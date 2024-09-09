@@ -1,4 +1,4 @@
-from project.data.datamodules.random import ExampleDataModule
+from project.data.datamodules.example import ExampleDataModule
 from project.data.dataset.random import RandomData
 
 from .utils import ZENSTORE, fbuilds

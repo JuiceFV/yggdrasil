@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 
 
@@ -21,7 +22,7 @@ class MLP(nn.Module):
             ]
         )
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         for layer in self.layers:
             x = layer(x)
         return x
