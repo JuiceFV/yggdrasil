@@ -14,9 +14,12 @@ class MLP(nn.Module):
 
         self.layers = nn.ModuleList(
             [
-                nn.Linear(
-                    input_dim if i == 0 else hidden_dim,
-                    output_dim if i == num_layers - 1 else hidden_dim,
+                nn.Sequential(
+                    nn.Linear(
+                        input_dim if i == 0 else hidden_dim,
+                        output_dim if i == num_layers - 1 else hidden_dim,
+                    ),
+                    nn.ReLU() if i != num_layers - 1 else nn.Identity(),
                 )
                 for i in range(num_layers)
             ]
