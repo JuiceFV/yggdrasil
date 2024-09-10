@@ -20,7 +20,7 @@ jobs:
         run: uv sync --extra dev
 
       - name: "Pyright"
-        uses: jakebailey/pyright-action@v1
+        run: uv run pyright
 
       - name: 
         run: uv run mypy src/
