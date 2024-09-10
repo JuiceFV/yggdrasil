@@ -1,8 +1,9 @@
+from hydra_zen import make_config
 from torch.optim.lr_scheduler import CyclicLR, ReduceLROnPlateau
 
 from project.configs.utils import ZENSTORE, pfbuilds
 
-sched_store = ZENSTORE(group="model/scheduler")
+sched_store = ZENSTORE(group="model/scheduler", package="_global_")
 
 ReduceLROnPlateauConf = pfbuilds(
     ReduceLROnPlateau,
@@ -11,7 +12,17 @@ ReduceLROnPlateauConf = pfbuilds(
     patience=10,
     min_lr=1e-5,
 )
-sched_store(ReduceLROnPlateauConf, name="plateau")
+
+plateau_conf = make_config(
+    model=dict(
+        scheduler=ReduceLROnPlateauConf,
+        lr_scheduler_config=dict(
+            monitor="val_loss_epoch", interval="epoch", frequency=1
+        ),
+    ),
+)
+
+sched_store(plateau_conf, name="plateau")
 
 
 CyclicLRConf = pfbuilds(
@@ -22,4 +33,5 @@ CyclicLRConf = pfbuilds(
     step_size_up=2000,
     cycle_momentum=False,
 )
-sched_store(CyclicLRConf, name="cyclic")
+cyclic_conf = make_config(model=dict(scheduler=CyclicLRConf))
+sched_store(cyclic_conf, name="cyclic")

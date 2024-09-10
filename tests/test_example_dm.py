@@ -2,7 +2,7 @@ from project.data.datamodules.example import ExampleDataModule
 from project.data.dataset.random import RandomData
 
 
-def test_example_datamodule():
+def test_example_datamodule() -> None:
     num_features = 64
     length = 128
     batch_size = 16

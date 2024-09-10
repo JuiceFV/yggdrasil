@@ -2,10 +2,10 @@ from dataclasses import is_dataclass
 
 from hydra_zen import ZenStore, make_custom_builds_fn
 from hydra_zen.wrapper import default_to_config
-from omegaconf import OmegaConf
+from omegaconf import DictConfig, ListConfig, OmegaConf
 
 builds = make_custom_builds_fn(
-    # zen_dataclass=dict(kw_only=True),
+    zen_dataclass=dict(kw_only=True),
     hydra_convert="object",
 )
 fbuilds = make_custom_builds_fn(
@@ -20,8 +20,10 @@ pfbuilds = make_custom_builds_fn(
     hydra_convert="object",
 )
 
+Config_ = DictConfig | ListConfig
 
-def destructure(x):
+
+def destructure(x: Config_) -> Config_:
     """Disables `hydra` config type checking.
 
     See `https://github.com/mit-ll-responsible-ai/hydra-zen/discussions/621#discussioncomment-7938326`

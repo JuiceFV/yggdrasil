@@ -1,6 +1,7 @@
 import os
-from typing import Optional
+from typing import Any
 
+import torch
 from hydra_zen import make_config
 from lightning import LightningDataModule, LightningModule, Trainer
 from omegaconf import DictConfig
@@ -23,9 +24,9 @@ def train_func(
     trainer: Trainer,
     train: bool = True,
     test: bool = False,
-    ckpt_path: Optional[str] = None,
-    cfg: Optional[DictConfig] = None,
-) -> tuple[dict, dict]:
+    ckpt_path: str | None = None,
+    cfg: DictConfig | None = None,
+) -> tuple[dict[str, torch.Tensor], dict[str, Any]]:
     """Trains the model. Can additionally evaluate on a testset,
     using best weights obtained during training.
 
@@ -99,10 +100,10 @@ def main(
     trainer: Trainer,
     train: bool = True,
     test: bool = False,
-    ckpt_path: Optional[str] = None,
-    optimized_metric: Optional[str] = None,
-    zen_cfg: Optional[DictConfig] = None,  # stores full config
-) -> Optional[float]:
+    ckpt_path: str | None = None,
+    optimized_metric: str | None = None,
+    zen_cfg: DictConfig | None = None,  # stores full config
+) -> float | None:
     if _DBX_CREDS:
         os.environ.update(_DBX_CREDS)
 

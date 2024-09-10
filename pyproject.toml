@@ -51,26 +51,84 @@ connect = ["databricks-connect>=13.0.1"] # remote connection to databricks spark
 # enabled = true
 
 [tool.ruff]
-include = ["*.py", "*.pyi", "**/pyproject.toml"]
+include = ["src/*.py", "setup.py", "tests/*.py", "scripts/*.py", "**/pyproject.toml"]
 exclude = ["notebooks"]
 line-length = 88
 
 [tool.ruff.lint]
 select = [
-    # Pyflakes
-    "F",
-    # Pycodestyle
-    "E",
+    "F", # Pyflakes
+    "E", # Pycodestyle
     "W",
-    # isort
-    "I001",
+    "I", # isort
+    "C90", # mccabe
+    "N", # pep8-naming
+    # "D", # pydocstyle
+    "UP", # pyupgrade
+    "ANN", # flake8-annotations 
+    "S", # flake8-bandit
+    "BLE", # flake8-blind-except
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "C4", # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "T10", # flake8-debugger
+    "EM", # flake8-errmsg
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "LOG", # flake8-logging
+    # "G", # flake8-logging-format
+    "INP", # flake8-no-pep420
+    "PIE", # flake8-pie
+    "T20", # flake8-print
+    "PYI", # flake8-pyi
+    "PT", # flake8-pytest-style
+    "RSE", # flake8-raise
+    "RET", # flake8-return
+    "SIM", # flake8-simplify
+    "TID", # flake8-tidy-imports
+    "TCH", # flake8-type-checking
+    "PL", # Pylint
+    "C", # Convention
+    "E", # Error
+    "R", # Refactor
+    "W", # Warning
+    "TRY", # tryceratops
+    "NPY", # NumPy-specific rules
+    "FURB", # refurb
+    # "DOC", # pydoclint
+    "RUF", # Ruff-specific rules
 ]
-# ignore = ["E712"]
+ignore = [
+    "N812", # lowercase-imported-as-non-lowercase
+    "ANN101", # missing-type-self
+    "ANN102", #	missing-type-cls
+    "ANN003", # missing-type-kwargs
+    "ANN401", # any-type
+    "C408", # unnecessary-collection-call
+    "RET504", # unnecessary-assign
+    "PLR0913", # too-many-arguments
+]
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"]
+"__init__.py" = ["F401"] # unused-imports
+"tests/**" = ["S101"] # use of assert
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
 testpaths = ["tests"]
 norecursedirs = "tests/helpers"
+
+[tool.pyright]
+include = ["src", "tests", "setup.py", "scripts"]
+exclude = [
+    "**/__pycache__",
+    "notebooks",
+]
+# defineConstant = { DEBUG = true }
+# reportMissingImports = "error"
+# reportUnnecessaryTypeIgnoreComment = true
+# reportUnnecessaryIsInstance = false

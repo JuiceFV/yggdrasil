@@ -11,7 +11,7 @@ class ExampleDataModule(L.LightningDataModule):
         batch_size: int = 16,
         num_workers: int = 1,
         **dataloader_kwargs,
-    ) -> None:
+    ):
         super().__init__()
         self.save_hyperparameters(logger=False)
 
@@ -21,7 +21,7 @@ class ExampleDataModule(L.LightningDataModule):
         self.num_workers = num_workers
         self.dataloader_kwargs = dataloader_kwargs
 
-    def _build_dataloader(self):
+    def _build_dataloader(self) -> DataLoader:
         return DataLoader(
             self.dataset,
             batch_size=self.batch_size,
@@ -29,13 +29,13 @@ class ExampleDataModule(L.LightningDataModule):
             **self.dataloader_kwargs,
         )
 
-    def train_dataloader(self):
+    def train_dataloader(self) -> DataLoader:
         return self._build_dataloader()
 
     # keep in mind that in this example, for simplicity,
     # validation and testing uses the same generated data as training
-    def val_dataloader(self):
+    def val_dataloader(self) -> DataLoader:
         return self._build_dataloader()
 
-    def test_dataloader(self):
+    def test_dataloader(self) -> DataLoader:
         return self._build_dataloader()

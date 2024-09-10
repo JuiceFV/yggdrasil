@@ -2,6 +2,7 @@ import os
 import shutil
 import tempfile
 import time
+from typing import Any
 
 from lightning import LightningModule, Trainer
 from lightning.pytorch.callbacks import Callback
@@ -29,7 +30,7 @@ class MLFlowModelRegistryHook(Callback):
 
 
 class SummaryLogger(Callback):
-    def __init__(self, max_depth=-1) -> None:
+    def __init__(self, max_depth: int = -1) -> None:
         self.max_depth = max_depth
 
     @rank_zero_only
@@ -53,19 +54,19 @@ class SummaryLogger(Callback):
 
 class TimingCallback(Callback):
     @rank_zero_only
-    def on_train_epoch_start(self, *args):
+    def on_train_epoch_start(self, *args: Any) -> None:
         self.epoch_start_time = time.time()
 
     @rank_zero_only
-    def on_train_batch_start(self, *args):
+    def on_train_batch_start(self, *args: Any) -> None:
         self.batch_start_time = time.time()
 
     @rank_zero_only
-    def on_train_batch_end(self, trainer: Trainer, *args):
+    def on_train_batch_end(self, trainer: Trainer, *args: Any) -> None:
         step_time = time.time() - self.batch_start_time
         trainer.logger.log_metrics({"step_time": step_time}, step=trainer.global_step)
 
     @rank_zero_only
-    def on_train_epoch_end(self, trainer: Trainer, *args):
+    def on_train_epoch_end(self, trainer: Trainer, *args: Any) -> None:
         epoch_time = time.time() - self.epoch_start_time
         trainer.logger.log_metrics({"epoch_time": epoch_time}, step=trainer.global_step)

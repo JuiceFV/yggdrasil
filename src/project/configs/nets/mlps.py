@@ -18,7 +18,7 @@ WideMLPConf = fbuilds(
 )
 
 
-def register_mlps():
+def register_mlps() -> None:
     NET_STORE(MLPConf, name="mlp")
     NET_STORE(DeepMLPConf, name="deep-mlp")
     NET_STORE(WideMLPConf, name="wide-mlp")

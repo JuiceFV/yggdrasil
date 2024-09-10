@@ -3,7 +3,7 @@ import logging
 from lightning.pytorch.utilities import rank_zero_only
 
 
-def init_logger(name=__name__) -> logging.Logger:
+def init_logger(name: str | None = __name__) -> logging.Logger:
     """Initializes multi-GPU-friendly python command line logger."""
 
     logger = logging.getLogger(name)

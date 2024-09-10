@@ -1,8 +1,10 @@
 import warnings
+from collections.abc import Callable
 from functools import wraps
-from typing import Callable
+from typing import Any, TypeVar
 
 import lightning as L
+import torch
 from hydra_zen import zen
 from lightning.pytorch.utilities import rank_zero_only
 from omegaconf import DictConfig
@@ -11,6 +13,8 @@ from .extra import enforce_tags, print_config_tree
 from .logging import init_logger
 
 log = init_logger(__name__)
+
+_T = TypeVar("_T")
 
 
 def setup(zen_cfg: DictConfig) -> None:
@@ -41,7 +45,7 @@ PRE_CALLS = [
 ]
 
 
-def log_instantiation(obj):
+def log_instantiation(obj: _T) -> _T:
     log.info(f"Instantiating\t{obj.__name__}")
     return obj
 
@@ -57,16 +61,16 @@ def task_wrapper(task_func: Callable) -> Callable:
     """
 
     @wraps(task_func)
-    def wrap(*args, **kwargs):
+    def wrap(*args: Any, **kwargs) -> dict[str, Any]:
         try:
             metric_dict = task_func(*args, **kwargs)
 
-        except Exception as ex:
-            log.exception(ex)
+        except Exception:
+            log.exception("Run failed")
 
             # when using hydra plugins like Optuna, you might want to disable raising
             # exception to avoid multirun failure
-            raise ex
+            raise
 
         finally:
             try:
@@ -114,7 +118,9 @@ def log_hyperparameters(
         logger.log_hyperparams(hparams)
 
 
-def get_metric_value(metric_dict: dict, metric_name: str) -> float:
+def get_metric_value(
+    metric_dict: dict[str, torch.Tensor], metric_name: str
+) -> float | None:
     """Safely retrieves value of the metric logged in LightningModule."""
 
     if not metric_name:
@@ -122,10 +128,12 @@ def get_metric_value(metric_dict: dict, metric_name: str) -> float:
         return None
 
     if metric_name not in metric_dict:
-        raise Exception(
+        msg = (
             f"Metric value not found! <metric_name={metric_name}>\n"
             "Make sure metric name logged in LightningModule is correct!"
         )
+
+        raise KeyError(msg)
 
     metric_value = metric_dict[metric_name].item()
     log.info(f"Retrieved metric value! <{metric_name}={metric_value}>")

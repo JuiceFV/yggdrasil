@@ -3,7 +3,7 @@ import torch
 from project.models.nets.mlp import MLP
 
 
-def test_mlp():
+def test_mlp() -> None:
     input_dim = 64
     output_dim = 16
 

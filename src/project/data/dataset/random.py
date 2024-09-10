@@ -16,10 +16,10 @@ class RandomData(Dataset):
         self.data = torch.rand(self.length, self.num_features)
         self.targets = torch.randint(0, 2, (self.length,), dtype=torch.float32)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.length
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> dict[str, torch.Tensor]:
         return {
             "features": self.data[index],
             "target": self.targets[index].unsqueeze(dim=-1),
