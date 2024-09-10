@@ -1,3 +1,6 @@
+# sink for all config groups to make them
+# automatically register on import of the project
+
 import project.configs.callbacks
 import project.configs.datamodules
 import project.configs.debug

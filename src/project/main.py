@@ -30,18 +30,14 @@ def train_func(
     """Trains the model. Can additionally evaluate on a testset,
     using best weights obtained during training.
 
-    This method is wrapped in optional @task_wrapper decorator which applies extra
-    utilities before and after the call.
-
     Args:
+        datamodule (LightningDataModule): DataModule object.
         model (LightningModule): Model to train.
         trainer (Trainer): Trainer object.
-        datamodule (Optional[LightningDataModule], optional): DataModule object.
-        Defaults to None.
         train (bool, optional): Whether to train the model. Defaults to True.
         test (bool, optional): Whether to test the model. Defaults to False.
-        ckpt_path (Optional[str], optional): Path to the checkpoint. Defaults to None.
-        cfg (Optional[DictConfig], optional): Hydra config. Defaults to None.
+        ckpt_path (str, optional): Path to the checkpoint. Defaults to None.
+        cfg (DictConfig, optional): raw Hydra config. Defaults to None.
 
     Returns:
         Tuple[dict, dict]: Dict with metrics and dict with all instantiated objects.
@@ -102,8 +98,12 @@ def main(
     test: bool = False,
     ckpt_path: str | None = None,
     optimized_metric: str | None = None,
-    zen_cfg: DictConfig | None = None,  # stores full config
+    zen_cfg: DictConfig | None = None,  # stores full resolved hydra config
 ) -> float | None:
+    """
+    main function which is a wrapper around the training function
+    with additional utilities before and after the training
+    """
     if _DBX_CREDS:
         os.environ.update(_DBX_CREDS)
 
@@ -124,5 +124,7 @@ def main(
     return metric_value
 
 
+# creates the final train config from the default presets
+# in `builder.py` and signature of the `main` function
 TrainCfg = fbuilds(main)
 RunCfg = make_config(bases=(TrainCfg, BaseRunCfg))

@@ -11,6 +11,7 @@ _DEBUG_DEFAULTS = [
     {"override /callbacks": ["model_summ", "richpb"]},
 ]
 
+# default debug configuration
 DefDebugCfg = make_config(
     hydra_defaults=_DEBUG_DEFAULTS,
     task_name="debug",
@@ -22,11 +23,11 @@ DefDebugCfg = make_config(
         max_epochs=1,
         accelerator="cpu",
         devices=1,
-        detect_anomaly=True,
+        detect_anomaly=True,  # detect NaNs in the model
         enable_checkpointing=False,
     ),
     datamodule=dict(
-        num_workers=0,
+        num_workers=0,  # avoids issues with the debugger in distributed setting
         pin_memory=False,
     ),
     hydra=dict(job_logging=dict(root={"level": "DEBUG"}), verbose=True),
@@ -35,7 +36,7 @@ DefDebugCfg = make_config(
 
 debug_store(DefDebugCfg, name="default")
 
-
+# fast dev run config for single step of each phase: train, val, test
 FastDevRunCfg = make_config(
     hydra_defaults=_DEBUG_DEFAULTS,
     trainer=dict(

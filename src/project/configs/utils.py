@@ -4,6 +4,11 @@ from hydra_zen import ZenStore, make_custom_builds_fn
 from hydra_zen.wrapper import default_to_config
 from omegaconf import DictConfig, ListConfig, OmegaConf
 
+# create multiple build functions for dataclasses with unified presets
+# `kw_only=True` argument is required to avoid issues with order of positional arguments
+#  in generated dataclasses with inheritance and `hydra_convert="object"` is required to
+#  recursively instantiate objects with `hydra` to native python objects
+# https://hydra.cc/docs/advanced/instantiate_objects/overview/#parameter-conversion-strategies
 builds = make_custom_builds_fn(
     zen_dataclass=dict(kw_only=True),
     hydra_convert="object",
@@ -37,7 +42,11 @@ def destructure(x: Config_) -> Config_:
     return x
 
 
+# general store for configs of all user-defined objects
 ZENSTORE = ZenStore(name="zenstore")(to_config=destructure)
+
+# store for hydra-specific configs
 HYDRASTORE = ZenStore(name="hydrastore", deferred_hydra_store=False)
 
+# substore for NN nets configs inside default storage
 NET_STORE = ZENSTORE(group="model/net")

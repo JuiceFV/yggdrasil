@@ -36,6 +36,7 @@ LRMonitorConf = fbuilds(
 lr_monitor_conf = {"lr_monitor": LRMonitorConf}
 cb_store(lr_monitor_conf, name="lr_monitor")
 
+# basic timing measurements callback
 TimingCallbackConf = fbuilds(TimingCallback)
 timing_cb_conf = {"timer": TimingCallbackConf}
 cb_store(timing_cb_conf, name="timer")
@@ -74,6 +75,7 @@ CheckpointerConf = fbuilds(
     save_on_train_epoch_end=None,
 )
 
+# checkpointer saving the best model weights based on monitored metric
 BestCheckpointerConf = CheckpointerConf(
     filename="best_checkpoint",
     monitor="val_loss_epoch",
@@ -83,6 +85,7 @@ BestCheckpointerConf = CheckpointerConf(
 best_ckpt_conf = {"best_ckpt": BestCheckpointerConf}
 cb_store(best_ckpt_conf, name="best_ckpt")
 
+# checkpointer saving the last model weights
 LastCheckpointerConf = CheckpointerConf(
     filename="last",
     monitor="global_step",
@@ -100,6 +103,7 @@ DefCallbacksConf = make_config(
 )
 cb_store(DefCallbacksConf, name="default")
 
+# callbacks required for MLFlow custom logger (or useful only with logger availabe)
 MLFlowCallbacksCfg = make_config(
     summ_logger=fbuilds(SummaryLogger),
     registry_hook=fbuilds(MLFlowModelRegistryHook),

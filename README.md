@@ -92,6 +92,12 @@ Setup pre-commit hooks - **MANDATORY** for further development:
 pre-commit install
 ```
 
+**REQUIRED** - copy the default `.env.default` file which can be used for local configuration and later to store sensitive information:
+
+```bash
+cp .env.default .env
+```
+
 ## Usage
 
 The project is configured using `hydra` and `hydra_zen` which provide extensive cli configuration options. To run the training script, you need to specify all required parameters in the command line (required parameters are marked with `???` in config available in the [debug mode](#debug-hydra)). For example:

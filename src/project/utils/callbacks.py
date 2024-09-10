@@ -18,6 +18,12 @@ log = init_logger(__name__)
 
 
 class MLFlowModelRegistryHook(Callback):
+    """
+    Hack to make instance of `trainer` and `pl_module` available to
+    MLFlowLoggerCheckpointer. Required for the checkpointer to be able to save
+    models to MLFlow model registry and not as just artifacts to the experiment run
+    """
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -30,6 +36,10 @@ class MLFlowModelRegistryHook(Callback):
 
 
 class SummaryLogger(Callback):
+    """
+    Callback saving txt model description to MLFlow experiment as artifact
+    """
+
     def __init__(self, max_depth: int = -1) -> None:
         self.max_depth = max_depth
 
@@ -53,6 +63,10 @@ class SummaryLogger(Callback):
 
 
 class TimingCallback(Callback):
+    """
+    Callback measuring and logging the time taken for each train step and epoch
+    """
+
     @rank_zero_only
     def on_train_epoch_start(self, *args: Any) -> None:
         self.epoch_start_time = time.time()

@@ -39,6 +39,7 @@ def setup(zen_cfg: DictConfig) -> None:
         print_config_tree(zen_cfg, resolve=True, save_to_file=True)
 
 
+# Pre-callbacks that executed before the training function
 PRE_CALLS = [
     zen(lambda seed: L.seed_everything(seed, workers=True)),
     zen(setup),
@@ -46,6 +47,9 @@ PRE_CALLS = [
 
 
 def log_instantiation(obj: _T) -> _T:
+    """
+    Hook to log the instantiation of each object by `hydra_zen`
+    """
     log.info(f"Instantiating\t{obj.__name__}")
     return obj
 
@@ -89,7 +93,8 @@ def task_wrapper(task_func: Callable) -> Callable:
 def log_hyperparameters(
     trainer: L.Trainer, model: L.LightningModule, cfg: DictConfig
 ) -> None:
-    """Logs configuration to each logger.
+    """
+    Logs configuration to each logger.
 
     Additionally saves:
     - Number of model parameters

@@ -10,8 +10,10 @@ log = init_logger(__name__)
 
 if __name__ == "__main__":
     ZENSTORE(RunCfg, name="runner")
+    # offload all registered configs to the original hydra store
     ZENSTORE.add_to_hydra_store()
 
+    # decorator to create a hydra context for the `main` function
     zen(
         main,
         pre_call=PRE_CALLS,

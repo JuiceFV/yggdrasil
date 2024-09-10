@@ -3,6 +3,8 @@ from torch.optim.lr_scheduler import CyclicLR, ReduceLROnPlateau
 
 from project.configs.utils import ZENSTORE, pfbuilds
 
+# scheduler store here is a _global_ store to allow for the overwrites
+# of the `model/lr_scheduler_config` required for the plateau lr scheduler
 sched_store = ZENSTORE(group="model/scheduler", package="_global_")
 
 ReduceLROnPlateauConf = pfbuilds(

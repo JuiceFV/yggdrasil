@@ -10,7 +10,7 @@ logging_store = ZENSTORE(group="loggers", package="_global_")
 
 MLFlowLogCfg = fbuilds(
     MLFlowLoggerCheckpointer,
-    experiment_name=MISSING,
+    experiment_name=MISSING,  # required argument to be provided
     run_name=None,
     tracking_uri="${oc.env:MLFLOW_TRACKING_URI,file:${paths.log_dir}/mlflow/mlruns}",
     tags=None,

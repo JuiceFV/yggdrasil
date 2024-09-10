@@ -17,6 +17,11 @@ log = init_logger(__name__)
 
 
 class MLFlowLoggerCheckpointer(MLFlowLogger):
+    """
+    Extension of MLFlowLogger that logs model checkpoints to MLFlow model registry.
+    It also extends the MLFlowLogger to log system metrics.
+    """
+
     def __init__(
         self,
         experiment_name: str = "lightning_logs",

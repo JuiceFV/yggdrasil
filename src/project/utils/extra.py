@@ -33,9 +33,10 @@ def print_config_tree(
     Args:
         cfg (DictConfig): Configuration composed by Hydra.
         print_order (Sequence[str], optional): Determines in what order config
-        components are printed. resolve (bool, optional): Whether to resolve reference
-        fields of DictConfig. save_to_file (bool, optional): Whether to export config
-        to the hydra output folder.
+            components are printed.
+        resolve (bool, optional): Whether to resolve reference fields of DictConfig.
+        save_to_file (bool, optional): Whether to export config to the hydra output
+            folder.
     """
 
     style = "dim"

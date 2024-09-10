@@ -43,13 +43,6 @@ dev = [
 dbx = ["dbx>=0.8.14"] # databricks cli
 connect = ["databricks-connect>=13.0.1"] # remote connection to databricks spark clusters (messes up pyspark install)
 
-# [tool.setuptools.packages.find]
-# include = ["floor_optimization"]
-# namespaces = false
-
-# [tool.setuptools-git-versioning]
-# enabled = true
-
 [tool.ruff]
 include = ["src/*.py", "setup.py", "tests/*.py", "scripts/*.py", "**/pyproject.toml"]
 exclude = ["notebooks"]
@@ -128,7 +121,3 @@ exclude = [
     "**/__pycache__",
     "notebooks",
 ]
-# defineConstant = { DEBUG = true }
-# reportMissingImports = "error"
-# reportUnnecessaryTypeIgnoreComment = true
-# reportUnnecessaryIsInstance = false

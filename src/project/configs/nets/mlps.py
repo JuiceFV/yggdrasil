@@ -1,6 +1,8 @@
 from project.configs.utils import NET_STORE, fbuilds
 from project.models.nets.mlp import MLP
 
+# multiple configurations for the same model with different
+# hyperparameters can be stored for an easy access later
 MLPConf = fbuilds(MLP, output_dim=1, num_layers=2, hidden_dim=64)
 
 DeepMLPConf = fbuilds(

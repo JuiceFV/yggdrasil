@@ -36,12 +36,16 @@ class BinaryClassificationModel(L.LightningModule):
         metrics: MetricCollection = _DEFAULT_BIN_CLASSIFICATION_METRICS,
     ):
         super().__init__()
+        # lightning automatically saves and logs all module arguments to `self.hparams`
+        # attribute, except the ignored ones. We also disable logging of the
+        # hyperparameters since we perform it manually for better control
         self.save_hyperparameters(logger=False, ignore=["net", "criterion", "metrics"])
 
         self.net = net
         self.criterion = criterion
         self.train_metrics = metrics.clone(prefix="train_")
         self.valid_metrics = metrics.clone(prefix="val_")
+        # object to manually track the max matrics of our metrics over all epochs
         self.max_metrics = nn.ModuleDict(
             {"max_" + name: MaxMetric() for name in metrics}
         )
@@ -50,13 +54,16 @@ class BinaryClassificationModel(L.LightningModule):
         return self.net(*args, **kwargs)
 
     def configure_optimizers(self) -> dict[str, Any]:
+        """
+        Required function configuring the optimizer and the learning rate scheduler
+        """
         config = {}
         optimizer = self.hparams.optimizer(self.parameters())
         config["optimizer"] = optimizer
 
         if self.hparams.scheduler is not None:
             scheduler = self.hparams.scheduler(optimizer=optimizer)
-            lr_scheduler_config = deepcopy(self.hparams.lr_scheduler_config)
+            lr_scheduler_config = deepcopy({} or self.hparams.lr_scheduler_config)
             lr_scheduler_config["scheduler"] = scheduler
             config["lr_scheduler"] = lr_scheduler_config
         return config
@@ -67,6 +74,10 @@ class BinaryClassificationModel(L.LightningModule):
         prefix: str = "",
         **log_args,
     ) -> torch.Tensor:
+        """
+        Utility function to log multiple loss components as separate metrics
+        if the model forward step produces a dictionary of losses
+        """
         if isinstance(losses, dict):
             self.log_dict({prefix + k: v for k, v in losses.items()}, **log_args)
             return sum(losses.values())
@@ -113,12 +124,12 @@ class BinaryClassificationModel(L.LightningModule):
 
     def on_validation_epoch_end(self) -> None:
         metrics = self.valid_metrics.compute()
-        # min metrics are accumulated across all epochs
+        # max metrics are accumulated across all epochs
         # that's why we need to update them manually
-        for min_metric_mod, metric_val in zip(
+        for max_metric_mod, metric_val in zip(
             self.max_metrics.values(), metrics.values(), strict=True
         ):
-            min_metric_mod.update(metric_val)
+            max_metric_mod.update(metric_val)
         # log through `.compute()` method instead of as a metric object
         # otherwise metric would be reset by lightning after each epoch
         self.log_dict(
@@ -129,6 +140,10 @@ class BinaryClassificationModel(L.LightningModule):
     def predict_step(
         self, batch: dict[str, torch.Tensor], batch_idx: int
     ) -> dict[str, torch.Tensor]:
+        """
+        Returns a dictionary with the model predictions alongside all
+        the other possible metadata passed inside the inference batch
+        """
         pred = torch.sigmoid(self(batch["features"]))
         out = {
             **{k: v for k, v in batch.items() if k != "features"},
