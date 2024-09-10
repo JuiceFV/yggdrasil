@@ -22,6 +22,8 @@ def gracefully(func: Callable) -> None:
 
 The template also provies github actions for type checking your code which are also aggressively configured. Currently, strict type checking is not mandatory but is very welcomed if it does not interfere with the development too much. The type-checking requirements will be reconfigured and might be relaxed in the future.
 
+Lastly, testing your code with `pytest` is also available in the project using github actions. Comprehensive testing helps to properly structure code and greatly simplifies maintenance and further development when the project grows. It is highly recommended to start covering all the vital parts of the codebase with tests immediately from the start of the project since it would greatly simplify the adoption of this practice. Testing will be strictly mandatory in the future for all the projects growing out of their infancy.
+
 ## Structure
 
 This is a simplified project structure. `data` and `models` directories contain all the code necessary for model training while `configs` directory holds the dynamic building of all necessary configs for cli using `hydra_zen`. `main.py` contains the training and evaluation function and `train.py` is the entry point for the training script managed by `hydra`.
