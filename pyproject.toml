@@ -1,0 +1,123 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project"
+requires-python = "==3.11.*" # python version is fixed to the DBX ML 15.4 runtime python version for compatibility
+dynamic = ["version"]
+dependencies = [
+    "python-dotenv",
+    "numpy",
+    "rich",
+    "torch==2.3.1", # according to DBX runtime 
+    "lightning==2.4.0",
+    "torchmetrics>=1.1.1",
+    "hydra-core==1.3.1",
+    "hydra-colorlog==1.2.0",
+    "hydra-ray-launcher>=1.2.1",
+    "hydra-zen",
+    "mlflow>=2.9.2",
+    # system monitoring for cpu and gpu for mlflow
+    "psutil",
+    "pynvml",
+]
+
+[project.optional-dependencies]
+spark = ["pyspark==3.5.0"] # according to DBX runtime 
+dev = [
+    "numpy",
+    "pandas",
+    "ipykernel",
+    "ipywidgets",
+    "matplotlib",
+    "plotly",
+    "ruff==0.6.4",
+    "mypy==1.11.2",
+    "pyright==1.1.379",
+    "pre-commit==3.8.0",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+dbx = ["dbx>=0.8.14"] # databricks cli
+connect = ["databricks-connect>=13.0.1"] # remote connection to databricks spark clusters (messes up pyspark install)
+
+[tool.ruff]
+include = ["src/*.py", "setup.py", "tests/*.py", "scripts/*.py", "**/pyproject.toml"]
+exclude = ["notebooks"]
+line-length = 88
+
+[tool.ruff.lint]
+select = [
+    "F", # Pyflakes
+    "E", # Pycodestyle
+    "W",
+    "I", # isort
+    "C90", # mccabe
+    "N", # pep8-naming
+    # "D", # pydocstyle
+    "UP", # pyupgrade
+    "ANN", # flake8-annotations 
+    "S", # flake8-bandit
+    "BLE", # flake8-blind-except
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    "C4", # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "T10", # flake8-debugger
+    "EM", # flake8-errmsg
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "LOG", # flake8-logging
+    # "G", # flake8-logging-format
+    "INP", # flake8-no-pep420
+    "PIE", # flake8-pie
+    "T20", # flake8-print
+    "PYI", # flake8-pyi
+    "PT", # flake8-pytest-style
+    "RSE", # flake8-raise
+    "RET", # flake8-return
+    "SIM", # flake8-simplify
+    "TID", # flake8-tidy-imports
+    "TCH", # flake8-type-checking
+    "PL", # Pylint
+    "C", # Convention
+    "E", # Error
+    "R", # Refactor
+    "W", # Warning
+    "TRY", # tryceratops
+    "NPY", # NumPy-specific rules
+    "FURB", # refurb
+    # "DOC", # pydoclint
+    "RUF", # Ruff-specific rules
+]
+ignore = [
+    "N812", # lowercase-imported-as-non-lowercase
+    "ANN101", # missing-type-self
+    "ANN102", #	missing-type-cls
+    "ANN003", # missing-type-kwargs
+    "ANN401", # any-type
+    "C408", # unnecessary-collection-call
+    "RET504", # unnecessary-assign
+    "PLR0913", # too-many-arguments
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"] # unused-imports
+"tests/**" = ["S101"] # use of assert
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+testpaths = ["tests"]
+norecursedirs = "tests/helpers"
+
+[tool.pyright]
+include = ["src", "tests", "setup.py", "scripts"]
+exclude = [
+    "**/__pycache__",
+    "notebooks",
+]
