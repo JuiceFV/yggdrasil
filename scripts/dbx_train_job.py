@@ -41,7 +41,7 @@ register_config(RunCfg)
 
 # COMMAND ----------
 
-default_overrides = "datamodule.dataset.num_features=128 model.net.input_dim=128"
+default_overrides = "datamodule.dataset.num_features=128 model.net.input_dim=128 paths.log_dir=/dbfs/FileStore/tmp/project/logs"
 dbutils.widgets.text("overrides", default_overrides)
 
 overrides = dbutils.widgets.get("overrides").split()
@@ -49,7 +49,7 @@ log.info(f"Detected overrides: {overrides}")
 
 # COMMAND ----------
 
-job = launch(RunCfg, run, overrides=overrides)
+job = launch(RunCfg, run, version_base="1.3", overrides=overrides)
 
 # COMMAND ----------
 
