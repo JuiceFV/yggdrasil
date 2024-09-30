@@ -1,13 +1,5 @@
 # Databricks notebook source
-repo_url = dbutils.entry_point.getDbutils().notebook().getContext().tags().apply("repoUrl")
-repo_branch = dbutils.entry_point.getDbutils().notebook().getContext().tags().apply("repoBranch")
-repo_url, repo_branch
-
-# COMMAND ----------
-
-# MAGIC %mkdir /tmp/pkg_build && cd .. && cp -R * /tmp/pkg_build 2>/dev/null
-# MAGIC %cd /tmp/pkg_build/
-# MAGIC %pip install .
+# MAGIC %pip install ..
 
 # COMMAND ----------
 
@@ -15,9 +7,32 @@ repo_url, repo_branch
 
 # COMMAND ----------
 
+import logging
+import hydra
+
 from project.utils import init_logger
 
 log = init_logger("dbx_train")
+
+log_config = logging.config.dictConfig(
+    {
+        "version": 1,
+        "loggers": {
+            "py4j": {"level": "WARNING"},
+            "urllib3.connectionpool": {"level": "ERROR"},
+        },
+    }
+)
+hydra.core.utils.configure_log(log_config)
+logging.captureWarnings(True)
+
+# COMMAND ----------
+
+default_overrides = "datamodule.dataset.num_features=128 model.net.input_dim=128"
+dbutils.widgets.text("overrides", default_overrides)
+
+overrides = dbutils.widgets.get("overrides").split()
+log.info(f"Detected overrides: {overrides}")
 
 # COMMAND ----------
 
@@ -28,14 +43,6 @@ from project.train import run, RunCfg, register_config
 # COMMAND ----------
 
 register_config(RunCfg)
-
-# COMMAND ----------
-
-dbx_args = dict(dbutils.notebook.entry_point.getCurrentBindings())
-default_overrides = "datamodule.dataset.num_features=128 model.net.input_dim=128"
-
-overrides = dbx_args.get("overrides", default_overrides).split()
-log.info(f"Detected overrides: {overrides}")
 
 # COMMAND ----------
 
