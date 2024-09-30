@@ -1,10 +1,7 @@
 # Databricks notebook source
-bindings = dict(dbutils.notebook.entry_point.getCurrentBindings())
-bindings
-
-# COMMAND ----------
-
-exit()
+repo_url = dbutils.entry_point.getDbutils().notebook().getContext().tags().apply("repoUrl")
+repo_branch = dbutils.entry_point.getDbutils().notebook().getContext().tags().apply("repoBranch")
+repo_url, repo_branch
 
 # COMMAND ----------
 
