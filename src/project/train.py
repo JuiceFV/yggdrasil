@@ -1,5 +1,5 @@
 from hydra_zen import zen
-from omegaconf import DictConfig
+from hydra_zen.typing._implementations import DataClass
 
 from project.configs.utils import ZENSTORE
 from project.main import RunCfg, main
@@ -17,7 +17,7 @@ run = zen(
 )
 
 
-def register_config(cfg: DictConfig) -> None:
+def register_config(cfg: type[DataClass]) -> None:
     ZENSTORE(cfg, name="runner")
     # offload all registered configs to the original hydra store
     ZENSTORE.add_to_hydra_store()
