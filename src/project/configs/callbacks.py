@@ -95,11 +95,12 @@ LastCheckpointerConf = CheckpointerConf(
 last_ckpt_conf = {"last_ckpt": LastCheckpointerConf}
 cb_store(last_ckpt_conf, name="last_ckpt")
 
+ckpt_callbacks = dict(**best_ckpt_conf, **last_ckpt_conf)
+cb_store(ckpt_callbacks, name="ckpts")
+
 DefCallbacksConf = make_config(
     **model_summary_conf,
     **rich_pb_conf,
-    **best_ckpt_conf,
-    **last_ckpt_conf,
 )
 cb_store(DefCallbacksConf, name="default")
 
@@ -108,4 +109,5 @@ MLFlowCallbacksCfg = make_config(
     summ_logger=fbuilds(SummaryLogger),
     registry_hook=fbuilds(MLFlowModelRegistryHook),
     **base_logging_callbacks,
+    **ckpt_callbacks,
 )
