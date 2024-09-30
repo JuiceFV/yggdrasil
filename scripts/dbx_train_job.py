@@ -10,24 +10,24 @@
 
 # COMMAND ----------
 
-import logging
-import hydra
+# import logging
+# import hydra
 
 from project.utils import init_logger
 
 log = init_logger("dbx_train")
 
-log_config = logging.config.dictConfig(
-    {
-        "version": 1,
-        "loggers": {
-            "py4j": {"level": "WARNING"},
-            "urllib3.connectionpool": {"level": "ERROR"},
-        },
-    }
-)
-hydra.core.utils.configure_log(log_config)
-logging.captureWarnings(True)
+# log_config = logging.config.dictConfig(
+#     {
+#         "version": 1,
+#         "loggers": {
+#             "py4j": {"level": "WARNING"},
+#             "urllib3.connectionpool": {"level": "ERROR"},
+#         },
+#     }
+# )
+# hydra.core.utils.configure_log(log_config)
+# logging.captureWarnings(True)
 
 # COMMAND ----------
 
