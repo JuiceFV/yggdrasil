@@ -1,4 +1,13 @@
 # Databricks notebook source
+bindings = dict(dbutils.notebook.entry_point.getCurrentBindings())
+bindings
+
+# COMMAND ----------
+
+exit()
+
+# COMMAND ----------
+
 # MAGIC %mkdir /tmp/pkg_build && cd .. && cp -R * /tmp/pkg_build 2>/dev/null
 # MAGIC %cd /tmp/pkg_build/
 # MAGIC %pip install .
