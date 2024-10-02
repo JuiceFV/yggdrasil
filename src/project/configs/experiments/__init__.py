@@ -22,7 +22,7 @@ DEEP_EXAMPLE_EXP_CONF = make_config(
     datamodule=dict(dataset=dict(num_features=64)),
     model=dict(net=dict(input_dim=64)),
     trainer=dict(max_epochs=5),
-    loggers={"mlflow": dict(experiment_name="bin-class-example")},
+    loggers={"mlflow": dict(experiment_name="/Shared/bin-class-example")},
     bases=(BaseRunCfg,),
 )
 

@@ -135,8 +135,30 @@ python src/project/train.py --info defaults-tree
 
 ## Databricks
 
-To sync local files with `Repos` [on the Databricks](https://docs.databricks.com/en/archive/dev-tools/dbx/dbx-sync.html), create `.syncinclude` file with patterns to include. Run command:
+### Interactive runs
+
+To launch the training run in the notebook on the Databricks using All-Purpose cluster, use `scripts/dbx_train.py` script which is recognized as a notebook by the Databricks as is. With `overrides` variable you can provide all configuration parameters supported by the project exactly the same way as you would provide in the regular CLI interface.
+
+Just don't forget to setup environment variables either with `.env` file, as described in the [Install](#install) section or manually provide them in the cluster configuration under the `Advanced options` section in `Spark` tab.
+
+### Launching training as job
+
+To launch the training run as an independent job, you need to create a workflow launching `scripts/dbx_train_job.py` as a notebook from git provider and setup `overrides` as job parameter. Now you can chose to launch a job either on a standalone Job cluster or on an already existing All-Purpose cluster. In both cases, you have to provide environment variables for the job in the cluster configuration. If you want to launch multiple runs simultenously, you can increase `Maximum concurrent runs` value in the `Advanced Settings` section.
+
+Keep in mind that every job run will pull the recent source code from the target git repository if the workflow is configured to use a git provider as a source instead of a Workspace. Any changes you want to apply to the job run should be committed and pushed to the repository in advance. Luckily you can specify git branch or tag for the source code in the workflow configuration which can be useful for development runs.
+
+Databricks runtime, if launched through the workflows, does not provide write access to the directory where source code will be launched on the Job cluster. Since we are utilizing `hydra` for managing logs and other write artifacts, we need to provide a path to the logs directory on the `/dbfs` and allow `hydra` to automaically create and change to the working directory. Here is an example of the necessary parameter `overrides`:
+
+```txt
+experiment=example-deep paths.log_dir=/dbfs/FileStore/tmp/project/logs hydra.job.chdir=True
+```
+
+You can specify the logs dir using the environment variable for the cluster but `hydra.job.chdir=True` is mandatory for now for every job run. We will simplify this job configuration in the future.
+
+### Syncing files
+
+To sync local files with your project folder in `Repos` [on the Databricks](https://docs.databricks.com/en/archive/dev-tools/dbx/dbx-sync.html), create `.syncinclude` file with patterns to include. Run command:
 
 ```bash
-dbx sync repo -s . -d floor_optimization
+dbx sync repo -s . -d project
 ```

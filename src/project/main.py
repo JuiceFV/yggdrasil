@@ -75,7 +75,7 @@ def train_func(
 
 
 _DBX_CREDS = None
-if int(os.environ.get("PROPAGATE_DBX_CREDS")):
+if int(os.environ.get("PROPAGATE_DBX_CREDS", "0")):
     # retrieves Databricks credentials if available and propagates them to the ray
     # remote jobs which are executed in the separete python processes and don't have
     # a direct access to them.
