@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install ..
+# MAGIC %pip install -e ..
 
 # COMMAND ----------
 
