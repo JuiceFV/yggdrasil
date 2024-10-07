@@ -1,19 +1,20 @@
 # Databricks notebook source
-# MAGIC %%bash
-# MAGIC
-# MAGIC # install uv
-# MAGIC curl -LsSf https://astral.sh/uv/install.sh | sh
-# MAGIC # activate it
-# MAGIC source $HOME/.cargo/env
-# MAGIC # set uv venv path to match the dbx virtual env dir
-# MAGIC export UV_PROJECT_ENVIRONMENT=$VIRTUAL_ENV
-# MAGIC echo installing project to $UV_PROJECT_ENVIRONMENT
-# MAGIC # install project and dependencies
-# MAGIC cd .. && uv sync --link-mode=copy
+!cd .. && source scripts/install_on_dbx.sh
 
 # COMMAND ----------
 
 # MAGIC %restart_python
+
+# COMMAND ----------
+
+# fixes issue with editable package discovery on dbx
+
+import os
+import sys
+
+src_dir = os.path.realpath("../src")
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
 # COMMAND ----------
 
