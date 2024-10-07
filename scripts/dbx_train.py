@@ -7,10 +7,14 @@
 
 # COMMAND ----------
 
-# MAGIC %load_ext autoreload
-# MAGIC %autoreload 2
+# enables autoreloading of all imporeted modules without
+# relaunching notebook. Should be executed just once
+%load_ext autoreload
+%autoreload 2
 
 # COMMAND ----------
+
+# fixes issue with editable package discovery on dbx
 
 import os
 import sys
@@ -37,8 +41,10 @@ register_config(RunCfg)
 
 # COMMAND ----------
 
-overrides = "datamodule.dataset.num_features=128 model.net.input_dim=128"
+overrides = ["datamodule.dataset.num_features=128", "model.net.input_dim=128"]
 
 job = launch(RunCfg, run, version_base="1.3", overrides=overrides)
 
 # COMMAND ----------
+
+
