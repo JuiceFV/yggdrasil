@@ -1,8 +1,6 @@
 # Databricks notebook source
-# MAGIC ! [ -d "/tmp/pkg_build" ] && rm -rf "/tmp/pkg_build"
-# MAGIC %mkdir /tmp/pkg_build && cd .. && cp -R * /tmp/pkg_build 2>/dev/null
-# MAGIC %cd /tmp/pkg_build/
-# MAGIC %pip install .
+# MAGIC !ln -s $(realpath ..) $(mktemp -d)
+# MAGIC %pip install ..
 
 # COMMAND ----------
 
