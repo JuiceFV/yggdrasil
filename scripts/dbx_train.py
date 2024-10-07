@@ -1,5 +1,5 @@
 # Databricks notebook source
-!cd .. && source scripts/install_on_dbx.sh
+# MAGIC !cd .. && source scripts/install_on_dbx.sh
 
 # COMMAND ----------
 
@@ -9,8 +9,8 @@
 
 # enables autoreloading of all imporeted modules without
 # relaunching notebook. Should be executed just once
-%load_ext autoreload
-%autoreload 2
+# MAGIC %load_ext autoreload
+# MAGIC %autoreload 2
 
 # COMMAND ----------
 

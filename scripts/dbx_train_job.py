@@ -1,5 +1,5 @@
 # Databricks notebook source
-!cd .. && source scripts/install_on_dbx.sh
+# MAGIC !cd .. && source scripts/install_on_dbx.sh
 
 # COMMAND ----------
 
