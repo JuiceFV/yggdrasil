@@ -1,6 +1,15 @@
 # Databricks notebook source
-# MAGIC !ln -s $(realpath ..) $(mktemp -d)
-# MAGIC %pip install ..
+# MAGIC %%bash
+# MAGIC
+# MAGIC # install uv
+# MAGIC curl -LsSf https://astral.sh/uv/install.sh | sh
+# MAGIC # activate it
+# MAGIC source $HOME/.cargo/env
+# MAGIC # set uv venv path to match the dbx virtual env dir
+# MAGIC export UV_PROJECT_ENVIRONMENT=$VIRTUAL_ENV
+# MAGIC echo installing project to $UV_PROJECT_ENVIRONMENT
+# MAGIC # install project and dependencies
+# MAGIC cd .. && uv sync --link-mode=copy --no-editable
 
 # COMMAND ----------
 
@@ -36,5 +45,3 @@ log.info(f"Detected overrides: {overrides}")
 # COMMAND ----------
 
 job = launch(RunCfg, run, version_base="1.3", overrides=overrides)
-
-# COMMAND ----------
