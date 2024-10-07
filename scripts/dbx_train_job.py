@@ -9,7 +9,7 @@
 # MAGIC export UV_PROJECT_ENVIRONMENT=$VIRTUAL_ENV
 # MAGIC echo installing project to $UV_PROJECT_ENVIRONMENT
 # MAGIC # install project and dependencies
-# MAGIC cd .. && uv sync --link-mode=copy --no-editable
+# MAGIC cd .. && uv sync --link-mode=copy
 
 # COMMAND ----------
 
