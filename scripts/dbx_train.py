@@ -7,25 +7,23 @@
 
 # COMMAND ----------
 
-import logging
+# MAGIC %load_ext autoreload
+# MAGIC %autoreload 2
 
-import hydra
+# COMMAND ----------
 
-from project.utils import init_logger
+import os
+import sys
 
-log = init_logger("dbx_train")
+src_dir = os.path.realpath("../src")
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
-log_config = logging.config.dictConfig(
-    {
-        "version": 1,
-        "loggers": {
-            "py4j": {"level": "WARNING"},
-            "urllib3.connectionpool": {"level": "ERROR"},
-        },
-    }
-)
-hydra.core.utils.configure_log(log_config)
-logging.captureWarnings(True)
+# COMMAND ----------
+
+from project.utils.dbx import setup_loggin_for_dbx_notebook
+
+log = setup_loggin_for_dbx_notebook("dbx_train")
 
 # COMMAND ----------
 
