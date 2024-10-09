@@ -180,7 +180,6 @@ cython_debug/
 .coverage
 .*cache
 *.log
-*lock
 .python-version
 /local
 /logs

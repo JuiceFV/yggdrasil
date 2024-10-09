@@ -1,8 +1,5 @@
 # Databricks notebook source
-# MAGIC ! [ -d "/tmp/pkg_build" ] && rm -r "/tmp/pkg_build"
-# MAGIC %mkdir /tmp/pkg_build && cd .. && cp -R * /tmp/pkg_build 2>/dev/null
-# MAGIC %cd /tmp/pkg_build/
-# MAGIC %pip install .
+# MAGIC !cd .. && source scripts/install_on_dbx.sh
 
 # COMMAND ----------
 
@@ -10,25 +7,20 @@
 
 # COMMAND ----------
 
-import logging
+# fixes issue with editable package discovery on dbx
 
-import hydra
+import os
+import sys
 
-from project.utils import init_logger
+src_dir = os.path.realpath("../src")
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
-log = init_logger("dbx_train")
+# COMMAND ----------
 
-log_config = logging.config.dictConfig(
-    {
-        "version": 1,
-        "loggers": {
-            "py4j": {"level": "WARNING"},
-            "urllib3.connectionpool": {"level": "ERROR"},
-        },
-    }
-)
-hydra.core.utils.configure_log(log_config)
-logging.captureWarnings(True)
+from project.utils.dbx import setup_loggin_for_dbx_notebook
+
+log = setup_loggin_for_dbx_notebook("dbx_train")
 
 # COMMAND ----------
 
@@ -54,5 +46,3 @@ log.info(f"Detected overrides: {overrides}")
 # COMMAND ----------
 
 job = launch(RunCfg, run, version_base="1.3", overrides=overrides)
-
-# COMMAND ----------

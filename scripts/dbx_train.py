@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC %pip install ..
+# MAGIC !cd .. && source scripts/install_on_dbx.sh
 
 # COMMAND ----------
 
@@ -7,25 +7,27 @@
 
 # COMMAND ----------
 
-import logging
+# enables autoreloading of all imporeted modules without
+# relaunching notebook. Should be executed just once
+# MAGIC %load_ext autoreload
+# MAGIC %autoreload 2
 
-import hydra
+# COMMAND ----------
 
-from project.utils import init_logger
+# fixes issue with editable package discovery on dbx
 
-log = init_logger("dbx_train")
+import os
+import sys
 
-log_config = logging.config.dictConfig(
-    {
-        "version": 1,
-        "loggers": {
-            "py4j": {"level": "WARNING"},
-            "urllib3.connectionpool": {"level": "ERROR"},
-        },
-    }
-)
-hydra.core.utils.configure_log(log_config)
-logging.captureWarnings(True)
+src_dir = os.path.realpath("../src")
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
+
+# COMMAND ----------
+
+from project.utils.dbx import setup_loggin_for_dbx_notebook
+
+log = setup_loggin_for_dbx_notebook("dbx_train")
 
 # COMMAND ----------
 
@@ -39,8 +41,6 @@ register_config(RunCfg)
 
 # COMMAND ----------
 
-overrides = "datamodule.dataset.num_features=128 model.net.input_dim=128"
+overrides = ["datamodule.dataset.num_features=128", "model.net.input_dim=128"]
 
 job = launch(RunCfg, run, version_base="1.3", overrides=overrides)
-
-# COMMAND ----------
