@@ -1,11 +1,19 @@
 from hydra_zen import make_config
+from torchmetrics.classification import (
+    BinaryAccuracy,
+    BinaryAUROC,
+    BinaryCalibrationError,
+    BinaryF1Score,
+)
 
 from project.configs.builder import BaseRunCfg
-from project.configs.utils import ZENSTORE
+from project.configs.callbacks.metrics import MetricCollectionConf
+from project.configs.utils import ZENSTORE, fbuilds
 
 # substore for experiments configs inside general store, `package="_global_"` is
 # required here to be able to overwrite all config groups in the store, not just local
 EXP_STORE = ZENSTORE(group="experiment", package="_global_")
+
 
 # `_global_` level config requires for overwrites in the defaults list
 # to be prefixed with `/`
@@ -17,11 +25,34 @@ DEEP_EXAMPLE_EXP_CONF = make_config(
         {"override /datamodule": "example"},
         {"override /model/net": "deep-mlp"},
         {"override /loggers": "mlflow"},
+        {"override /callbacks": ["default", "metrics"]},
         "_self_",
     ],
     datamodule=dict(dataset=dict(num_features=64)),
     model=dict(net=dict(input_dim=64)),
     trainer=dict(max_epochs=5),
+    callbacks={
+        "metrics": dict(
+            train_metrics=MetricCollectionConf(
+                metrics=[
+                    fbuilds(BinaryAccuracy),
+                    fbuilds(BinaryF1Score),
+                    fbuilds(BinaryAUROC),
+                    fbuilds(BinaryCalibrationError),
+                ],
+                prefix="train_",
+            ),
+        ),
+        # TODO: Come up with more generic names for max metrics
+        "max_metrics": dict(
+            metric_names=[
+                "val_BinaryAccuracy",
+                "val_BinaryF1Score",
+                "val_BinaryAUROC",
+                "val_BinaryCalibrationError",
+            ]
+        ),
+    },
     loggers={"mlflow": dict(experiment_name="/Shared/bin-class-example")},
     bases=(BaseRunCfg,),
 )

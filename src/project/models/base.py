@@ -1,0 +1,27 @@
+import abc
+from copy import deepcopy
+
+import torch
+from torch import nn
+
+from project.core.dtypes.base import TensorDataClass
+
+
+class BaseModel(nn.Module):
+    @abc.abstractmethod
+    def input_prototype(
+        self,
+    ) -> tuple[torch.Tensor, ...] | dict[str, torch.Tensor] | TensorDataClass:
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_distributed_data_parallel_model(self) -> "BaseModel":
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def cpu_model(self) -> "BaseModel":
+        return deepcopy(self).cpu()
+
+    @abc.abstractmethod
+    def requires_model_parallel(self) -> bool:
+        return False

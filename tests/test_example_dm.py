@@ -1,5 +1,5 @@
 from project.data.datamodules.example import ExampleDataModule
-from project.data.dataset.random import RandomData
+from project.data.dataset.random import RandomDataset
 
 
 def test_example_datamodule() -> None:
@@ -7,7 +7,7 @@ def test_example_datamodule() -> None:
     length = 128
     batch_size = 16
 
-    dataset = RandomData(num_features=num_features, length=length)
+    dataset = RandomDataset(num_features=num_features, length=length)
     dm = ExampleDataModule(dataset=dataset, batch_size=batch_size, num_workers=0)
 
     dm.prepare_data()

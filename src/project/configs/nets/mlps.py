@@ -1,19 +1,29 @@
+from omegaconf import MISSING
+
 from project.configs.utils import NET_STORE, fbuilds
-from project.models.nets.mlp import MLP
+from project.models.mlp import BinaryClassificationMLPNetwork
 
 # multiple configurations for the same model with different
 # hyperparameters can be stored for an easy access later
-MLPConf = fbuilds(MLP, output_dim=1, num_layers=2, hidden_dim=64)
+MLPConf = fbuilds(
+    BinaryClassificationMLPNetwork,
+    input_dim=MISSING,
+    output_dim=1,
+    num_layers=2,
+    hidden_dim=64,
+)
 
 DeepMLPConf = fbuilds(
-    MLP,
+    BinaryClassificationMLPNetwork,
+    input_dim=MISSING,
     output_dim=1,
     num_layers=6,
     hidden_dim=64,
 )
 
 WideMLPConf = fbuilds(
-    MLP,
+    BinaryClassificationMLPNetwork,
+    input_dim=MISSING,
     output_dim=1,
     num_layers=2,
     hidden_dim=256,

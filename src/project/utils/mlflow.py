@@ -2,9 +2,9 @@ import os
 from typing import TYPE_CHECKING, Any
 
 import mlflow
+from lightning.fabric.utilities.rank_zero import rank_zero_only
 from lightning.pytorch.callbacks.model_checkpoint import ModelCheckpoint
 from lightning.pytorch.loggers import MLFlowLogger
-from lightning.pytorch.utilities.rank_zero import rank_zero_only
 from mlflow.system_metrics.system_metrics_monitor import SystemMetricsMonitor
 from mlflow.utils.autologging_utils import get_autologging_config
 
@@ -12,6 +12,7 @@ from project.utils import init_logger
 
 if TYPE_CHECKING:
     from lightning import LightningModule, Trainer
+    from mlflow.tracking.fluent import ActiveRun
 
 log = init_logger(__name__)
 
@@ -57,9 +58,9 @@ class MLFlowLoggerCheckpointer(MLFlowLogger):
         self.trainer: Trainer | None = None
         self.module: LightningModule | None = None
 
-        self._active_run = None
+        self._active_run: ActiveRun | None = None
         self.log_system_metrics = log_system_metrics
-        self._system_monitor = None
+        self._system_monitor: SystemMetricsMonitor | None = None
         self._existing_run = run_id is not None
 
     @property
@@ -70,7 +71,8 @@ class MLFlowLoggerCheckpointer(MLFlowLogger):
                     self._run_id,
                     resume_logging=self._existing_run,
                 )
-                self._system_monitor.start()
+                if self._system_monitor is not None:
+                    self._system_monitor.start()
             except Exception:
                 log.exception("Failed to start system metrics monitoring: %e")
                 self.log_system_metrics = False
@@ -103,7 +105,7 @@ class MLFlowLoggerCheckpointer(MLFlowLogger):
                 )
 
                 mlflow.pytorch.log_model(
-                    pytorch_model=self.trainer.model.net,
+                    pytorch_model=self.trainer.model.net,  # type: ignore
                     artifact_path=name,
                     registered_model_name=registered_model_name,
                     extra_files=self.extra_files,
@@ -117,17 +119,20 @@ class MLFlowLoggerCheckpointer(MLFlowLogger):
             )
 
     @rank_zero_only
-    def after_save_checkpoint(self, model_checkpoint: ModelCheckpoint) -> None:
+    def after_save_checkpoint(self, checkpoint_callback: ModelCheckpoint) -> None:
         """
         Called after model checkpoint callback saves a new checkpoint.
         """
 
         if self.custom_log_model:
-            self.experiment.log_artifact(self.run_id, model_checkpoint.best_model_path)
+            self.experiment.log_artifact(
+                self.run_id, checkpoint_callback.best_model_path
+            )
 
         if self.register_model:
             _ = self.active_run
-            self._register_model(model_checkpoint.filename)
+            if checkpoint_callback.filename is not None:
+                self._register_model(checkpoint_callback.filename)
 
     @rank_zero_only
     def finalize(self, status: str = "success") -> None:

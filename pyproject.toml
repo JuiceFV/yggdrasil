@@ -18,6 +18,7 @@ dependencies = [
     "hydra-ray-launcher>=1.2.1",
     "hydra-zen",
     "mlflow>=2.9.2",
+    "pydantic",
     # system monitoring for cpu and gpu for mlflow
     "psutil",
     "pynvml",
@@ -40,15 +41,28 @@ dev = [
     "pytest-cov",
     "pytest-xdist",
 ]
+doc = [
+    "doc8",
+    "rstcheck",
+    "esbonio",
+    "sphinx",
+    "sphinx-rtd-theme",
+    "sphinxcontrib.katex",
+    "sphinx-panels",
+    "sphinx-autodoc-typehints",
+    "sphinx_copybutton",
+    "sphinx-panels",
+    "python-etcd"
+]
 dbx = ["dbx>=0.8.14"] # databricks cli
 connect = ["databricks-connect>=13.0.1"] # remote connection to databricks spark clusters (messes up pyspark install)
 
 [tool.hatch.version]
-path = "setup.py"
+path = "src/project/version.py"
 
 [tool.ruff]
 include = ["src/*.py", "setup.py", "tests/*.py", "scripts/*.py", "**/pyproject.toml"]
-exclude = ["notebooks"]
+exclude = ["notebooks", "docs"]
 line-length = 88
 
 [tool.ruff.lint]
@@ -125,4 +139,5 @@ include = ["src", "tests", "setup.py", "scripts"]
 exclude = [
     "**/__pycache__",
     "notebooks",
+    "scripts",
 ]

@@ -1,9 +1,9 @@
 from hydra_zen import make_config
 from omegaconf import MISSING
 
+from project.configs.callbacks.base import MLFlowCallbacksCfg
 from project.utils.mlflow import MLFlowLoggerCheckpointer
 
-from .callbacks import MLFlowCallbacksCfg
 from .utils import ZENSTORE, fbuilds
 
 logging_store = ZENSTORE(group="loggers", package="_global_")

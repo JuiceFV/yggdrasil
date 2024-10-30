@@ -18,12 +18,16 @@ _T = TypeVar("_T")
 
 
 def setup(zen_cfg: DictConfig) -> None:
-    """Applies optional utilities before the task is started.
+    r"""
+    Applies optional utilities before the task is started.
 
     Utilities:
     - Ignoring python warnings
     - Setting tags from command line
     - Rich config printing
+
+    Args:
+        zen_cfg (DictConfig): Hydra config object.
     """
 
     if zen_cfg.get("ignore_warnings"):
@@ -50,7 +54,7 @@ def log_instantiation(obj: _T) -> _T:
     """
     Hook to log the instantiation of each object by `hydra_zen`
     """
-    log.info(f"Instantiating\t{obj.__name__}")
+    log.info(f"Instantiating\t{obj.__name__}")  # type: ignore
     return obj
 
 
@@ -108,7 +112,7 @@ def log_hyperparameters(
     hparams = {}
 
     for k, v in cfg.items():
-        if not k.startswith("_"):
+        if isinstance(k, str) and not k.startswith("_"):
             hparams[k] = v
 
     hparams["model/params/total"] = sum(p.numel() for p in model.parameters())

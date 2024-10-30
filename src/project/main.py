@@ -49,7 +49,8 @@ def train_func(
         "trainer": trainer,
     }
 
-    log_hyperparameters(trainer, model, cfg)
+    if cfg is not None:
+        log_hyperparameters(trainer, model, cfg)
 
     if train:
         log.info("Starting training!")
@@ -60,7 +61,7 @@ def train_func(
     # TODO: support loading checkpoint if trained before or loading from path if not
     if test:
         log.info("Starting testing!")
-        ckpt_path = trainer.checkpoint_callback.best_model_path
+        ckpt_path = getattr(trainer.checkpoint_callback, "best_model_path", "")
         if ckpt_path == "":
             log.warning("Best ckpt not found! Using current weights for testing...")
             ckpt_path = None
@@ -84,7 +85,8 @@ if int(os.environ.get("PROPAGATE_DBX_CREDS", "0")):
     import mlflow
 
     try:
-        _DBX_CREDS = mlflow.utils.databricks_utils.get_databricks_env_vars("databricks")
+        from mlflow.utils.databricks_utils import get_databricks_env_vars
+        _DBX_CREDS = get_databricks_env_vars("databricks")
     except mlflow.MlflowException as e:
         log.warning(f"Failed to retrieve Databricks credentials: {e}")
 
@@ -100,9 +102,33 @@ def main(
     optimized_metric: str | None = None,
     zen_cfg: DictConfig | None = None,  # stores full resolved hydra config
 ) -> float | None:
-    """
-    main function which is a wrapper around the training function
+    r"""
+    Main function which is a wrapper around the training function
     with additional utilities before and after the training
+
+    Parameters
+    ----------
+    datamodule : LightningDataModule
+        _description_
+    model : LightningModule
+        _description_
+    trainer : Trainer
+        _description_
+    train : bool, optional
+        _description_, by default True
+    test : bool, optional
+        _description_, by default False
+    ckpt_path : str | None, optional
+        _description_, by default None
+    optimized_metric : str | None, optional
+        _description_, by default None
+    zen_cfg : DictConfig | None, optional
+        _description_, by default None
+
+    Returns
+    -------
+    float | None
+        _description_
     """
     if _DBX_CREDS:
         os.environ.update(_DBX_CREDS)
@@ -118,9 +144,11 @@ def main(
     )
 
     # safely retrieve metric value for hydra-based hyperparameter optimization
-    metric_value = get_metric_value(
-        metric_dict=metric_dict, metric_name=optimized_metric
-    )
+    metric_value = None
+    if optimized_metric is not None:
+        metric_value = get_metric_value(
+            metric_dict=metric_dict, metric_name=optimized_metric
+        )
     return metric_value
 
 

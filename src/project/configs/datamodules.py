@@ -1,12 +1,12 @@
 from project.data.datamodules.example import ExampleDataModule
-from project.data.dataset.random import RandomData
+from project.data.dataset.random import RandomDataset
 
 from .utils import ZENSTORE, fbuilds
 
 dm_store = ZENSTORE(group="datamodule")
 
 RandomDataConf = fbuilds(
-    RandomData,
+    RandomDataset,
     length=128,
 )
 

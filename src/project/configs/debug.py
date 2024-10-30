@@ -13,7 +13,7 @@ _DEBUG_DEFAULTS = [
 
 # default debug configuration
 DefDebugCfg = make_config(
-    hydra_defaults=_DEBUG_DEFAULTS,
+    hydra_defaults=_DEBUG_DEFAULTS,  # type: ignore
     task_name="debug",
     loggers={},
     ignore_warnings=False,
@@ -38,7 +38,7 @@ debug_store(DefDebugCfg, name="default")
 
 # fast dev run config for single step of each phase: train, val, test
 FastDevRunCfg = make_config(
-    hydra_defaults=_DEBUG_DEFAULTS,
+    hydra_defaults=_DEBUG_DEFAULTS,  # type: ignore
     trainer=dict(
         fast_dev_run=True,
         enable_checkpointing=False,
@@ -49,7 +49,7 @@ FastDevRunCfg = make_config(
 debug_store(FastDevRunCfg, name="fdr")
 
 LimitBatchesCfg = make_config(
-    hydra_defaults=_DEBUG_DEFAULTS,
+    hydra_defaults=_DEBUG_DEFAULTS,  # type: ignore
     trainer=dict(
         max_epochs=3,
         limit_train_batches=3,
