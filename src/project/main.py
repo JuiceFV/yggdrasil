@@ -14,6 +14,7 @@ from project.utils import (
     log_hyperparameters,
     task_wrapper,
 )
+from project.utils.dbx import propagate_credentials
 
 log = init_logger(__name__)
 
@@ -75,20 +76,7 @@ def train_func(
     return metric_dict, object_dict
 
 
-_DBX_CREDS = None
-if int(os.environ.get("PROPAGATE_DBX_CREDS", "0")):
-    # retrieves Databricks credentials if available and propagates them to the ray
-    # remote jobs which are executed in the separete python processes and don't have
-    # a direct access to them.
-    # If launched locally, the script will also propagate your own local credentials
-    # specified in the ~/.databrickscfg and will connect to mlflow on DBX.
-    import mlflow
-
-    try:
-        from mlflow.utils.databricks_utils import get_databricks_env_vars
-        _DBX_CREDS = get_databricks_env_vars("databricks")
-    except mlflow.MlflowException as e:
-        log.warning(f"Failed to retrieve Databricks credentials: {e}")
+_DBX_CREDS = propagate_credentials()
 
 
 @task_wrapper
