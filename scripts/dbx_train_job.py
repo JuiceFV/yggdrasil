@@ -1,5 +1,5 @@
 # Databricks notebook source
-# MAGIC !cd .. && source scripts/install_on_dbx.sh
+!cd .. && source scripts/install_on_dbx.sh
 
 # COMMAND ----------
 
@@ -8,13 +8,9 @@
 # COMMAND ----------
 
 # fixes issue with editable package discovery on dbx
+from site import addsitepackages
 
-import os
-import sys
-
-src_dir = os.path.realpath("../src")
-if src_dir not in sys.path:
-    sys.path.insert(0, src_dir)
+addsitepackages(None)
 
 # COMMAND ----------
 
@@ -26,17 +22,17 @@ log = setup_loggin_for_dbx_notebook("dbx_train")
 
 from hydra_zen import launch
 
-from project.train import RunCfg, register_config, run
+from project.train import RunCfg, register_config, run, ZENSTORE
 
 # COMMAND ----------
 
-register_config(RunCfg)
+register_config(RunCfg, ZENSTORE)
 
 # COMMAND ----------
 
 default_overrides = (
     "datamodule.dataset.num_features=128 model.net.input_dim=128 "
-    "paths.log_dir=/dbfs/FileStore/tmp/project/logs"
+    "paths.log_dir=/tmp/logs"
 )
 
 dbx_params = dbutils.notebook.entry_point.getCurrentBindings()  # noqa: F821
