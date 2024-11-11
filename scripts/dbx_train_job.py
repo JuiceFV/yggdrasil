@@ -1,5 +1,5 @@
 # Databricks notebook source
-!cd .. && source scripts/install_on_dbx.sh
+# MAGIC !cd .. && source scripts/install_on_dbx.sh
 
 # COMMAND ----------
 
@@ -22,7 +22,7 @@ log = setup_loggin_for_dbx_notebook("dbx_train")
 
 from hydra_zen import launch
 
-from project.train import RunCfg, register_config, run, ZENSTORE
+from project.train import ZENSTORE, RunCfg, register_config, run
 
 # COMMAND ----------
 
