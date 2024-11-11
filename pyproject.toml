@@ -8,7 +8,7 @@ requires-python = "==3.11.*" # python version is fixed to the DBX ML 15.4 runtim
 dynamic = ["version"]
 dependencies = [
     "python-dotenv",
-    "numpy",
+    "numpy==1.23.5", # according to DBX runtime 
     "rich",
     "torch==2.3.1", # according to DBX runtime 
     "lightning==2.4.0",
