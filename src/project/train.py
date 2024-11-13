@@ -1,4 +1,4 @@
-from hydra_zen import zen
+from hydra_zen import ZenStore, zen
 from hydra_zen.typing._implementations import DataClass
 
 from project.configs.utils import ZENSTORE
@@ -17,14 +17,14 @@ run = zen(
 )
 
 
-def register_config(cfg: type[DataClass]) -> None:
-    ZENSTORE(cfg, name="runner")
+def register_config(cfg: type[DataClass], store: ZenStore) -> None:
+    store(cfg, name="runner")
     # offload all registered configs to the original hydra store
-    ZENSTORE.add_to_hydra_store()
+    store.add_to_hydra_store()
 
 
 if __name__ == "__main__":
-    register_config(RunCfg)
+    register_config(RunCfg, ZENSTORE)
 
     run.hydra_main(
         config_name="runner",

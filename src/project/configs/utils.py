@@ -49,10 +49,10 @@ def destructure(x: Config_) -> Config_:
 
 
 # general store for configs of all user-defined objects
-ZENSTORE = ZenStore(name="zenstore")(to_config=destructure)
+ZENSTORE = ZenStore(name="zenstore", overwrite_ok=True)(to_config=destructure)
 
 # store for hydra-specific configs
-HYDRASTORE = ZenStore(name="hydrastore", deferred_hydra_store=False)
+HYDRASTORE = ZenStore(name="hydrastore", overwrite_ok=True, deferred_hydra_store=False)
 
 # substore for NN nets configs inside default storage
 NET_STORE = ZENSTORE(group="model/net")

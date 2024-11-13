@@ -6,7 +6,7 @@ from torch import nn
 from project.core.dtypes.base import TensorDataClass
 
 
-class BatchPreprocessor(nn.Module):
+class BatchPreprocessor(nn.Module, abc.ABC):
     r"""
     Abstract class for batch preprocessors. It's applied on collate stage.
     The :meth:`forward` method should return an instance of :class:`TensorDataClass`.
