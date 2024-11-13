@@ -2,6 +2,7 @@ import logging
 import os
 
 import hydra
+import mlflow
 
 from project.utils import init_logger
 
@@ -28,8 +29,6 @@ def setup_loggin_for_dbx_notebook(log_name: str) -> logging.Logger:
 
 def _retrive_mlflow_credentials() -> dict | None:
     creds = None
-
-    import mlflow
 
     try:
         from mlflow.utils.databricks_utils import get_databricks_env_vars
