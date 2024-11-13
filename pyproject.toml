@@ -8,7 +8,7 @@ requires-python = "==3.11.*" # python version is fixed to the DBX ML 15.4 runtim
 dynamic = ["version"]
 dependencies = [
     "python-dotenv",
-    "numpy==1.23.5", # according to DBX runtime 
+    "numpy<2.0.0", # to satisfy DBX built-in packages
     "rich",
     "torch==2.3.1", # according to DBX runtime 
     "lightning==2.4.0",
@@ -27,7 +27,6 @@ dependencies = [
 [project.optional-dependencies]
 spark = ["pyspark==3.5.0"] # according to DBX runtime 
 dev = [
-    "numpy",
     "pandas",
     "ipykernel",
     "ipywidgets",
