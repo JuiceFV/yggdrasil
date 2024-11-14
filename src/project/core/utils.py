@@ -18,8 +18,8 @@ class lazy_property:  # noqa: N801
         return value
 
 
-def deprecated_attrs(*attrs: str):  # noqa: ANN201
-    def decorator(cls):  # noqa: ANN001, ANN202
+def deprecated_attrs(*attrs: str) -> Callable[[type], type]:
+    def decorator(cls: type) -> type:
         original_getattribute = cls.__getattribute__
 
         @wraps(original_getattribute)
@@ -31,7 +31,9 @@ def deprecated_attrs(*attrs: str):  # noqa: ANN201
                     DeprecationWarning,
                     stacklevel=2,
                 )
-            return original_getattribute(self, name)
+
+            # TODO: figure out how to annotate decorator over builtins
+            return original_getattribute(self, name)  # type: ignore
 
         cls.__getattribute__ = new_getattribute  # type: ignore
         return cls
