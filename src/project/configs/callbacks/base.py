@@ -80,17 +80,17 @@ lr_monitor_conf = {"lr_monitor": LRMonitorConf}
 
 
 DefCallbacksConf = make_config(
-    **model_summary_conf,  # type: ignore
-    **rich_pb_conf,  # type: ignore
+    **model_summary_conf,
+    **rich_pb_conf,
 )
 
 MLFlowCallbacksCfg = make_config(
     summ_logger=fbuilds(SummaryLogger),
     registry_hook=fbuilds(MLFlowModelRegistryHook),
     step_logging=StepLoggingCallbackConf,  # required for logging
-    **timing_cb_conf,  # type: ignore
-    **lr_monitor_conf,  # type: ignore
-    **ckpt_callbacks,  # type: ignore
+    **timing_cb_conf,
+    **lr_monitor_conf,
+    **ckpt_callbacks,
 )
 
 

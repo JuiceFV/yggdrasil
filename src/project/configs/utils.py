@@ -12,24 +12,24 @@ from hydra_zen.wrapper import default_to_config
 from omegaconf import DictConfig, ListConfig, OmegaConf
 
 builds: Callable = make_custom_builds_fn(
-    zen_dataclass=dict(kw_only=True),  # type: ignore
+    zen_dataclass={"kw_only": True},
     hydra_convert="object",
 )
 
 
 fbuilds: Callable = make_custom_builds_fn(
     populate_full_signature=True,
-    zen_dataclass=dict(kw_only=True),  # type: ignore
+    zen_dataclass={"kw_only": True},
     hydra_convert="object",
-)  # type: ignore
+)
 
 
 pfbuilds: Callable = make_custom_builds_fn(
     zen_partial=True,
     populate_full_signature=True,
-    zen_dataclass=dict(kw_only=True),  # type: ignore
+    zen_dataclass={"kw_only": True},
     hydra_convert="object",
-)  # type: ignore
+)
 
 
 Config_ = DataClass_ | type[DataClass_] | ListConfig | DictConfig
