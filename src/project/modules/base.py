@@ -1,7 +1,7 @@
 import abc
 import inspect
 from collections.abc import Generator
-from typing import Any, final
+from typing import Any, Generic, TypeVar, cast, final
 
 import lightning as L
 import torch
@@ -13,8 +13,13 @@ from project.utils.logging import init_logger
 
 log = init_logger(__name__)
 
+T = TypeVar("T", bound=TensorDataClass)
 
-class BaseModule(abc.ABC, L.LightningModule):
+STEP_OUT_TYPE = STEP_OUTPUT | TensorDataClass
+STEP_GEN_T = TypeVar("STEP_GEN_T", bound=STEP_OUT_TYPE)
+
+
+class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
     r"""
     Base class for all lightning modules.
     :class:`~lightning.pytorch.core.LightningModule` typically implements the
@@ -70,7 +75,7 @@ class BaseModule(abc.ABC, L.LightningModule):
         """
         super().__init__()
         self._automatic_optimization = automatic_optimization
-        self._training_step_gen: Generator[STEP_OUTPUT, None, None] | None = None
+        self._training_step_gen: Generator[STEP_GEN_T, None, None] | None = None
         self._verified_steps = False
         self._setup_input_type()
         self.train_batches_processed_this_epoch = 0
@@ -88,7 +93,7 @@ class BaseModule(abc.ABC, L.LightningModule):
             this exception is raised to indicate that the training data's
                 type could not be inferred.
         """
-        self._training_batch_type = None
+        self._training_batch_type: type[T] | None = None
         sig = inspect.signature(self.train_step_gen)
         if "training_batch" not in sig.parameters:
             msg = "Missing training data to infer its type."
@@ -97,13 +102,12 @@ class BaseModule(abc.ABC, L.LightningModule):
         annotation = param.annotation
         if annotation == inspect.Parameter.empty:
             return
-        if hasattr(annotation, "from_dict"):
-            self._training_batch_type = annotation
+        self._training_batch_type = annotation
 
     @abc.abstractmethod
     def train_step_gen(
-        self, training_batch: TensorDataClass, batch_idx: int
-    ) -> Generator[STEP_OUTPUT, None, None]:
+        self, training_batch: T, batch_idx: int
+    ) -> Generator[STEP_GEN_T, None, None]:
         r"""
         Generator for training steps. Should be implemented in subclasses.
 
@@ -115,15 +119,15 @@ class BaseModule(abc.ABC, L.LightningModule):
             NotImplementedError: This method must be implemented in subclasses.
 
         Returns:
-            Generator[STEP_OUTPUT, None, None]: A generator for a training step output.
+            Generator[STEP_GEN_T, None, None]: A generator for a training step output.
         """
         raise NotImplementedError
 
-    def training_step(
+    def training_step(  # type: ignore
         self,
-        batch: TensorDataClass | dict[str, torch.Tensor],
+        batch: T | dict[str, torch.Tensor],
         batch_idx: int,
-    ) -> STEP_OUTPUT:
+    ) -> STEP_GEN_T:
         r"""
         Executes a training step.
 
@@ -136,15 +140,15 @@ class BaseModule(abc.ABC, L.LightningModule):
             TypeError: If the batch type does not match the expected `TensorDataClass`.
 
         Returns:
-            STEP_OUTPUT: The output of the training step.
+            STEP_GEN_T: The output of the training step.
         """
         if self._training_step_gen is None:
             if self._training_batch_type and isinstance(batch, dict):
-                batch = self._training_batch_type.from_dict(batch)
+                batch = self._training_batch_type(**batch)
             if not isinstance(batch, TensorDataClass):
                 msg = f"Expected {self._training_batch_type} but got {type(batch)}"
                 raise TypeError(msg)
-            self._training_step_gen = self.train_step_gen(batch, batch_idx)
+            self._training_step_gen = self.train_step_gen(cast(T, batch), batch_idx)
 
         output = next(self._training_step_gen)
 

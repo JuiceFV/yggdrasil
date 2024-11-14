@@ -9,10 +9,7 @@ from project.core.dtypes.base import TensorDataClass
 from project.modules.base import BaseModule
 
 
-class DummyTensorDataClass(TensorDataClass):
-    @classmethod
-    def from_dict(cls, data: dict[str, torch.Tensor]) -> "DummyTensorDataClass":
-        return cls()
+class DummyTensorDataClass(TensorDataClass): ...
 
 
 class DummyBaseModule(BaseModule):
@@ -50,7 +47,7 @@ class TestBaseModuleTests:
         batch = DummyTensorDataClass()
         batch_idx = 0
         output = base_module.training_step(batch, batch_idx)
-        assert output.item() == 0.0  # type: ignore
+        assert output.item() == 0.0
 
     @patch.object(DummyBaseModule, "current_epoch", new_callable=PropertyMock)
     def test_on_train_epoch_end(
