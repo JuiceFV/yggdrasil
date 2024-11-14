@@ -50,11 +50,11 @@ PRE_CALLS: list[Callable] = [
 ]
 
 
-def log_instantiation(obj: _T) -> _T:
+def log_instantiation(obj: type[_T]) -> type[_T]:
     """
     Hook to log the instantiation of each object by `hydra_zen`
     """
-    log.info(f"Instantiating\t{obj.__name__}")  # type: ignore
+    log.info(f"Instantiating\t{obj.__name__}")
     return obj
 
 
