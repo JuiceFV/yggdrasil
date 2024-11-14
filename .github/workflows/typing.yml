@@ -23,5 +23,5 @@ jobs:
         run: uv run pyright
 
       - name: "Mypy"
-        run: uv run mypy --ignore-missing-imports src/
+        run: uv run mypy src/ tests/
           
