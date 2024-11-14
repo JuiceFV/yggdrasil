@@ -33,8 +33,8 @@ dev = [
     "matplotlib",
     "plotly",
     "ruff==0.6.4",
-    "mypy==1.11.2",
-    "pyright==1.1.379",
+    "mypy==1.13.0",
+    "pyright==1.1.389",
     "pre-commit==3.8.0",
     "pytest",
     "pytest-cov",
@@ -141,3 +141,7 @@ exclude = [
     "notebooks",
     "scripts",
 ]
+
+[[tool.mypy.overrides]]
+module = ["mlflow.*", "aim.*"]
+ignore_missing_imports = true
