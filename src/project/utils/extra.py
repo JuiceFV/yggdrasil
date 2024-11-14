@@ -51,9 +51,9 @@ def print_config_tree(
         )
 
     # add all the other fields to queue (not specified in `print_order`)
-    for field in cfg:  # type: ignore
+    for field in cfg:
         if field not in queue:
-            queue.append(field)
+            queue.append(str(field))
 
     # generate config tree from queue
     for field in queue:
