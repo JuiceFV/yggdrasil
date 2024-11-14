@@ -1,3 +1,5 @@
+import os
+
 from hydra_zen import make_config
 from omegaconf import MISSING
 
@@ -42,15 +44,10 @@ logging_store(MLFlowLogCheckCfg, name="mlflow")
 
 
 if AimLogger is not None:
-    AimLoggerConf = fbuilds(AimLogger, experiment=MISSING)
-
-    AimLoggerLocalConf = make_config(
+    AimLoggerConf = fbuilds(
+        AimLogger, experiment=MISSING, repo=os.environ.get("AIM_ENDPOINT", None)
+    )
+    aim_logger_conf = make_config(
         loggers={"aim": AimLoggerConf},
     )
-
-    AimLoggerDBXConf = make_config(
-        loggers={"aim": AimLoggerConf(repo="aim://aimstack-server.appgrowth.com:53800")}
-    )
-
-    logging_store(AimLoggerLocalConf, name="aim")
-    logging_store(AimLoggerDBXConf, name="aim-dbx")
+    logging_store(aim_logger_conf, name="aim")
