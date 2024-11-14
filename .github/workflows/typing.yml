@@ -17,7 +17,7 @@ jobs:
           python-version-file: "pyproject.toml"
 
       - name: Install the project
-        run: uv sync --extra dev
+        run: uv sync --extra dev --extra aim
 
       - name: "Pyright"
         run: uv run pyright
