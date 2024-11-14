@@ -44,7 +44,7 @@ def setup(zen_cfg: DictConfig) -> None:
 
 
 # Pre-callbacks that executed before the training function
-PRE_CALLS = [
+PRE_CALLS: list[Callable] = [
     zen(lambda seed: L.seed_everything(seed, workers=True)),
     zen(setup),
 ]

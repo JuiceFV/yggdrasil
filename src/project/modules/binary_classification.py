@@ -1,9 +1,11 @@
-from collections.abc import Generator
+from collections.abc import Callable, Generator, Iterable
 from copy import deepcopy
 from functools import partial
 
 import torch
 from torch import nn
+from torch.optim import Optimizer
+from torch.optim.lr_scheduler import LRScheduler
 
 from project.core.dtypes import (
     BinaryOutput,
@@ -18,8 +20,8 @@ class BinaryClassificationModule(BaseModule):
     def __init__(
         self,
         net: BaseModel,
-        optimizer: partial[torch.optim.Optimizer] | None = None,
-        scheduler: partial[torch.optim.lr_scheduler.LRScheduler] | None = None,
+        optimizer: Callable[[Iterable[torch.nn.Parameter]], Optimizer] | None = None,
+        scheduler: Callable[[Optimizer], LRScheduler] | None = None,
         lr_scheduler_config: dict | None = None,
     ) -> None:
         super().__init__()
@@ -36,7 +38,7 @@ class BinaryClassificationModule(BaseModule):
         config["optimizer"] = optimizer
 
         if self.scheduler is not None:
-            scheduler = self.scheduler(optimizer=optimizer)
+            scheduler = self.scheduler(optimizer)
             lr_scheduler_config = deepcopy(self.lr_scheduler_config)
             lr_scheduler_config["scheduler"] = scheduler
             config["lr_scheduler"] = lr_scheduler_config
