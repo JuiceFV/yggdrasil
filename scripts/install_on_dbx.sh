@@ -7,4 +7,4 @@ source $UV_INSTALL_DIR/env
 export UV_PROJECT_ENVIRONMENT=$VIRTUAL_ENV
 echo installing project to $UV_PROJECT_ENVIRONMENT
 # install project and dependencies
-uv sync --link-mode=copy
+uv sync --link-mode=copy $@

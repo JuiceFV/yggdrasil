@@ -1,10 +1,23 @@
+import os
+
 from hydra_zen import make_config
 from omegaconf import MISSING
 
 from project.configs.callbacks.base import MLFlowCallbacksCfg
+from project.utils.logging import init_logger
 from project.utils.mlflow import MLFlowLoggerCheckpointer
 
 from .utils import ZENSTORE, fbuilds
+
+logger = init_logger(__name__)
+
+try:
+    from aim.pytorch_lightning import AimLogger
+except ImportError:
+    AimLogger = None
+    logger.warning(
+        msg=("AimLogger is not available. All related config groups will be disabled.")
+    )
 
 logging_store = ZENSTORE(group="loggers", package="_global_")
 
@@ -28,3 +41,13 @@ MLFlowLogCheckCfg = make_config(
 )
 
 logging_store(MLFlowLogCheckCfg, name="mlflow")
+
+
+if AimLogger is not None:
+    AimLoggerConf = fbuilds(
+        AimLogger, experiment=MISSING, repo=os.environ.get("AIM_ENDPOINT", None)
+    )
+    aim_logger_conf = make_config(
+        loggers={"aim": AimLoggerConf},
+    )
+    logging_store(aim_logger_conf, name="aim")
