@@ -5,12 +5,10 @@ from typing import Any, Generic, TypeVar, cast, final
 
 import lightning as L
 import torch
-from lightning.pytorch.core.module import (
-    LightningOptimizer,
-    Optimizer,
-    _FabricOptimizer,
-)
+from lightning.fabric.wrappers import _FabricOptimizer
+from lightning.pytorch.core.optimizer import LightningOptimizer
 from lightning.pytorch.utilities.types import STEP_OUTPUT
+from torch.optim.optimizer import Optimizer
 
 from project.core.dtypes.base import TensorDataClass
 from project.core.utils import lazy_property
