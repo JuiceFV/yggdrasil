@@ -5,6 +5,11 @@ from typing import Any, Generic, TypeVar, cast, final
 
 import lightning as L
 import torch
+from lightning.pytorch.core.module import (
+    LightningOptimizer,
+    Optimizer,
+    _FabricOptimizer,
+)
 from lightning.pytorch.utilities.types import STEP_OUTPUT
 
 from project.core.dtypes.base import TensorDataClass
@@ -17,6 +22,14 @@ T = TypeVar("T", bound=TensorDataClass)
 
 STEP_OUT_TYPE = STEP_OUTPUT | TensorDataClass
 STEP_GEN_T = TypeVar("STEP_GEN_T", bound=STEP_OUT_TYPE)
+
+Optimizers = Optimizer | LightningOptimizer | _FabricOptimizer
+OptimizersList = (
+    list[Optimizer]
+    | list[LightningOptimizer]
+    | list[_FabricOptimizer]
+    | list[Optimizers]
+)
 
 
 class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
@@ -166,7 +179,7 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
         self._training_step_gen = None
         return output
 
-    def optimizers(self, use_pl_optimizer: bool = True):  # type: ignore # noqa: ANN201
+    def optimizers(self, use_pl_optimizer: bool = True) -> OptimizersList:  # type: ignore
         r"""
         Returns the optimizers used during training.
 
@@ -178,7 +191,7 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
             list: A list of optimizers.
         """
         opt = super().optimizers(use_pl_optimizer)
-        return opt if isinstance(opt, list | tuple) else [opt]
+        return opt if isinstance(opt, list) else [opt]
 
     @lazy_property
     def _num_opt_steps(self) -> int:
