@@ -1,5 +1,6 @@
 import logging
 from collections.abc import Generator
+from typing import Any
 from unittest.mock import PropertyMock, patch
 
 import pytest
@@ -9,7 +10,10 @@ from project.core.dtypes.base import TensorDataClass
 from project.modules.base import BaseModule
 
 
-class DummyTensorDataClass(TensorDataClass): ...
+class DummyTensorDataClass(TensorDataClass):
+    @classmethod
+    def from_dict(cls, data: Any) -> "DummyTensorDataClass":
+        return cls()
 
 
 class DummyBaseModule(BaseModule):

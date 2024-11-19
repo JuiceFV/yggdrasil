@@ -113,6 +113,7 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
         annotation = param.annotation
         if annotation == inspect.Parameter.empty:
             return
+
         self._training_batch_type = annotation
 
     @abc.abstractmethod
@@ -155,7 +156,7 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
         """
         if self._training_step_gen is None:
             if self._training_batch_type and isinstance(batch, dict):
-                batch = self._training_batch_type(**batch)
+                batch = self._training_batch_type.from_dict(batch)
             if not isinstance(batch, TensorDataClass):
                 msg = f"Expected {self._training_batch_type} but got {type(batch)}"
                 raise TypeError(msg)

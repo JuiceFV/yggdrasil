@@ -101,3 +101,7 @@ class TensorDataClass(BaseDataClass):
             else:
                 cpu_tensor[k] = v
         return self.__class__(**cpu_tensor)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> Self:
+        raise NotImplementedError
