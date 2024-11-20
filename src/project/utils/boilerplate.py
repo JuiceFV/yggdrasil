@@ -44,17 +44,17 @@ def setup(zen_cfg: DictConfig) -> None:
 
 
 # Pre-callbacks that executed before the training function
-PRE_CALLS = [
+PRE_CALLS: list[Callable] = [
     zen(lambda seed: L.seed_everything(seed, workers=True)),
     zen(setup),
 ]
 
 
-def log_instantiation(obj: _T) -> _T:
+def log_instantiation(obj: type[_T]) -> type[_T]:
     """
     Hook to log the instantiation of each object by `hydra_zen`
     """
-    log.info(f"Instantiating\t{obj.__name__}")  # type: ignore
+    log.info(f"Instantiating\t{obj.__name__}")
     return obj
 
 

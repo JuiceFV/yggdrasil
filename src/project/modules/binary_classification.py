@@ -1,9 +1,11 @@
-from collections.abc import Generator
+from collections.abc import Callable, Generator, Iterable
 from copy import deepcopy
 from functools import partial
 
 import torch
 from torch import nn
+from torch.optim import Optimizer
+from torch.optim.lr_scheduler import LRScheduler
 
 from project.core.dtypes import (
     BinaryOutput,
@@ -11,15 +13,17 @@ from project.core.dtypes import (
     MetricInput,
 )
 from project.models.base import BaseModel
-from project.modules.base import STEP_OUTPUT, BaseModule
+from project.modules.base import BaseModule
+
+_STEP_T = dict[str, torch.Tensor | MetricInput]
 
 
-class BinaryClassificationModule(BaseModule):
+class BinaryClassificationModule(BaseModule[BinaryPreprocessedInput, _STEP_T]):
     def __init__(
         self,
         net: BaseModel,
-        optimizer: partial[torch.optim.Optimizer] | None = None,
-        scheduler: partial[torch.optim.lr_scheduler.LRScheduler] | None = None,
+        optimizer: Callable[[Iterable[torch.nn.Parameter]], Optimizer] | None = None,
+        scheduler: Callable[[Optimizer], LRScheduler] | None = None,
         lr_scheduler_config: dict | None = None,
     ) -> None:
         super().__init__()
@@ -36,7 +40,7 @@ class BinaryClassificationModule(BaseModule):
         config["optimizer"] = optimizer
 
         if self.scheduler is not None:
-            scheduler = self.scheduler(optimizer=optimizer)
+            scheduler = self.scheduler(optimizer)
             lr_scheduler_config = deepcopy(self.lr_scheduler_config)
             lr_scheduler_config["scheduler"] = scheduler
             config["lr_scheduler"] = lr_scheduler_config
@@ -45,26 +49,24 @@ class BinaryClassificationModule(BaseModule):
     def _single_step(
         self,
         batch: BinaryPreprocessedInput,
-    ) -> dict[str, torch.Tensor | MetricInput]:
+    ) -> _STEP_T:
         # NOTE: Binary classification task is restricted by the data
         # acceptable for this task. Probably, it's better to add
         # isinstance checks for the input data.
         out: BinaryOutput = self.net(batch)
-        loss = self.criterion(out.logits, batch.target)
+        loss: torch.Tensor = self.criterion(out.logits, batch.target)
         metric_input = MetricInput(preds=out.probabilities, target=batch.target)
         return {"loss": loss, "metric_input": metric_input}
 
-    def train_step_gen(  # type: ignore
+    def train_step_gen(
         self, training_batch: BinaryPreprocessedInput, batch_idx: int
-    ) -> Generator[STEP_OUTPUT, None, None]:
+    ) -> Generator[_STEP_T, None, None]:
         yield self._single_step(training_batch)
 
     def validation_step(
         self, valid_batch: BinaryPreprocessedInput, batch_idx: int
-    ) -> STEP_OUTPUT:
+    ) -> _STEP_T:
         return self._single_step(valid_batch)
 
-    def test_step(
-        self, test_batch: BinaryPreprocessedInput, batch_idx: int
-    ) -> STEP_OUTPUT:
+    def test_step(self, test_batch: BinaryPreprocessedInput, batch_idx: int) -> _STEP_T:
         return self._single_step(test_batch)

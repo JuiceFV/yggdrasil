@@ -7,30 +7,32 @@ from collections.abc import Callable
 from dataclasses import is_dataclass
 
 from hydra_zen import ZenStore, make_custom_builds_fn
+from hydra_zen.typing._implementations import DataClass_
 from hydra_zen.wrapper import default_to_config
 from omegaconf import DictConfig, ListConfig, OmegaConf
 
 builds: Callable = make_custom_builds_fn(
-    zen_dataclass=dict(kw_only=True),  # type: ignore
+    zen_dataclass={"kw_only": True},
     hydra_convert="object",
 )
 
 
 fbuilds: Callable = make_custom_builds_fn(
     populate_full_signature=True,
-    zen_dataclass=dict(kw_only=True),  # type: ignore
+    zen_dataclass={"kw_only": True},
     hydra_convert="object",
-)  # type: ignore
+)
 
 
 pfbuilds: Callable = make_custom_builds_fn(
     zen_partial=True,
     populate_full_signature=True,
-    zen_dataclass=dict(kw_only=True),  # type: ignore
+    zen_dataclass={"kw_only": True},
     hydra_convert="object",
-)  # type: ignore
+)
 
-Config_ = DictConfig | ListConfig
+
+Config_ = DataClass_ | type[DataClass_] | ListConfig | DictConfig
 
 
 def destructure(x: Config_) -> Config_:
@@ -39,12 +41,13 @@ def destructure(x: Config_) -> Config_:
     See `https://github.com/mit-ll-responsible-ai/hydra-zen/discussions/621#discussioncomment-7938326`
     """
     # apply the default auto-config logic of `store`
-    x = default_to_config(x)  # type: ignore
+    x = default_to_config(x)
     if is_dataclass(x):
         # Recursively converts:
         # dataclass -> omegaconf-dict (backed by dataclass types)
         #           -> dict -> omegaconf dict (no types)
-        return OmegaConf.create(OmegaConf.to_container(OmegaConf.create(x)))
+        # Omegaconf handles structured configs but this is not reflected in typing
+        return OmegaConf.create(OmegaConf.to_container(OmegaConf.create(x)))  # type: ignore
     return x
 
 

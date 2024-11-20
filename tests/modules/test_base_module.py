@@ -1,5 +1,6 @@
 import logging
 from collections.abc import Generator
+from typing import Any
 from unittest.mock import PropertyMock, patch
 
 import pytest
@@ -11,7 +12,7 @@ from project.modules.base import BaseModule
 
 class DummyTensorDataClass(TensorDataClass):
     @classmethod
-    def from_dict(cls, data: dict[str, torch.Tensor]) -> "DummyTensorDataClass":
+    def from_dict(cls, data: Any) -> "DummyTensorDataClass":
         return cls()
 
 
@@ -50,7 +51,7 @@ class TestBaseModuleTests:
         batch = DummyTensorDataClass()
         batch_idx = 0
         output = base_module.training_step(batch, batch_idx)
-        assert output.item() == 0.0  # type: ignore
+        assert output.item() == 0.0
 
     @patch.object(DummyBaseModule, "current_epoch", new_callable=PropertyMock)
     def test_on_train_epoch_end(

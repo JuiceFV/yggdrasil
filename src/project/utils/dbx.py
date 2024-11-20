@@ -1,7 +1,6 @@
 import logging
 import os
 
-import hydra
 import mlflow
 
 from project.utils import init_logger
@@ -10,9 +9,11 @@ log = init_logger(__name__)
 
 
 def setup_loggin_for_dbx_notebook(log_name: str) -> logging.Logger:
+    from logging.config import dictConfig
+
     log = init_logger(log_name)
 
-    log_config = logging.config.dictConfig(
+    dictConfig(
         {
             "version": 1,
             "loggers": {
@@ -21,7 +22,6 @@ def setup_loggin_for_dbx_notebook(log_name: str) -> logging.Logger:
             },
         }
     )
-    hydra.core.utils.configure_log(log_config)
     logging.captureWarnings(True)
 
     return log

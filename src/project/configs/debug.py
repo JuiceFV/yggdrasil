@@ -1,4 +1,5 @@
 from hydra_zen import make_config
+from hydra_zen.typing._implementations import DefaultsList
 from lightning.pytorch.profilers import SimpleProfiler
 
 from .builder import BaseRunCfg
@@ -6,14 +7,14 @@ from .utils import ZENSTORE, fbuilds
 
 debug_store = ZENSTORE(group="debug", package="_global_")
 
-_DEBUG_DEFAULTS = [
+_DEBUG_DEFAULTS: DefaultsList = [
     "_self_",
     {"override /callbacks": ["model_summ", "richpb"]},
 ]
 
 # default debug configuration
 DefDebugCfg = make_config(
-    hydra_defaults=_DEBUG_DEFAULTS,  # type: ignore
+    hydra_defaults=_DEBUG_DEFAULTS,
     task_name="debug",
     loggers={},
     ignore_warnings=False,
@@ -38,7 +39,7 @@ debug_store(DefDebugCfg, name="default")
 
 # fast dev run config for single step of each phase: train, val, test
 FastDevRunCfg = make_config(
-    hydra_defaults=_DEBUG_DEFAULTS,  # type: ignore
+    hydra_defaults=_DEBUG_DEFAULTS,
     trainer=dict(
         fast_dev_run=True,
         enable_checkpointing=False,
@@ -49,7 +50,7 @@ FastDevRunCfg = make_config(
 debug_store(FastDevRunCfg, name="fdr")
 
 LimitBatchesCfg = make_config(
-    hydra_defaults=_DEBUG_DEFAULTS,  # type: ignore
+    hydra_defaults=_DEBUG_DEFAULTS,
     trainer=dict(
         max_epochs=3,
         limit_train_batches=3,

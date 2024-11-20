@@ -1,7 +1,5 @@
 import dataclasses
-from typing import Any, TypeVar, cast
-
-BaseDataClassT = TypeVar("BaseDataClassT", bound="BaseDataClass")
+from typing import Any, Self
 
 
 class BaseDataClass:
@@ -25,8 +23,8 @@ class BaseDataClass:
         print(new_person)  # Output: Person(name='Alice', age=31)
     """
 
-    def _replace(self: BaseDataClassT, **kwargs: Any) -> BaseDataClassT:
+    def _replace(self, **kwargs: Any) -> Self:
         if not dataclasses.is_dataclass(self):
             msg = f"Expected dataclass, got {type(self)}"
             raise TypeError(msg)
-        return cast(BaseDataClassT, dataclasses.replace(self, **kwargs))
+        return dataclasses.replace(self, **kwargs)
