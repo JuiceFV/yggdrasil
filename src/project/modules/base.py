@@ -154,13 +154,12 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
         Returns:
             STEP_GEN_T: The output of the training step.
         """
-        if self._training_step_gen is None:
-            if self._training_batch_type and isinstance(batch, dict):
-                batch = self._training_batch_type.from_dict(batch)
-            if not isinstance(batch, TensorDataClass):
-                msg = f"Expected {self._training_batch_type} but got {type(batch)}"
-                raise TypeError(msg)
-            self._training_step_gen = self.train_step_gen(cast(T, batch), batch_idx)
+        if self._training_batch_type and isinstance(batch, dict):
+            batch = self._training_batch_type.from_dict(batch)
+        if not isinstance(batch, TensorDataClass):
+            msg = f"Expected {self._training_batch_type} but got {type(batch)}"
+            raise TypeError(msg)
+        self._training_step_gen = self.train_step_gen(cast(T, batch), batch_idx)
 
         output = next(self._training_step_gen)
 
@@ -175,7 +174,6 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
                     f"of optimizers {self._num_opt_steps}"
                 )
                 raise RuntimeError(msg)
-        self._training_step_gen = None
         return output
 
     def optimizers(self, use_pl_optimizer: bool = True) -> OptimizersList:  # type: ignore
