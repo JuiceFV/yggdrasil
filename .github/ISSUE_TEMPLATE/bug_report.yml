@@ -35,9 +35,9 @@ body:
   validations:
     required: true
 
-  - type: textarea
-    id: additional_context
-    attributes:
-      label: Additional context
-      description: Add any other context about the problem here.
-      placeholder: Any other context...
+- type: textarea
+  id: additional_context
+  attributes:
+    label: Additional context
+    description: Add any other context about the problem here.
+    placeholder: Any other context...
