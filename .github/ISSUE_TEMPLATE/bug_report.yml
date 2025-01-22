@@ -13,13 +13,16 @@ body:
         required: true
       - label: I have reproduced the issue with the latest version
         required: true
+
 - type: textarea
   id: description
   attributes:
     label: Describe the bug
     description: A clear and concise description of what the bug is.
     placeholder: Tell us about the bug...
+
 - type: textarea
+  id: versions
   attributes:
     label: Versions
     description: |
