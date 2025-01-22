@@ -16,27 +16,26 @@ body:
   - type: textarea
     id: feature
     attributes:
-      label: Feature description
+      label: 🚀 The feature, motivation and pitch
       description: A clear and concise description of the feature proposal.
+      Please outline the motivation for the proposal. Is your feature request
+      related to a specific problem? e.g., "I'm working on X and would like Y to be possible".
+      If this is related to another GitHub issue, please link here too.
       placeholder: Describe the feature...
-
-  - type: textarea
-    id: motivation
-    attributes:
-      label: Motivation
-      description: Explain why this feature should be added.
-      placeholder: Why do you want this feature?
+      required: true
 
   - type: textarea
     id: alternatives
     attributes:
       label: Alternatives
-      description: Describe any alternative solutions you've considered.
+      description: A description of any alternative solutions or features you've considered, if any.
       placeholder: Alternatives you've considered...
+      required: false
 
   - type: textarea
     id: additional_context
     attributes:
       label: Additional context
-      description: Add any other context or screenshots.
+      description: Add any other context or screenshots about the feature request.
       placeholder: Any other context...
+      required: false
