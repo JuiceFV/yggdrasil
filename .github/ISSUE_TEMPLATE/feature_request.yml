@@ -3,14 +3,15 @@ description: Suggest an idea for this project.
 title: '[Feature Request] '
 labels: enhancement, needs triage
 body:
-  - type: markdown
+  - type: checkboxes
     attributes:
-      value: |
-        Thank you for suggesting a feature.
-
-        **Checklist**
-        - [ ] I have searched for existing issues
-        - [ ] I have discussed this feature with the community
+      label: Checklist
+      description: Before creating the issue make sure you are completed the following steps
+      options:
+        - label: I have searched for existing issues
+          required: true
+        - label: I have discussed this feature with the repository contributors
+          required: true
 
   - type: textarea
     id: feature
