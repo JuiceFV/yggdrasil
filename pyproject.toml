@@ -62,7 +62,7 @@ path = "src/project/version.py"
 
 [tool.ruff]
 include = ["src/*.py", "setup.py", "tests/*.py", "scripts/*.py", "**/pyproject.toml"]
-exclude = ["notebooks", "docs"]
+exclude = ["notebooks", "docs", "src/project/utils/collect_env.py"]
 line-length = 88
 
 [tool.ruff.lint]
@@ -140,6 +140,7 @@ exclude = [
     "**/__pycache__",
     "notebooks",
     "scripts",
+    "src/project/utils/collect_env.py",
 ]
 
 [tool.mypy]
