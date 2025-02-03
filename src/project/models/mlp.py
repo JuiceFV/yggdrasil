@@ -122,5 +122,5 @@ class BinaryClassificationMLPNetwork(MLPNetwork):
         )
 
     def forward(self, batch: BinaryPreprocessedInput) -> BinaryOutput:
-        logits = self.mlp(batch.features)
+        logits = self.mlp(batch.features.dense_features)
         return BinaryOutput(probabilities=torch.sigmoid(logits), logits=logits)
