@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import torch
 
-from project.core.dtypes.base import TensorDataClass
+from project.core.dtypes.base import Feature, TensorDataClass
 
 
 @dataclass
@@ -15,7 +15,7 @@ class BinaryPreprocessedInput(TensorDataClass):
     target: torch.Tensor
 
     #: Features tensor. Normalized and preprocessed features.
-    features: torch.Tensor
+    features: Feature
 
     @classmethod
     def from_input(
@@ -60,7 +60,7 @@ class BinaryPreprocessedInput(TensorDataClass):
         annotation_checking(target)
         annotation_checking(features)
 
-        return cls(target=target, features=features)
+        return cls(target=target, features=Feature(dense_features=features))
 
 
 @dataclass
