@@ -17,7 +17,7 @@ class TestExampleBatchPreprocessor:
         batch = {"features": torch.randn(16, 64), "target": torch.randint(0, 2, (16,))}
         preprocessed_batch = batch_preprocessor.forward(batch)
         assert isinstance(preprocessed_batch, BinaryPreprocessedInput)
-        assert preprocessed_batch.features.shape == (16, 64)
+        assert preprocessed_batch.features.dense_features.shape == (16, 64)
         assert preprocessed_batch.target.shape == (16, 1)
 
 
@@ -31,7 +31,7 @@ class TestCollateAndPreprocess:
         ]
         preprocessed_batch = collate_fn(batch_list)
         assert isinstance(preprocessed_batch, BinaryPreprocessedInput)
-        assert preprocessed_batch.features.shape == (2, 64)
+        assert preprocessed_batch.features.dense_features.shape == (2, 64)
         assert preprocessed_batch.target.shape == (2, 1)
 
 
@@ -46,7 +46,7 @@ class TestExampleDataModule:
         assert isinstance(dataloader, DataLoader)
         batch = next(iter(dataloader))
         assert isinstance(batch, BinaryPreprocessedInput)
-        assert batch.features.shape == (16, 64)
+        assert batch.features.dense_features.shape == (16, 64)
         assert batch.target.shape == (16, 1)
 
     def test_val_dataloader(self, data_module: ExampleDataModule) -> None:
@@ -54,7 +54,7 @@ class TestExampleDataModule:
         assert isinstance(dataloader, DataLoader)
         batch = next(iter(dataloader))
         assert isinstance(batch, BinaryPreprocessedInput)
-        assert batch.features.shape == (16, 64)
+        assert batch.features.dense_features.shape == (16, 64)
         assert batch.target.shape == (16, 1)
 
     def test_test_dataloader(self, data_module: ExampleDataModule) -> None:
@@ -62,7 +62,7 @@ class TestExampleDataModule:
         assert isinstance(dataloader, DataLoader)
         batch = next(iter(dataloader))
         assert isinstance(batch, BinaryPreprocessedInput)
-        assert batch.features.shape == (16, 64)
+        assert batch.features.dense_features.shape == (16, 64)
         assert batch.target.shape == (16, 1)
 
     def test_example_datamodule(self, data_module: ExampleDataModule) -> None:
