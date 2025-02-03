@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass
+from enum import StrEnum
 from typing import Any, Self
 
 import torch
@@ -105,3 +106,47 @@ class TensorDataClass(BaseDataClass):
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
         raise NotImplementedError
+
+
+class Ftype(StrEnum):
+    """
+    Feature type which is detected while Data Analysis process.
+    """
+
+    #: Feature value can be either binary (0 or 1) or unique (``min == max``).
+    BINARY = "binary"
+
+    #: Feature value is a real number and a distribution adheres normal one.
+    CONTINUOUS = "continuous"
+
+    #: Feature value lies within range :math:`[0; 1]`.
+    PROBABILITY = "probability"
+
+    #: Feature value is a real number whose distribution differs enough from
+    #: normal to apply the box-cox transformation.
+    BOXCOX = "boxcox"
+
+    #: Feature takes any discrete value which will be processed distinctly.
+    ENUM = "enum"
+
+    #: Feature value is a real number whose distribution differs enough from
+    #: normal to apply the quantile normalization.
+    QUANTILE = "quantile"
+
+    #: Feature will not be processed. Commonly used for fake features.
+    DO_NOT_PREPROCESS = "do_not_preprocess"
+
+
+@dataclass
+class Feature(TensorDataClass):
+    r"""
+    Feature wrapper which helps to handle different types of features.
+
+    .. warning::
+
+        Currently, only dense features are in use. Thus, there is no implementation
+        of catigorical features.
+    """
+
+    #: Dense float features. (E.g. time spent)
+    dense_features: torch.Tensor
