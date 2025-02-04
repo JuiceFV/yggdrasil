@@ -78,15 +78,15 @@ def stratified_sampling_norm_spec(
     if isinstance(df.schema[col_name].dataType, T.ArrayType):
         df = df.select(F.explode(F.col(col_name)).alias(col_name))
 
-    df = df.select(F.explode(F.col(col_name)).alias("fname", "fvalue"))
+    df = df.select(F.explode(F.col(col_name)).alias("fid", "fvalue"))
 
-    counts_df: DataFrame = df.groupBy("fname").count()
+    counts_df: DataFrame = df.groupBy("fid").count()
     fracs = {}
     for row in counts_df.collect():
-        fracs[row["fname"]] = min(nsamples / row["count"], 1.0)
+        fracs[row["fid"]] = min(nsamples / row["count"], 1.0)
 
-    df = df.sampleBy("fname", fractions=fracs, seed=seed)
-    df = df.groupBy("fname").agg(F.collect_list("fvalue").alias("fvalues"))
+    df = df.sampleBy("fid", fractions=fracs, seed=seed)
+    df = df.groupBy("fid").agg(F.collect_list("fvalue").alias("fvalues"))
     return df
 
 
