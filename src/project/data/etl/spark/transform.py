@@ -8,6 +8,33 @@ from project.data.etl.spark.extract import query_original_table
 from project.preprocessing.normalization import infer_normalization
 
 
+def make_sparse_vector(
+    df: DataFrame,
+    include: list[str] | None = None,
+    exclude: list[str] | None = None,
+) -> tuple[DataFrame, dict[int, str]]:
+    if include and exclude:
+        msg = "`include` and `exclude` are mutually exclusive"
+        raise ValueError(msg)
+    select_cols = (
+        list(set(df.columns) & set(include))
+        if include
+        else list(set(df.columns) - set(exclude or []))
+    )
+    fid2fname = dict(enumerate(select_cols))
+    col_pairs = list(
+        sum(
+            [
+                (F.lit(fid).cast("int"), F.col(f"`{fname}`").cast("double"))
+                for fid, fname in fid2fname.items()
+            ],
+            (),
+        )
+    )
+    df = df.withColumn("sparse_vector", F.create_map(*col_pairs)).drop(*select_cols)
+    return df, fid2fname
+
+
 def make_sparse2dense(
     df: DataFrame,
     col_name: str,
