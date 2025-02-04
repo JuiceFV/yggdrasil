@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from enum import StrEnum
 from typing import Any, Self
 
@@ -150,3 +150,13 @@ class Feature(TensorDataClass):
 
     #: Dense float features. (E.g. time spent)
     dense_features: torch.Tensor
+
+
+@dataclass
+class ExtraData(TensorDataClass):
+    #: Hashed unique identifier of a table.
+    sample_id: torch.Tensor | None = None
+
+    @classmethod
+    def from_dict(cls, data: dict[str, torch.Tensor]) -> Self:
+        return cls(**{f.name: data.get(f.name, None) for f in fields(cls)})

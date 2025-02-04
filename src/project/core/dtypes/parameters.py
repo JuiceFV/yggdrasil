@@ -29,4 +29,4 @@ class NormalizationData(BaseDataClass):
 
 
 class NormalizationKey:
-    pass
+    FEATURES = "features"

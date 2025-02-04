@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import torch
 
-from project.core.dtypes.base import Feature, TensorDataClass
+from project.core.dtypes.base import ExtraData, Feature, TensorDataClass
 
 
 @dataclass
@@ -17,9 +17,15 @@ class BinaryPreprocessedInput(TensorDataClass):
     #: Features tensor. Normalized and preprocessed features.
     features: Feature
 
+    #: Extra data for the model.
+    extras: ExtraData | None = None
+
     @classmethod
     def from_input(
-        cls, target: torch.Tensor, features: torch.Tensor
+        cls,
+        target: torch.Tensor,
+        features: torch.Tensor,
+        extras: ExtraData | None = None,
     ) -> "BinaryPreprocessedInput":
         r"""
         Create a BinaryPreprocessedInput instance from target and features tensors.
@@ -46,11 +52,14 @@ class BinaryPreprocessedInput(TensorDataClass):
         ):
             msg = "Target must be binary"
             raise ValueError(msg)
-        return cls.from_tensors(target=target, features=features)
+        return cls.from_tensors(target=target, features=features, extras=extras)
 
     @classmethod
     def from_tensors(
-        cls, target: torch.Tensor, features: torch.Tensor
+        cls,
+        target: torch.Tensor,
+        features: torch.Tensor,
+        extras: ExtraData | None = None,
     ) -> "BinaryPreprocessedInput":
         def annotation_checking(inp: torch.Tensor | None) -> None:
             if inp is not None and not isinstance(inp, torch.Tensor):
@@ -60,7 +69,11 @@ class BinaryPreprocessedInput(TensorDataClass):
         annotation_checking(target)
         annotation_checking(features)
 
-        return cls(target=target, features=Feature(dense_features=features))
+        return cls(
+            target=target,
+            features=Feature(dense_features=features),
+            extras=extras,
+        )
 
 
 @dataclass
