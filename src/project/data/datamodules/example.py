@@ -13,6 +13,7 @@ from project.data.data_extractor.example import DataExtractor
 from project.data.datamodules.manual import ManualDataModule
 from project.data.etl import spark
 from project.preprocessing.batch_preprocessor import BatchPreprocessor
+from project.preprocessing.normalization import sort_features_by_normalization
 from project.preprocessing.preprocessor import Preprocessor
 
 
@@ -43,9 +44,20 @@ class ExampleBatchPreprocessor(BatchPreprocessor):
             from binary specified :class:`~project.core.dtypes.base.TensorDataClass`
         """
         batch_dict = {}
+        _, _, indcs = sort_features_by_normalization(
+            self.features_preprocessor.normalization_params
+        )
         batch_dict["features"] = self.features_preprocessor(
-            batch[InputColumn.FEATURES],
-            batch[f"{InputColumn.FEATURES}_presence"],
+            torch.index_select(
+                batch[InputColumn.FEATURES],
+                dim=1,
+                index=torch.tensor(indcs),
+            ),
+            torch.index_select(
+                batch[f"{InputColumn.FEATURES}_presence"],
+                dim=1,
+                index=torch.tensor(indcs),
+            ),
         )
         batch_dict["extras"] = ExtraData(sample_id=batch[InputColumn.SAMPLE_ID].long())
         batch_dict["target"] = batch[InputColumn.TARGET].unsqueeze(-1).float()
