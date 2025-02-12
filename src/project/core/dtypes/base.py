@@ -145,7 +145,7 @@ class Feature(TensorDataClass):
     .. warning::
 
         Currently, only dense features are in use. Thus, there is no implementation
-        of catigorical features.
+        of the sparse features.
     """
 
     #: Dense float features. (E.g. time spent)

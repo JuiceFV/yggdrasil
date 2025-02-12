@@ -22,11 +22,11 @@ def collate_and_preprocess(
 
     Example::
 
+        from datasets import load_dataset
         from torch.utils.data import DataLoader
-        from project.data.dataset.random import RandomData
 
         dataloader = DataLoader(
-            RandomData(num_features=64, length=1024),
+            load_dataset(...),
             batch_size=64,
             collate_fn=collate_and_preprocess(
                 batch_preprocessor=ExampleBatchPreprocessor()
@@ -34,9 +34,6 @@ def collate_and_preprocess(
 
         # batch == BinaryPreprocessedInput(features=..., target=...)
         batch = next(iter(dataloader))
-
-    .. todo::
-        * Further this function will be defined in another module.
 
     .. warning::
         :func:`~torch.utils.data.default_collate` doesn't properly handle Decimals.
@@ -48,8 +45,7 @@ def collate_and_preprocess(
         imposible to pickle because we define :func:`collate_fn` inside this function.
 
     Args:
-        batch_preprocessor (BatchPreprocessor): Preprocessor applied to a batch of
-            ``dict[str, torch.Tensor]``.
+        batch_preprocessor (BatchPreprocessor): Preprocessor applied to a batch.
 
     Returns:
         ~collections.abc.Callable[[list[dict]], torch.Tensor]:
