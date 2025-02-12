@@ -37,9 +37,6 @@ dev = [
     "mypy==1.13.0",
     "pyright==1.1.389",
     "pre-commit==3.8.0",
-    "pytest",
-    "pytest-cov",
-    "pytest-xdist",
 ]
 doc = [
     "doc8",
@@ -53,6 +50,13 @@ doc = [
     "sphinx_copybutton",
     "sphinx-panels",
     "python-etcd"
+]
+tests = [
+    "coverage",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+    "spark-testing-base"
 ]
 dbx = ["dbx>=0.8.14"] # databricks cli
 connect = ["databricks-connect>=13.0.1"] # remote connection to databricks spark clusters (messes up pyspark install)
@@ -107,7 +111,6 @@ select = [
     "TRY", # tryceratops
     "NPY", # NumPy-specific rules
     "FURB", # refurb
-    # "DOC", # pydoclint
     "RUF", # Ruff-specific rules
 ]
 ignore = [
@@ -134,6 +137,11 @@ mypy-init-return = true
 addopts = ["--import-mode=importlib"]
 testpaths = ["tests"]
 norecursedirs = "tests/helpers"
+markers = ["serial"]
+filterwarnings = [
+    "ignore::DeprecationWarning:pyspark.sql.pandas.*",
+    "ignore::FutureWarning:pyspark.sql.context.*",
+]
 
 [tool.pyright]
 include = ["src", "tests", "setup.py", "scripts"]
