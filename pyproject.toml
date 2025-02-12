@@ -156,5 +156,5 @@ exclude = [
 allow_redefinition = true
 
 [[tool.mypy.overrides]]
-module = ["mlflow.*", "aim.*", "pandas.*", "scipy.*", "datasets.*"]
+module = ["mlflow.*", "aim.*", "pandas.*", "scipy.*", "datasets.*", "sparktestingbase.*"]
 ignore_missing_imports = true
