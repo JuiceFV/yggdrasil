@@ -75,7 +75,7 @@ class TestExampleData(SQLTestBase):
             ],
             dtype=bool,
         )
-        self.assert_eq(df["features_presence"], features_presence)
+        self.assert_eq(pd.Series(df["features_presence"]), features_presence)
         features = np.array(
             [
                 [0.0, 0.0, 1.0, 0.0],
@@ -85,4 +85,6 @@ class TestExampleData(SQLTestBase):
             ],
             dtype=float,
         )
-        self.assert_eq_with_presence(df["features"], features_presence, features)
+        self.assert_eq_with_presence(
+            pd.Series(df["features"]), features_presence, features
+        )
