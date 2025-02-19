@@ -1,5 +1,5 @@
 r"""
-Defines the DPP options which will be set while configuration.
+Defines the DPP options which will be set during configuration.
 """
 
 from project.core.dataclasses import dataclass

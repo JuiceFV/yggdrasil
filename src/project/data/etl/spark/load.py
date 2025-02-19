@@ -9,7 +9,6 @@ if TYPE_CHECKING:
     import pandas as pd
 
 MAX_UPLOAD_PARQUET_TRIES = 10
-MAX_UINT32 = 4294967295
 
 
 def get_table_url(session: SparkSession, table_name: str) -> str:

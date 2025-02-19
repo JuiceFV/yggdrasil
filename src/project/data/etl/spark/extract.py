@@ -20,7 +20,7 @@ def hash_and_subsample(
     hash_cols: list[str] | None = None,
     num_partitions: int = 100,
 ) -> DataFrame:
-    if sample_range and not (0.0 <= sample_range[0] <= sample_range[1] <= 100.0):  # noqa: PLR2004
+    if sample_range and not (0.0 <= sample_range[0] <= sample_range[1] <= 100.0):
         msg = f"Sample range must be between 0.0 and 100.0; got {sample_range}"
         raise ValueError(msg)
 
