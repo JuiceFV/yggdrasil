@@ -93,7 +93,7 @@ def get_sample_range(input_table_spec: TableSpec) -> TrainEvalTestSampleRanges:
     )
 
 
-class BaseDataModule(L.LightningDataModule):
+class BaseDataModule(abc.ABC, L.LightningDataModule):
     _normalization_dict: dict[str, NormalizationData] | None
     _train_data: ParquetDataset | None
     _eval_data: ParquetDataset | None

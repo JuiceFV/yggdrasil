@@ -3,7 +3,7 @@ import abc
 from project.core.dtypes.dataset import ParquetDataset
 
 
-class DataExtractor:
+class DataExtractor(abc.ABC):
     @abc.abstractmethod
     def query_data(
         self,
