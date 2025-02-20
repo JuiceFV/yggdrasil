@@ -9,6 +9,7 @@ from torchmetrics.classification import (
 from project.configs.builder import BaseRunCfg
 from project.configs.callbacks.metrics import MetricCollectionConf
 from project.configs.utils import ZENSTORE, fbuilds
+from project.data.data_extractor.example import ExampleDataExtractor
 
 # substore for experiments configs inside general store, `package="_global_"` is
 # required here to be able to overwrite all config groups in the store, not just local
@@ -28,7 +29,17 @@ DEEP_EXAMPLE_EXP_CONF = make_config(
         {"override /callbacks": ["default", "metrics"]},
         "_self_",
     ],
-    datamodule=dict(dataset=dict(num_features=64)),
+    datamodule=dict(
+        input_table_spec=dict(
+            table_identifier="dlh.tmp.demo_processed",
+            train_table_sample=80.0,
+            eval_table_sample=10.0,
+            test_table_sample=10.0,
+        ),
+        # TODO: Replace with config override
+        data_extractor=fbuilds(ExampleDataExtractor),
+        features_preprocessing_options=dict(nsamples=100),
+    ),
     model=dict(net=dict(input_dim=64)),
     trainer=dict(max_epochs=5),
     callbacks={

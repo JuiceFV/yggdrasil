@@ -30,7 +30,7 @@ class DummyNetwork(BaseModel):
         return nn.Sequential(nn.Linear(64, 1))
 
     def forward(self, batch: BinaryPreprocessedInput) -> BinaryOutput:
-        logits = self.model(batch.features)
+        logits = self.model(batch.features.dense_features)
         return BinaryOutput(probabilities=torch.sigmoid(logits), logits=logits)
 
 
@@ -67,7 +67,7 @@ class TestBinaryClassificationModule:
         model = setup_model
         optimizer = model.configure_optimizers()["optimizer"]
         initial_weights = deepcopy(list(model.net.parameters()))
-        batch = BinaryPreprocessedInput(
+        batch = BinaryPreprocessedInput.from_tensors(
             features=torch.randn(8, 64),
             target=torch.randint(0, 2, (8, 1)).float(),
         )

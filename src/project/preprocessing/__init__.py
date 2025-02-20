@@ -1,3 +1,11 @@
-from project.preprocessing.batch_preprocessor import BatchPreprocessor, batch_to_device
+BOXCOX_MARGIN = 1e-4
+MISSING_VALUE = -228.228
+BOXCOX_MAX_STDEV = 1e8
+DEFAULT_MAX_QUANTILE_SIZE = 20
+DEFAULT_QUANTILE_K2_THRESHOLD = 1000.0
+DEFAULT_NSAMPLES = 1000000
+MIN_SAMPLES_TO_IDENTIFY = 20
+MAX_FVALUE = 11.513
+MIN_FVALUE = MAX_FVALUE * -1
 
-__all__ = ["BatchPreprocessor", "batch_to_device"]
+DEFAULT_MAX_UNIQUE_ENUM = 16

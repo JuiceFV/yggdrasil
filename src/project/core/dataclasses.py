@@ -6,10 +6,12 @@ I don't really trust the developers (namely data scientists)
 so the following dataclass implementation should prevent a
 developer from type mismatching.
 """
+
 import dataclasses
+import json
 import logging
 import os
-from dataclasses import field  # noqa: F401
+from dataclasses import asdict, field, is_dataclass  # noqa: F401
 from typing import TYPE_CHECKING, Any
 
 import pydantic
@@ -26,13 +28,13 @@ log.info(f"ARBITRARY_TYPES_ALLOWED: {ARBITRARY_TYPES_ALLOWED}")
 if TYPE_CHECKING:
     from dataclasses import dataclass
 else:
+
     def dataclass(_cls: type[object] | None = None, **kwargs: Any):  # noqa: ANN201
         def wrap(cls):  # noqa: ANN001, ANN202
             if USE_VANILLA_DATACLASS:
                 # For vanilla dataclasses, directly use the dataclasses decorator
                 return dataclasses.dataclass(**kwargs)(cls)
             if ARBITRARY_TYPES_ALLOWED:
-
                 if "config" in kwargs:
                     msg = "Config duplication occures"
                     raise KeyError(msg)
@@ -46,3 +48,13 @@ else:
             return wrap
 
         return wrap(_cls)
+
+
+class DataclassJSONEncoder(json.JSONEncoder):
+    def default(self, o: Any) -> Any:
+        if isinstance(o, object) and is_dataclass(o):
+            if isinstance(o, type):
+                msg = "asdict() should be called on dataclass instances, not types"
+                raise TypeError(msg)
+            return asdict(o)
+        return super().default(o)

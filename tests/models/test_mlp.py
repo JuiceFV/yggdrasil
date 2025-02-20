@@ -134,5 +134,5 @@ class TestBinaryClassificationMLPNetwork:
     ) -> None:
         mlp_network = setup_bc_mlp_network
         prototype = mlp_network.input_prototype()
-        assert prototype.features.shape == (1, mlp_network.input_dim)
+        assert prototype.features.dense_features.shape == (1, mlp_network.input_dim)
         assert prototype.target.shape == (1, 1)
