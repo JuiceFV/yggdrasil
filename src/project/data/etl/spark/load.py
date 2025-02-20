@@ -1,24 +1,21 @@
 import secrets
 import string
-from typing import TYPE_CHECKING
 
 import pyspark.sql.functions as F
+import pyspark.sql.types as T
 from pyspark.sql import DataFrame, SparkSession
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 MAX_UPLOAD_PARQUET_TRIES = 10
 
 
 def get_table_url(session: SparkSession, table_name: str) -> str:
-    pdf: pd.DataFrame = (
+    row = (
         session.sql(f"DESCRIBE FORMATTED {table_name}")
         .filter(F.col("col_name") == "Location")
-        .select("data_type")
-        .toPandas()
+        .select(F.col("data_type").cast(T.StringType()))
+        .collect()
     )
-    url = pdf.astype(str)["data_type"].values[0]
+    url = row[0]["data_type"]
     schema, path = str(url).split(":")
     return f"{schema}://{path}" if schema != "dbfs" else f"/{schema}/{path}"
 

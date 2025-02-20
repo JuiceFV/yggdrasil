@@ -9,8 +9,11 @@ def query_original_table(session: SparkSession, table_identifier: str) -> DataFr
 
 
 def get_distinct_keys(df: DataFrame, col_name: str) -> list[int]:
-    df = df.select(F.explode(F.map_keys(col_name)))
-    keys = df.distinct().rdd.flatMap(lambda x: x).collect()
+    df = df.select(F.explode(F.map_keys(col_name)).alias("key"))
+    keys = [row["key"] for row in df.distinct().collect()]
+    if not all(isinstance(k, int) for k in keys):
+        msg = f"Expected all keys to be of type int; got {keys}"
+        raise ValueError(msg)
     return sorted(keys)
 
 
