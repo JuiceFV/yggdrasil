@@ -1,5 +1,5 @@
 project.data
-================
+============
 
 .. automodule:: project.data
 
@@ -10,9 +10,8 @@ project.data
 
 Data Utility Functions
 ----------------------
-.. currentmodule:: project.data.datamodules.example
+.. currentmodule:: project.data.datamodules.base
 .. autosummary::
     :toctree: generated
     :nosignatures:
 
-    collate_and_preprocess

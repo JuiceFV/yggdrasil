@@ -105,6 +105,24 @@ class TensorDataClass(BaseDataClass):
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
+        r"""
+        Prodices TensorDataClass instance from python dictionary.
+
+        .. note::
+
+            This method accpets unstructured data, meaning any data type.
+            However, the data should be processed s.t. it returns types
+            instantiated from class:`torch.Tensor`.
+
+        Args:
+            data (dict[str, Any]): Dictionary of the unstructured data.
+
+        Raises:
+            NotImplementedError: Not overridden method.
+
+        Returns:
+            Self: TensorDataClass instance.
+        """
         raise NotImplementedError
 
 
@@ -154,6 +172,11 @@ class Feature(TensorDataClass):
 
 @dataclass
 class ExtraData(TensorDataClass):
+    r"""
+    Extra fields that are not directly included in the main data flow, but
+    those fields could be helpful in process' formalization.
+    """
+
     #: Hashed unique identifier of a table.
     sample_id: torch.Tensor | None = None
 

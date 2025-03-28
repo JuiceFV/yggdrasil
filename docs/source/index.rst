@@ -1,9 +1,10 @@
 Project documentation
 =====================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents
+.. image:: _static/diagrams/architecture/architecture.drawio.png
+   :alt: Architecture
+   :align: center
+   :width: 80%
 
 .. toctree::
    :maxdepth: 1
@@ -14,6 +15,5 @@ Project documentation
    core.dtypes
    data
    data.datamodule
-   data.dataset
    models
    modules

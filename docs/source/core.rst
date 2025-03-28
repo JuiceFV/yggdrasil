@@ -2,7 +2,6 @@ project.core
 ============
 
 .. automodule:: project.core
-
 .. currentmodule:: project.core
 
 .. contents:: project.core
