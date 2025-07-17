@@ -5,6 +5,6 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 source $UV_INSTALL_DIR/env
 # set uv venv path to match the dbx virtual env dir
 export UV_PROJECT_ENVIRONMENT=$VIRTUAL_ENV
-echo installing project to $UV_PROJECT_ENVIRONMENT
-# install project and dependencies
+echo installing yggdrasil to $UV_PROJECT_ENVIRONMENT
+# install yggdrasil and dependencies
 uv sync --link-mode=copy $@

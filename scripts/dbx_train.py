@@ -21,7 +21,7 @@ addsitepackages(None)
 
 # COMMAND ----------
 
-from project.utils.dbx import setup_loggin_for_dbx_notebook
+from yggdrasil.utils.dbx import setup_loggin_for_dbx_notebook
 
 log = setup_loggin_for_dbx_notebook("dbx_train")
 
@@ -29,7 +29,7 @@ log = setup_loggin_for_dbx_notebook("dbx_train")
 
 from hydra_zen import launch
 
-from project.train import ZENSTORE, RunCfg, register_config, run
+from yggdrasil.train import ZENSTORE, RunCfg, register_config, run
 
 # COMMAND ----------
 
