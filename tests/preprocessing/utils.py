@@ -1,9 +1,9 @@
 import numpy as np
 from scipy import special, stats
 
-from project.core.dtypes.base import Ftype
-from project.core.dtypes.parameters import NormalizationParams
-from project.preprocessing import BOXCOX_MARGIN, MAX_FVALUE, MIN_FVALUE, MISSING_VALUE
+from yggdrasil.core.dtypes.base import Ftype
+from yggdrasil.core.dtypes.parameters import NormalizationParams
+from yggdrasil.preprocessing.constants import BOXCOX_MARGIN, MAX_FVALUE, MIN_FVALUE, MISSING_VALUE
 
 BINARY_FEATURE_ID = 1
 BINARY_FEATURE_ID_2 = 2
@@ -40,36 +40,22 @@ def fid2type(fid: int) -> str:
 def variate_data() -> dict[int, NDFeatureT]:
     rng = np.random.default_rng(1)
     feature_value_map = {}
-    feature_value_map[BINARY_FEATURE_ID] = rng.binomial(1, 0.5, size=10000).astype(
-        np.float32
-    )
-    feature_value_map[BINARY_FEATURE_ID_2] = rng.binomial(1, 0.5, size=10000).astype(
-        np.float32
-    )
+    feature_value_map[BINARY_FEATURE_ID] = rng.binomial(1, 0.5, size=10000).astype(np.float32)
+    feature_value_map[BINARY_FEATURE_ID_2] = rng.binomial(1, 0.5, size=10000).astype(np.float32)
     feature_value_map[CONTINUOUS_FEATURE_ID] = rng.normal(size=10000).astype(np.float32)
-    feature_value_map[CONTINUOUS_FEATURE_ID_2] = rng.normal(size=10000).astype(
+    feature_value_map[CONTINUOUS_FEATURE_ID_2] = rng.normal(size=10000).astype(np.float32)
+    feature_value_map[BOXCOX_FEATURE_ID] = rng.exponential(size=10000).astype(np.float32)
+    feature_value_map[ENUM_FEATURE_ID] = (rng.integers(0, 10, size=10000) * 1000).astype(np.float32)
+    feature_value_map[QUANTILE_FEATURE_ID] = np.concatenate((rng.normal(size=5000), rng.exponential(size=5000))).astype(
         np.float32
     )
-    feature_value_map[BOXCOX_FEATURE_ID] = rng.exponential(size=10000).astype(
-        np.float32
-    )
-    feature_value_map[ENUM_FEATURE_ID] = (
-        rng.integers(0, 10, size=10000) * 1000
-    ).astype(np.float32)
-    feature_value_map[QUANTILE_FEATURE_ID] = np.concatenate(
-        (rng.normal(size=5000), rng.exponential(size=5000))
-    ).astype(np.float32)
-    feature_value_map[PROBABILITY_FEATURE_ID] = np.clip(
-        rng.beta(a=2.0, b=2.0, size=10000), 0.01, 0.99
-    )
+    feature_value_map[PROBABILITY_FEATURE_ID] = np.clip(rng.beta(a=2.0, b=2.0, size=10000), 0.01, 0.99)
     return feature_value_map
 
 
 class NumpyFeaturePreprocessor:
     @staticmethod
-    def value_to_quantile(
-        original_value: np.float32, quantiles: np.ndarray
-    ) -> np.float32:
+    def value_to_quantile(original_value: np.float32, quantiles: np.ndarray) -> np.float32:
         if original_value <= quantiles[0]:
             return np.float32(0.0)
         if original_value >= quantiles[-1]:
@@ -78,18 +64,12 @@ class NumpyFeaturePreprocessor:
         right = np.searchsorted(quantiles, original_value)
         left = right - 1
         interpolated = (
-            left
-            + (
-                (original_value - quantiles[left])
-                / (quantiles[right] + 1e-6 - quantiles[left])
-            )
+            left + ((original_value - quantiles[left]) / (quantiles[right] + 1e-6 - quantiles[left]))
         ) / nquantiles
         return interpolated
 
     @classmethod
-    def preprocess_feature(
-        cls, feature: NDFeatureT, params: NormalizationParams
-    ) -> NDFeatureT:
+    def preprocess_feature(cls, feature: NDFeatureT, params: NormalizationParams) -> NDFeatureT:
         is_not_missing = 1 - np.isclose(feature, MISSING_VALUE)
         if params.ftype == Ftype.BINARY:
             return ((feature != 0) * is_not_missing).astype(np.float32)
@@ -108,9 +88,7 @@ class NumpyFeaturePreprocessor:
             assert params.quantiles is not None
             transformed_feature = np.zeros_like(feature)
             for i in range(feature.shape[0]):
-                transformed_feature[i] = cls.value_to_quantile(
-                    feature[i], np.array(params.quantiles)
-                )
+                transformed_feature[i] = cls.value_to_quantile(feature[i], np.array(params.quantiles))
             feature = transformed_feature
         elif params.ftype == Ftype.ENUM:
             assert params.possible_values is not None
@@ -118,9 +96,7 @@ class NumpyFeaturePreprocessor:
             value_feature_mapping: dict[int, int] = {}
             for i, possible_value in enumerate(possible_values):
                 value_feature_mapping[possible_value] = i
-            output_feature = np.zeros(
-                (len(feature), len(possible_values)), dtype=np.float32
-            )
+            output_feature = np.zeros((len(feature), len(possible_values)), dtype=np.float32)
             for i, value in enumerate(feature):
                 if abs(value - MISSING_VALUE) < MISSING_VALUE_MARGIN:
                     continue
@@ -153,10 +129,7 @@ class NumpyFeaturePreprocessor:
     ) -> np.ndarray:
         assert len(arr.shape) == ARRAY_SHAPE
         assert arr.shape[1] == len(features)
-        preprocessed_values = [
-            cls.preprocess(dict(zip(features, row, strict=False)), params)
-            for row in arr
-        ]
+        preprocessed_values = [cls.preprocess(dict(zip(features, row, strict=False)), params) for row in arr]
         return np.array(
             [[pv[fid] for fid in features] for pv in preprocessed_values],
             dtype=np.float32,

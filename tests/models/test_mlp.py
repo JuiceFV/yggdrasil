@@ -2,8 +2,8 @@ import pytest
 import torch
 from torch import nn
 
-from project.core.dtypes.classification import BinaryOutput, BinaryPreprocessedInput
-from project.models.mlp import MLP, BinaryClassificationMLPNetwork
+from yggdrasil.core.dtypes.classification import BinaryPreprocessedInput, ClassificationOutput
+from yggdrasil.models.mlp import MLP, BinaryClassificationMLPNetwork
 
 
 class TestUtilityMLP:
@@ -40,9 +40,7 @@ class TestUtilityMLP:
             linear_layer = layer.get_submodule("0")
             linear_output = linear_output @ linear_layer.weight.T + linear_layer.bias
         output_mlp = mlp(x)
-        assert not torch.allclose(
-            output_mlp, linear_output, atol=1e-6
-        ), "MLP is not applying non-linearity"
+        assert not torch.allclose(output_mlp, linear_output, atol=1e-6), "MLP is not applying non-linearity"
 
 
 class TestForwardPassMLP:
@@ -64,15 +62,11 @@ class TestForwardPassMLP:
                     ]
                 )
             )
-            mlp.layers[0].get_submodule("0").bias = nn.Parameter(
-                torch.tensor([1.0, 1.0, 1.0, 1.0])
-            )
+            mlp.layers[0].get_submodule("0").bias = nn.Parameter(torch.tensor([1.0, 1.0, 1.0, 1.0]))
             mlp.layers[1].get_submodule("0").weight = nn.Parameter(
                 torch.tensor([[1.0, 1.0, 1.0, 1.0], [2.0, 2.0, 2.0, 2.0]])
             )
-            mlp.layers[1].get_submodule("0").bias = nn.Parameter(
-                torch.tensor([0.5, 0.5])
-            )
+            mlp.layers[1].get_submodule("0").bias = nn.Parameter(torch.tensor([0.5, 0.5]))
 
         x = torch.tensor([[1.0, 2.0, 3.0]])
         expected_hidden = torch.relu(
@@ -111,27 +105,21 @@ class TestBinaryClassificationMLPNetwork:
     @pytest.fixture
     def setup_bc_mlp_network(self) -> BinaryClassificationMLPNetwork:
         input_dim = 64
-        output_dim = 10
+        output_dim = 1
         hidden_dim = 32
         num_layers = 3
-        return BinaryClassificationMLPNetwork(
-            input_dim, output_dim, hidden_dim, num_layers
-        )
+        return BinaryClassificationMLPNetwork(input_dim, output_dim, hidden_dim, num_layers)
 
-    def test_bc_mlp_network_output_shape(
-        self, setup_bc_mlp_network: BinaryClassificationMLPNetwork
-    ) -> None:
+    def test_bc_mlp_network_output_shape(self, setup_bc_mlp_network: BinaryClassificationMLPNetwork) -> None:
         mlp_network = setup_bc_mlp_network
         batch = BinaryPreprocessedInput.from_tensors(
             target=torch.randint(0, 2, (8, 1), dtype=torch.float32),
             features=torch.randn(8, mlp_network.input_dim, dtype=torch.float32),
         )
-        output: BinaryOutput = mlp_network.forward(batch)
+        output: ClassificationOutput = mlp_network.forward(batch)
         assert output.logits.shape == (8, mlp_network.output_dim)
 
-    def test_bc_mlp_network_input_prototype(
-        self, setup_bc_mlp_network: BinaryClassificationMLPNetwork
-    ) -> None:
+    def test_bc_mlp_network_input_prototype(self, setup_bc_mlp_network: BinaryClassificationMLPNetwork) -> None:
         mlp_network = setup_bc_mlp_network
         prototype = mlp_network.input_prototype()
         assert prototype.features.dense_features.shape == (1, mlp_network.input_dim)

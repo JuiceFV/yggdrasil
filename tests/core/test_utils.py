@@ -2,7 +2,7 @@ import warnings
 
 import pytest
 
-from project.core.utils import deprecated_attrs
+from yggdrasil.core.utils import deprecated_attrs
 
 
 class TestDeprecatedAttrs:
@@ -17,8 +17,7 @@ class TestDeprecatedAttrs:
 
         with pytest.warns(
             DeprecationWarning,
-            match="MyClass.old_attr is deprecated and will "
-            "be removed in future versions.",
+            match="MyClass.old_attr is deprecated and will be removed in future versions.",
         ):
             _ = obj.old_attr
 
@@ -38,8 +37,7 @@ class TestDeprecatedAttrs:
 
         with pytest.warns(
             DeprecationWarning,
-            match="AnotherClass.another_old_attr is deprecated and will be removed "
-            "in future versions.",
+            match="AnotherClass.another_old_attr is deprecated and will be removed in future versions.",
         ):
             _ = obj.another_old_attr
 
@@ -60,15 +58,13 @@ class TestDeprecatedAttrs:
 
         with pytest.warns(
             DeprecationWarning,
-            match="MultiDeprecatedClass.old_attr1 is deprecated and will be removed "
-            "in future versions.",
+            match="MultiDeprecatedClass.old_attr1 is deprecated and will be removed in future versions.",
         ):
             _ = obj.old_attr1
 
         with pytest.warns(
             DeprecationWarning,
-            match="MultiDeprecatedClass.old_attr2 is deprecated and will be removed"
-            " in future versions.",
+            match="MultiDeprecatedClass.old_attr2 is deprecated and will be removed in future versions.",
         ):
             _ = obj.old_attr2
 

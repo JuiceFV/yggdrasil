@@ -8,7 +8,7 @@ import pandas as pd
 from sparktestingbase.sqltestcase import SQLTestCase
 
 SPARK_CONFIG = {
-    "spark.app.name": "ProjectTest",
+    "spark.app.name": "YggdrasilTest",
     "spark.sql.session.timeZone": "UTC",
     # use local host
     "spark.driver.host": "127.0.0.1",
@@ -60,9 +60,7 @@ class SQLTestBase(SQLTestCase):
         series_as_arr = np.array(pd_series.tolist())
         np.testing.assert_allclose(series_as_arr, arr)
 
-    def assert_eq_with_presence(
-        self, pd_series: pd.Series, presence: np.ndarray, arr: np.ndarray
-    ) -> None:
+    def assert_eq_with_presence(self, pd_series: pd.Series, presence: np.ndarray, arr: np.ndarray) -> None:
         series_as_arr = np.array(pd_series.tolist())
         present_sa = series_as_arr[presence]
         present_arr = arr[presence]

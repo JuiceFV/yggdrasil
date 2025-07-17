@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from project.core.dataclasses import dataclass
+from yggdrasil.core.dataclasses import dataclass
 
 
 class TestDataclasses:

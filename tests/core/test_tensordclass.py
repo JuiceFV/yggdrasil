@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import pytest
 import torch
 
-from project.core.dtypes.base import TensorDataClass
+from yggdrasil.core.dtypes.base import TensorDataClass
 
 
 @dataclass
@@ -28,9 +28,7 @@ class TestConfigParser:
 
     @unittest.skipIf(not torch.cuda.is_available(), "Test requires CUDA")
     def test_tensor_data_class_cpu(self) -> None:
-        t = MyTensorType(
-            torch.Tensor(1, 3).cuda(), torch.ones(1, 3, dtype=torch.bool).cuda()
-        )
+        t = MyTensorType(torch.Tensor(1, 3).cuda(), torch.ones(1, 3, dtype=torch.bool).cuda())
         t_cpu = t.cpu()
         assert not t_cpu.dense_features.is_cuda
         assert not t_cpu.mask.is_cuda  # type: ignore

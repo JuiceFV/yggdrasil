@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from project.core.base_dclass import BaseDataClass
+from yggdrasil.core.base_dclass import BaseDataClass
 
 
 @dataclass

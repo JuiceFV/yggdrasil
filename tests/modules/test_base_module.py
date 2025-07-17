@@ -6,8 +6,8 @@ from unittest.mock import PropertyMock, patch
 import pytest
 import torch
 
-from project.core.dtypes.base import TensorDataClass
-from project.modules.base import BaseModule
+from yggdrasil.core.dtypes.base import TensorDataClass
+from yggdrasil.modules.base import BaseModule
 
 
 class DummyTensorDataClass(TensorDataClass):
@@ -27,9 +27,7 @@ class DummyBaseModule(BaseModule):
         self.test_batches_processed_this_epoch = 0
         self.all_batches_processed = 0
 
-    def train_step_gen(
-        self, training_batch: TensorDataClass, batch_idx: int
-    ) -> Generator[torch.Tensor, None, None]:
+    def train_step_gen(self, training_batch: TensorDataClass, batch_idx: int) -> Generator[torch.Tensor, None, None]:
         yield torch.tensor(0.0)
 
 

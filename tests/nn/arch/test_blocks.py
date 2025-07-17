@@ -2,7 +2,7 @@ import pytest
 import torch
 from torch import nn
 
-from project.nn.arch.blocks import HeterogeneousEncoder
+from yggdrasil.nn.arch.blocks import HeterogeneousEncoder
 
 
 class TestHeterogeneousEncoder:
@@ -24,16 +24,12 @@ class TestHeterogeneousEncoder:
             KeyError,
             match="'unsupported_initialization'",
         ):
-            HeterogeneousEncoder(
-                10, [20, 30], initialization="unsupported_initialization"
-            )
+            HeterogeneousEncoder(10, [20, 30], initialization="unsupported_initialization")
 
     def test_initialization(self) -> None:
         input_dim = 10
         hidden_dims = [20, 30]
-        model = HeterogeneousEncoder(
-            input_dim, hidden_dims, initialization="kaiming_uniform"
-        )
+        model = HeterogeneousEncoder(input_dim, hidden_dims, initialization="kaiming_uniform")
         for param in model.parameters():
             if param.dim() > 1:
                 assert torch.all(param != 0), "Parameters should be initialized"
@@ -42,18 +38,14 @@ class TestHeterogeneousEncoder:
         input_dim = 10
         hidden_dims = [20, 30]
         model = HeterogeneousEncoder(input_dim, hidden_dims, batch_norm=True)
-        assert any(
-            isinstance(layer, nn.BatchNorm1d) for layer in model.layers
-        ), "BatchNorm1d should be in layers"
+        assert any(isinstance(layer, nn.BatchNorm1d) for layer in model.layers), "BatchNorm1d should be in layers"
 
     def test_dropout(self) -> None:
         input_dim = 10
         hidden_dims = [20, 30]
         dropout_rate = 0.5
         model = HeterogeneousEncoder(input_dim, hidden_dims, dropout_rate=dropout_rate)
-        assert any(
-            isinstance(layer, nn.Dropout) for layer in model.layers
-        ), "Dropout should be in layers"
+        assert any(isinstance(layer, nn.Dropout) for layer in model.layers), "Dropout should be in layers"
 
     def test_extra_repr(self) -> None:
         model = HeterogeneousEncoder(10, [20, 30], initialization="kaiming_normal")
@@ -69,9 +61,7 @@ class TestHeterogeneousEncoder:
             activation="leaky_relu",
             activation_cfg=activation_cfg,
         )
-        assert any(
-            isinstance(layer, nn.LeakyReLU) for layer in model.layers
-        ), "LeakyReLU should be in layers"
+        assert any(isinstance(layer, nn.LeakyReLU) for layer in model.layers), "LeakyReLU should be in layers"
 
     def test_initialization_configuration(self) -> None:
         input_dim = 10
@@ -85,9 +75,7 @@ class TestHeterogeneousEncoder:
         )
         for param in model.parameters():
             if param.dim() > 1:
-                assert torch.all(
-                    param != 0
-                ), "Parameters should be initialized with kaiming_uniform"
+                assert torch.all(param != 0), "Parameters should be initialized with kaiming_uniform"
 
     def test_no_hidden_layers(self) -> None:
         input_dim = 10

@@ -3,14 +3,6 @@ import numpy.testing as npt
 import torch
 from scipy import special
 
-from project.core.dtypes.base import Ftype
-from project.core.dtypes.parameters import NormalizationParams
-from project.preprocessing import MISSING_VALUE, normalization
-from project.preprocessing.normalization import (
-    identify_param,
-    sort_features_by_normalization,
-)
-from project.preprocessing.preprocessor import Preprocessor
 from tests.preprocessing.utils import (
     BOXCOX_FEATURE_ID,
     CONTINUOUS_FEATURE_ID,
@@ -21,6 +13,16 @@ from tests.preprocessing.utils import (
     fid2type,
     variate_data,
 )
+from yggdrasil.core.dtypes.base import Ftype
+from yggdrasil.core.dtypes.parameters import NormalizationParams
+from yggdrasil.preprocessing.constants import MISSING_VALUE
+from yggdrasil.preprocessing.normalization import (
+    deserialize,
+    identify_param,
+    serialize,
+    sort_features_by_normalization,
+)
+from yggdrasil.preprocessing.preprocessor import Preprocessor
 
 
 class TestPreprocessing:
@@ -48,9 +50,7 @@ class TestPreprocessing:
         for i, fid in enumerate(sorted(normalization_params.keys())):
             input_matrix[:, i] = torch.from_numpy(fvalue_map[fid])
         input_matrix = input_matrix[:, indcs]
-        normalized_feature_matrix = preprocessor(
-            input_matrix, (input_matrix != MISSING_VALUE)
-        )
+        normalized_feature_matrix = preprocessor(input_matrix, (input_matrix != MISSING_VALUE))
         normalized_features: dict[int, torch.Tensor] = {}
         on_column = 0
         for fid in sorted_features:
@@ -60,9 +60,7 @@ class TestPreprocessing:
                 column_size = len(norm.possible_values)
             else:
                 column_size = 1
-            normalized_features[fid] = normalized_feature_matrix[
-                :, on_column : (on_column + column_size)
-            ]
+            normalized_features[fid] = normalized_feature_matrix[:, on_column : (on_column + column_size)]
             on_column += column_size
 
         assert all(
@@ -76,9 +74,7 @@ class TestPreprocessing:
             ftype = normalization_params[fid].ftype
             if ftype == Ftype.PROBABILITY:
                 sigmoidv = special.expit(np_nfvalues)
-                assert np.all(
-                    np.logical_and(np.greater(sigmoidv, 0), np.less(sigmoidv, 1))
-                )
+                assert np.all(np.logical_and(np.greater(sigmoidv, 0), np.less(sigmoidv, 1)))
             elif ftype == Ftype.ENUM:
                 possible_values = normalization_params[fid].possible_values
                 assert possible_values is not None
@@ -92,10 +88,7 @@ class TestPreprocessing:
                     if abs(original_feature - MISSING_VALUE) < MISSING_VALUE_MARGIN:
                         assert np.sum(row) == 0.0
                     else:
-                        assert (
-                            possible_value_map[original_feature]
-                            == np.where(row == 1)[0][0]
-                        )
+                        assert possible_value_map[original_feature] == np.where(row == 1)[0][0]
             elif ftype == Ftype.QUANTILE:
                 for i, feature in enumerate(np_nfvalues[0]):
                     original_feature = fvalue_map[fid][i]
@@ -116,15 +109,9 @@ class TestPreprocessing:
 
     def test_normalize_dense_matrix_enum(self) -> None:
         normalization_params = {
-            1: NormalizationParams(
-                Ftype.ENUM, None, None, None, None, [12, 4, 2], None, None, None
-            ),
-            2: NormalizationParams(
-                Ftype.CONTINUOUS, None, 0, 0, 1, None, None, None, None
-            ),
-            3: NormalizationParams(
-                Ftype.ENUM, None, None, None, None, [15, 3], None, None, None
-            ),
+            1: NormalizationParams(Ftype.ENUM, None, None, None, None, [12, 4, 2], None, None, None),
+            2: NormalizationParams(Ftype.CONTINUOUS, None, 0, 0, 1, None, None, None, None),
+            3: NormalizationParams(Ftype.ENUM, None, None, None, None, [15, 3], None, None, None),
         }
 
         preprocessor = Preprocessor(normalization_params)
@@ -156,10 +143,8 @@ class TestPreprocessing:
             normalization_params[fid] = identify_param(fid, fvalues)
             fvalues[0] = MISSING_VALUE
 
-        serialized_normalization_params = normalization.serialize(normalization_params)
-        deserialized_normalization_params = normalization.deserialize(
-            serialized_normalization_params
-        )
+        serialized_normalization_params = serialize(normalization_params)
+        deserialized_normalization_params = deserialize(serialized_normalization_params)
         assert deserialized_normalization_params.keys() == normalization_params.keys()
         for fid in normalization_params:
             for field in [
@@ -173,19 +158,15 @@ class TestPreprocessing:
                 "min_value",
                 "max_value",
             ]:
-                assert getattr(
-                    deserialized_normalization_params[fid], field
-                ) == getattr(normalization_params[fid], field)
+                assert getattr(deserialized_normalization_params[fid], field) == getattr(
+                    normalization_params[fid], field
+                )
 
     def test_quantile_boundary(self) -> None:
         x = torch.tensor([[0.0], [80.0], [100.0]])
-        norm_params = NormalizationParams(
-            Ftype.QUANTILE, None, None, 0, 1, None, [0.0, 80.0, 100.0], 0.0, 100.0
-        )
+        norm_params = NormalizationParams(Ftype.QUANTILE, None, None, 0, 1, None, [0.0, 80.0, 100.0], 0.0, 100.0)
         preprocessor = Preprocessor({1: norm_params})
-        preprocessed_input = preprocessor._preprocess_quantile(
-            0, x.float(), [norm_params]
-        )
+        preprocessed_input = preprocessor._preprocess_quantile(0, x.float(), [norm_params])
 
         expected = torch.tensor([[0.0], [0.5], [1.0]])
 
@@ -203,14 +184,10 @@ class TestPreprocessing:
 
             preprocessor = Preprocessor({fid: normalization_params[fid]})
             fvalue_matrix = torch.from_numpy(np.expand_dims(fvalues, -1))
-            normalized_fvalues: torch.Tensor = preprocessor(
-                fvalue_matrix, (fvalue_matrix != MISSING_VALUE)
-            )
+            normalized_fvalues: torch.Tensor = preprocessor(fvalue_matrix, (fvalue_matrix != MISSING_VALUE))
             fid_preprocessed_blob_map[fid] = normalized_fvalues.numpy()
 
-        test_features = NumpyFeaturePreprocessor.preprocess(
-            fvalue_map, normalization_params
-        )
+        test_features = NumpyFeaturePreprocessor.preprocess(fvalue_map, normalization_params)
 
         for fid in fvalue_map:
             normalized_features = fid_preprocessed_blob_map[fid]

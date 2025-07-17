@@ -7,12 +7,12 @@ import pytest
 from pyspark.sql import DataFrame, SQLContext
 from pyspark.sql.functions import asc
 
-from project.core.dtypes.preprocessing.base import InputColumn
-from project.data.data_extractor.example import ExampleDataExtractor
 from tests.data.sql_test_base import SQLTestBase
+from yggdrasil.core.dtypes.preprocessing.base import InputColumn
+from yggdrasil.data.data_extractor.example import ExampleDataExtractor
 
 if TYPE_CHECKING:
-    from project.core.dtypes.dataset import ParquetDataset
+    from yggdrasil.core.dtypes.dataset import ParquetDataset
 
 logger = logging.getLogger(__name__)
 
@@ -85,6 +85,4 @@ class TestExampleData(SQLTestBase):
             ],
             dtype=float,
         )
-        self.assert_eq_with_presence(
-            pd.Series(df["features"]), features_presence, features
-        )
+        self.assert_eq_with_presence(pd.Series(df["features"]), features_presence, features)

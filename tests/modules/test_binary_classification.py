@@ -8,14 +8,14 @@ from torch import nn
 from torch.optim import Adam
 from torch.optim.lr_scheduler import StepLR
 
-from project.core.config import param_hash
-from project.core.dataclasses import dataclass
-from project.core.dtypes.classification.base import (
-    BinaryOutput,
+from yggdrasil.core.config import param_hash
+from yggdrasil.core.dataclasses import dataclass
+from yggdrasil.core.dtypes.classification.base import (
     BinaryPreprocessedInput,
+    ClassificationOutput,
 )
-from project.models.base import BaseModel
-from project.modules.binary_classification import BinaryClassificationModule
+from yggdrasil.models.base import BaseModel
+from yggdrasil.modules.binary_classification import BinaryClassificationModule
 
 
 @dataclass
@@ -29,9 +29,9 @@ class DummyNetwork(BaseModel):
     def _build_model(self) -> nn.Module:
         return nn.Sequential(nn.Linear(64, 1))
 
-    def forward(self, batch: BinaryPreprocessedInput) -> BinaryOutput:
+    def forward(self, batch: BinaryPreprocessedInput) -> ClassificationOutput:
         logits = self.model(batch.features.dense_features)
-        return BinaryOutput(probabilities=torch.sigmoid(logits), logits=logits)
+        return ClassificationOutput(logits=logits)
 
 
 class TestBinaryClassificationModule:
@@ -40,9 +40,7 @@ class TestBinaryClassificationModule:
         net = DummyNetwork()
         return BinaryClassificationModule(net)
 
-    def test_optimizer_initialization(
-        self, setup_model: BinaryClassificationModule
-    ) -> None:
+    def test_optimizer_initialization(self, setup_model: BinaryClassificationModule) -> None:
         model = setup_model
         optimizers = model.configure_optimizers()
         optimizer = optimizers["optimizer"]
@@ -61,9 +59,7 @@ class TestBinaryClassificationModule:
         assert isinstance(loss, torch.Tensor)
         assert loss.shape == torch.Size([])
 
-    def test_weight_update_after_backward(
-        self, setup_model: BinaryClassificationModule
-    ) -> None:
+    def test_weight_update_after_backward(self, setup_model: BinaryClassificationModule) -> None:
         model = setup_model
         optimizer = model.configure_optimizers()["optimizer"]
         initial_weights = deepcopy(list(model.net.parameters()))
@@ -79,9 +75,7 @@ class TestBinaryClassificationModule:
 
         updated_weights = list(model.net.parameters())
         for initial, updated in zip(initial_weights, updated_weights, strict=False):
-            assert not torch.equal(
-                initial, updated
-            ), "Weights did not update after optimization step."
+            assert not torch.equal(initial, updated), "Weights did not update after optimization step."
 
 
 class TestBinaryClassificationModuleLRScheduling:
