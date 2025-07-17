@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "project"
+name = "yggdrasil"
 requires-python = "==3.11.*" # python version is fixed to the DBX ML 15.4 runtime python version for compatibility
 dynamic = ["version"]
 dependencies = [
@@ -33,6 +33,7 @@ dev = [
     "ipywidgets",
     "matplotlib",
     "plotly",
+    "grpcio==1.71.0",
     "ruff==0.6.4",
     "mypy==1.13.0",
     "pyright==1.1.389",
@@ -43,13 +44,16 @@ doc = [
     "rstcheck",
     "esbonio",
     "sphinx",
-    "sphinx-rtd-theme",
-    "sphinxcontrib.katex",
-    "sphinx-panels",
     "sphinx-autodoc-typehints",
     "sphinx_copybutton",
-    "sphinx-panels",
-    "python-etcd"
+    "python-etcd",
+    "pydata-sphinx-theme",
+    "sphinx-design",
+    "sphinx-docsearch",
+    "sphinx-togglebutton",
+    "sphinx-favicon",
+    "sphinx-sitemap",
+    "sphinx-design",
 ]
 tests = [
     "coverage",
@@ -62,13 +66,18 @@ dbx = ["dbx>=0.8.14"] # databricks cli
 connect = ["databricks-connect>=13.0.1"] # remote connection to databricks spark clusters (messes up pyspark install)
 aim = ["aim==3.25.0"]
 
+[tool.doc8]
+ignore = [
+    "D001", # line too long
+]
+
 [tool.hatch.version]
-path = "src/project/version.py"
+path = "src/yggdrasil/version.py"
 
 [tool.ruff]
 include = ["src/*.py", "setup.py", "tests/*.py", "scripts/*.py", "**/pyproject.toml"]
-exclude = ["notebooks", "docs", "src/project/utils/collect_env.py"]
-line-length = 88
+exclude = ["notebooks", "docs", "src/yggdrasil/utils/collect_env.py"]
+line-length = 120
 
 [tool.ruff.lint]
 select = [
@@ -124,12 +133,7 @@ ignore = [
     "PLR0913", # too-many-arguments
     "PLR2004", # magic values comparison
 ]
-
-[tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401"] # unused-imports
-"tests/**" = ["S101"] # use of assert
-"scripts/**" = ["INP001"] # part of implicit namespace package, requires __init__.py
-"scripts/dbx_train*" = ["E402"] # module level import not at top of file
+per-file-ignores = { "__init__.py" = ["F401"], "tests/**" = ["S101"], "scripts/**" = ["INP001"], "scripts/dbx_train*" = ["E402"] }
 
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
@@ -150,7 +154,7 @@ exclude = [
     "**/__pycache__",
     "notebooks",
     "scripts",
-    "src/project/utils/collect_env.py",
+    "src/yggdrasil/utils/collect_env.py",
 ]
 
 [tool.mypy]
