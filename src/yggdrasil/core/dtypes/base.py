@@ -129,29 +129,28 @@ class TensorDataClass(BaseDataClass):
 class Ftype(StrEnum):
     """
     Feature type which is detected while Data Analysis process.
+
+    .. note::
+        The feature type is detected by the :func:`~yggdrasil.preprocessing.identify_types.identify_type`
+
+    Attributes:
+        BINARY (str): Feature value can be either binary (0 or 1) or unique (``min == max``).
+        CONTINUOUS (str): Feature value is a real number and a distribution adheres normal one.
+        PROBABILITY (str): Feature value lies within range :math:`[0; 1]`.
+        BOXCOX (str): Feature value is a real number whose distribution differs enough from
+            normal to apply the box-cox transformation.
+        ENUM (str): Feature takes any discrete value which will be processed distinctly.
+        QUANTILE (str): Feature value is a real number whose distribution differs enough from
+            normal to apply the quantile normalization.
+        DO_NOT_PREPROCESS (str): Feature will not be processed. Commonly used for fake features.
     """
 
-    #: Feature value can be either binary (0 or 1) or unique (``min == max``).
     BINARY = "binary"
-
-    #: Feature value is a real number and a distribution adheres normal one.
     CONTINUOUS = "continuous"
-
-    #: Feature value lies within range :math:`[0; 1]`.
     PROBABILITY = "probability"
-
-    #: Feature value is a real number whose distribution differs enough from
-    #: normal to apply the box-cox transformation.
     BOXCOX = "boxcox"
-
-    #: Feature takes any discrete value which will be processed distinctly.
     ENUM = "enum"
-
-    #: Feature value is a real number whose distribution differs enough from
-    #: normal to apply the quantile normalization.
     QUANTILE = "quantile"
-
-    #: Feature will not be processed. Commonly used for fake features.
     DO_NOT_PREPROCESS = "do_not_preprocess"
 
 
@@ -164,9 +163,10 @@ class Feature(TensorDataClass):
 
         Currently, only dense features are in use. Thus, there is no implementation
         of the sparse features.
-    """
 
-    #: Dense float features. (E.g. time spent)
+    Args:
+        dense_features (torch.Tensor): Dense features tensor. (E.g. time spent)
+    """
     dense_features: torch.Tensor
 
 
@@ -175,9 +175,10 @@ class ExtraData(TensorDataClass):
     r"""
     Extra fields that are not directly included in the main data flow, but
     those fields could be helpful in process' formalization.
-    """
 
-    #: Hashed unique identifier of a table.
+    Args:
+        sample_id (torch.Tensor | None, optional): Hashed unique identifier of a table. Defaults to None.
+    """
     sample_id: torch.Tensor | None = None
 
     @classmethod

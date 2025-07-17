@@ -9,7 +9,8 @@ from yggdrasil.core.dtypes.base import TensorDataClass
 class BatchPreprocessor(nn.Module, abc.ABC):
     r"""
     Abstract class for batch preprocessors. It's applied on collate stage.
-    The :meth:`forward` method should return an instance of :class:`TensorDataClass`.
+    The :meth:`forward` method should return an instance of
+    :class:`~yggdrasil.core.dtypes.base.TensorDataClass`.
     """
 
     def __init__(self) -> None:

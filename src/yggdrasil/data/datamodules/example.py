@@ -44,9 +44,7 @@ class ExampleBatchPreprocessor(BatchPreprocessor):
             from binary specified :class:`~yggdrasil.core.dtypes.base.TensorDataClass`
         """
         batch_dict = {}
-        _, _, indcs = sort_features_by_normalization(
-            self.features_preprocessor.normalization_params
-        )
+        _, _, indcs = sort_features_by_normalization(self.features_preprocessor.normalization_params)
         batch_dict["features"] = self.features_preprocessor(
             torch.index_select(
                 batch[InputColumn.FEATURES],
@@ -65,6 +63,19 @@ class ExampleBatchPreprocessor(BatchPreprocessor):
 
 
 class ExampleDataModule(ManualDataModule):
+    r"""
+    ExampleDataModule is a data module for example data. It inherits from
+    :class:`~yggdrasil.data.datamodules.manual.ManualDataModule` and
+    implements methods for feature identification and data querying.
+
+    Args:
+        input_table_spec (TableSpec | None): Specification of the input table.
+        data_extractor (DataExtractor | None): Data extractor instance.
+        setup_data (dict[str, str] | None): Setup data for the data module.
+        saved_setup_data (dict[str, str] | None): Saved setup data for the data module.
+        dataset_options (DatasetOptions | None): Options for the dataset.
+        features_preprocessing_options (PreprocessingOptions | None): Options for features preprocessing.
+    """
     def __init__(
         self,
         *,
@@ -83,23 +94,27 @@ class ExampleDataModule(ManualDataModule):
             dataset_options=dataset_options,
         )
 
-        self.features_preprocessing_options = (
-            features_preprocessing_options or PreprocessingOptions()
-        )
+        self.features_preprocessing_options = features_preprocessing_options or PreprocessingOptions()
 
-    def run_feature_identification(
-        self, table_identifier: str
-    ) -> dict[str, NormalizationData]:
+    def run_feature_identification(self, table_identifier: str) -> dict[str, NormalizationData]:
+        r"""
+        Run feature identification for the given table identifier.
+
+        Args:
+            table_identifier (str): Identifier of the table to run feature identification on.
+
+        Returns:
+            dict[str, NormalizationData]: A dictionary containing normalization data for features.
+        """
         session = spark.init.get_spark_session()
         features_normalization_params = spark.transform.identify_normalization_params(
             session=session,
             table_name=table_identifier,
             col_name=InputColumn.FEATURES,
             preprocessing_options=self.features_preprocessing_options,
+            seed=42,
         )
-        return {
-            NormalizationKey.FEATURES: NormalizationData(features_normalization_params)
-        }
+        return {NormalizationKey.FEATURES: NormalizationData(features_normalization_params)}
 
     def query_data(
         self,
@@ -107,9 +122,29 @@ class ExampleDataModule(ManualDataModule):
         sample_range: tuple[float, float],
         data_extractor: DataExtractor,
     ) -> ParquetDataset:
+        """
+        Query data from the data extractor for the given table identifier and sample range.
+
+        Args:
+            table_identifier (str): Identifier of the table to query data from.
+            sample_range (tuple[float, float]): Range of samples to query.
+            data_extractor (DataExtractor): Instance of DataExtractor to use for querying.
+
+        Returns:
+            ParquetDataset: A dataset containing the queried data.
+        """
         return data_extractor.query_data(table_identifier, sample_range)
 
     def build_batch_preprocessor(self) -> ExampleBatchPreprocessor:
+        r"""
+        Build a batch preprocessor for the example data module.
+
+        Raises:
+            ValueError: If the normalization dictionary is not defined.
+
+        Returns:
+            ExampleBatchPreprocessor: An instance of ExampleBatchPreprocessor.
+        """
         if self.normalization_dict is None:
             msg = "Normalization dict must be defined"
             raise ValueError(msg)

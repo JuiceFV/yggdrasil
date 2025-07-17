@@ -47,9 +47,7 @@ class MetricCallback(L.Callback):
         self.val_metrics = val_metrics or self.train_metrics.clone(prefix="val_")
         self.test_metrics = test_metrics or self.train_metrics.clone(prefix="test_")
 
-    def setup(
-        self, trainer: L.Trainer, pl_module: L.LightningModule, stage: str
-    ) -> None:
+    def setup(self, trainer: L.Trainer, pl_module: L.LightningModule, stage: str) -> None:
         r"""
         Setup lightning module with relevant metrics. By doing this we
         move the metrics to the correct device and make them trackable.
@@ -190,13 +188,9 @@ class MaxMetricCallback(L.Callback):
         Args:
             metric_names (list[str]): List of metric names to log the maximum value.
         """
-        self.max_metrics = nn.ModuleDict(
-            {f"max_{name}": MaxMetric() for name in metric_names}
-        )
+        self.max_metrics = nn.ModuleDict({f"max_{name}": MaxMetric() for name in metric_names})
 
-    def on_validation_epoch_end(
-        self, trainer: L.Trainer, pl_module: L.LightningModule
-    ) -> None:
+    def on_validation_epoch_end(self, trainer: L.Trainer, pl_module: L.LightningModule) -> None:
         """
         Log the maximum value of the metrics at the end of the validation epoch
 

@@ -22,12 +22,7 @@ STEP_OUT_TYPE = STEP_OUTPUT | TensorDataClass
 STEP_GEN_T = TypeVar("STEP_GEN_T", bound=STEP_OUT_TYPE)
 
 Optimizers = Optimizer | LightningOptimizer | _FabricOptimizer
-OptimizersList = (
-    list[Optimizer]
-    | list[LightningOptimizer]
-    | list[_FabricOptimizer]
-    | list[Optimizers]
-)
+OptimizersList = list[Optimizer] | list[LightningOptimizer] | list[_FabricOptimizer] | list[Optimizers]
 
 
 class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
@@ -116,9 +111,7 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
         self._training_batch_type = annotation
 
     @abc.abstractmethod
-    def train_step_gen(
-        self, training_batch: T, batch_idx: int
-    ) -> Generator[STEP_GEN_T, None, None]:
+    def train_step_gen(self, training_batch: T, batch_idx: int) -> Generator[STEP_GEN_T, None, None]:
         r"""
         Generator for training steps. Should be implemented in subclasses.
 
@@ -168,10 +161,7 @@ class BaseModule(L.LightningModule, abc.ABC, Generic[T, STEP_GEN_T]):
             except StopIteration:
                 self._verified_steps = True
             if not self._verified_steps:
-                msg = (
-                    "The number of training steps should match the number "
-                    f"of optimizers {self._num_opt_steps}"
-                )
+                msg = f"The number of training steps should match the number of optimizers {self._num_opt_steps}"
                 raise RuntimeError(msg)
         return output
 

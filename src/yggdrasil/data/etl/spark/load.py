@@ -9,6 +9,16 @@ MAX_UPLOAD_PARQUET_TRIES = 10
 
 
 def get_table_url(session: SparkSession, table_name: str) -> str:
+    r"""
+    Get the URL of a table in the Spark session.
+
+    Args:
+        session (SparkSession): Spark session to use for querying.
+        table_name (str): Name of the table to get the URL for.
+
+    Returns:
+        str: URL of the table in the format "schema://path" or "/dbfs/schema/path".
+    """
     row = (
         session.sql(f"DESCRIBE FORMATTED {table_name}")
         .filter(F.col("col_name") == "Location")
@@ -21,6 +31,19 @@ def get_table_url(session: SparkSession, table_name: str) -> str:
 
 
 def upload_as_parquet(session: SparkSession, df: DataFrame) -> str:
+    r"""
+    Upload a DataFrame as a Parquet table in the Spark session.
+
+    Args:
+        session (SparkSession): Spark session to use for uploading.
+        df (DataFrame): DataFrame to be uploaded as a Parquet table.
+
+    Raises:
+        RuntimeError: If a unique table name cannot be generated after multiple attempts.
+
+    Returns:
+        str: URL of the uploaded Parquet table in the format "schema://path" or "/dbfs/schema/path".
+    """
     success = False
     rand_name = "tmp_parquet_default"
     for _ in range(MAX_UPLOAD_PARQUET_TRIES):

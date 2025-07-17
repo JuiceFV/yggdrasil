@@ -60,12 +60,8 @@ class MultiClassificationModule(BaseModule[MulticlassPreprocessedInput, _STEP_T]
     ) -> Generator[_STEP_T, None, None]:
         yield self._single_step(training_batch)
 
-    def validation_step(
-        self, valid_batch: MulticlassPreprocessedInput, batch_idx: int
-    ) -> _STEP_T:
+    def validation_step(self, valid_batch: MulticlassPreprocessedInput, batch_idx: int) -> _STEP_T:
         return self._single_step(valid_batch)
 
-    def test_step(
-        self, test_batch: MulticlassPreprocessedInput, batch_idx: int
-    ) -> _STEP_T:
+    def test_step(self, test_batch: MulticlassPreprocessedInput, batch_idx: int) -> _STEP_T:
         return self._single_step(test_batch)

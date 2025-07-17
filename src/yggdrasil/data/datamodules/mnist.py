@@ -18,6 +18,19 @@ from yggdrasil.preprocessing.preprocessor import Preprocessor
 
 
 class MNISTBatchPreprocessor(BatchPreprocessor):
+    r"""
+    Batch preprocessor for MNIST dataset.
+
+    1. It applies the preprocessing defined in the :class:`~yggdrasil.preprocessing.preprocessor.Preprocessor`
+       to the features of the MNIST dataset.
+    2. It extracts the sample ID and target from the batch and formats them into a
+       :class:`~yggdrasil.core.dtypes.classification.base.MulticlassPreprocessedInput`
+       object, which is a subclass of :class:`~yggdrasil.core.dtypes.base.TensorDataClass`.
+
+    Args:
+        features_preprocessor (Preprocessor): Preprocessor for the features of the MNIST dataset.
+    """
+
     def __init__(self, features_preprocessor: Preprocessor) -> None:
         super().__init__()
         self.features_preprocessor = features_preprocessor
@@ -34,9 +47,7 @@ class MNISTBatchPreprocessor(BatchPreprocessor):
                 specified :class:`~yggdrasil.core.dtypes.base.TensorDataClass`
         """
         batch_dict = {}
-        _, _, indcs = sort_features_by_normalization(
-            self.features_preprocessor.normalization_params
-        )
+        _, _, indcs = sort_features_by_normalization(self.features_preprocessor.normalization_params)
         batch_dict["features"] = self.features_preprocessor(
             torch.index_select(
                 batch[InputColumn.FEATURES],
@@ -56,6 +67,18 @@ class MNISTBatchPreprocessor(BatchPreprocessor):
 
 
 class MNISTDataModule(ManualDataModule):
+    r"""
+    Data module for the MNIST dataset.
+
+    Args:
+        input_table_spec (TableSpec | None): Specification of the input table.
+        data_extractor (DataExtractor | None): Data extractor to use for querying data.
+        setup_data (dict[str, str] | None): Setup data for the data module.
+        saved_setup_data (dict[str, str] | None): Saved setup data for the data module.
+        dataset_options (DatasetOptions | None): Options for the dataset.
+        features_preprocessing_options (PreprocessingOptions | None): Preprocessing options for features.
+    """
+
     def __init__(
         self,
         *,
@@ -74,13 +97,18 @@ class MNISTDataModule(ManualDataModule):
             dataset_options=dataset_options,
         )
 
-        self.features_preprocessing_options = (
-            features_preprocessing_options or PreprocessingOptions()
-        )
+        self.features_preprocessing_options = features_preprocessing_options or PreprocessingOptions()
 
-    def run_feature_identification(
-        self, table_identifier: str
-    ) -> dict[str, NormalizationData]:
+    def run_feature_identification(self, table_identifier: str) -> dict[str, NormalizationData]:
+        r"""
+        Identify normalization parameters for the features in the MNIST dataset.
+
+        Args:
+            table_identifier (str): Identifier for the table containing the MNIST dataset.
+
+        Returns:
+            dict[str, NormalizationData]: A dictionary containing normalization data for the features.
+        """
         session = spark.init.get_spark_session()
         features_normalization_params = spark.transform.identify_normalization_params(
             session=session,
@@ -89,9 +117,7 @@ class MNISTDataModule(ManualDataModule):
             preprocessing_options=self.features_preprocessing_options,
             seed=42,  # Fixed seed for reproducibility
         )
-        return {
-            NormalizationKey.FEATURES: NormalizationData(features_normalization_params)
-        }
+        return {NormalizationKey.FEATURES: NormalizationData(features_normalization_params)}
 
     def query_data(
         self,
@@ -99,9 +125,29 @@ class MNISTDataModule(ManualDataModule):
         sample_range: tuple[float, float],
         data_extractor: DataExtractor,
     ) -> ParquetDataset:
+        """
+        Query data from the MNIST dataset using the provided data extractor.
+
+        Args:
+            table_identifier (str): Identifier for the table containing the MNIST dataset.
+            sample_range (tuple[float, float]): Range of samples to query from the dataset.
+            data_extractor (DataExtractor): Data extractor to use for querying data.
+
+        Returns:
+            ParquetDataset: A dataset containing the queried data from the MNIST dataset.
+        """
         return data_extractor.query_data(table_identifier, sample_range)
 
     def build_batch_preprocessor(self) -> MNISTBatchPreprocessor:
+        r"""
+        Build a batch preprocessor for the MNIST dataset.
+
+        Raises:
+            ValueError: If the normalization dictionary is not defined.
+
+        Returns:
+            MNISTBatchPreprocessor: An instance of MNISTBatchPreprocessor configured with the normalization parameters.
+        """
         if self.normalization_dict is None:
             msg = "Normalization dict must be defined"
             raise ValueError(msg)

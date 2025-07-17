@@ -9,13 +9,13 @@ __all__ = ["DatasetOptions", "PreprocessingOptions"]
 class DatasetOptions:
     r"""
     Batch reader options.
+
+    Args:
+        minibatch_size (int): Batch size for reading the dataset.
+        num_proc (int): Number of processes to use for reading the dataset.
+        streaming (bool): Use streaming mode for reading a dataset (Useful for large datasets).
     """
 
-    #: Batch size.
     minibatch_size: int = 1024
-
-    #: Number of processes to use for reading the dataset.
     num_proc: int = 1
-
-    #: Use streaming mode for reading a dataset (Useful for large datasets).
     streaming: bool = False

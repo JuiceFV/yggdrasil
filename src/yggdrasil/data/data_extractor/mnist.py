@@ -26,6 +26,16 @@ class MNISTDataExtractor(DataExtractor):
     def query_data(
         self, table_identifier: str, sample_range: tuple[float, float]
     ) -> ParquetDataset:
+        r"""
+        Queries MNIST data from the original table, applies transformations, and returns a Parquet dataset.
+
+        Args:
+            table_identifier (str): Original table identifier.
+            sample_range (tuple[float, float]): Range of samples to query.
+
+        Returns:
+            ParquetDataset: A dataset containing the queried MNIST data in Parquet format.
+        """
         session = spark.init.get_spark_session()
         df = spark.extract.query_original_table(session, table_identifier)
         df = spark.extract.hash_and_subsample(

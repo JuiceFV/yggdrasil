@@ -6,7 +6,7 @@ from torch.nn import Module, Parameter
 
 from yggdrasil.core.dtypes.base import Ftype
 from yggdrasil.core.dtypes.parameters import NormalizationParams
-from yggdrasil.preprocessing import MAX_FVALUE, MIN_FVALUE
+from yggdrasil.preprocessing.constants import MAX_FVALUE, MIN_FVALUE
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +16,15 @@ class Preprocessor(Module):
         self,
         normalization_params: dict[int, NormalizationParams],
     ) -> None:
+        r"""
+        Preprocessor class that applies normalization to input features based on
+        the provided normalization parameters.
+
+
+        Args:
+            normalization_params (dict[int, NormalizationParams]): Mapping of feature IDs
+                to their normalization parameters.
+        """
         super().__init__()
         self.normalization_params = normalization_params
         self.fid2index, self.sorted_features, _ = self._sort_features_by_normalization()
@@ -23,9 +32,7 @@ class Preprocessor(Module):
         self.zero_tensor = Parameter(torch.tensor([0.0]), requires_grad=False)
         self.one_tensor = Parameter(torch.tensor([1.0]), requires_grad=False)
         self.negative_one_tensor = Parameter(torch.tensor([-1.0]), requires_grad=False)
-        self.one_hunderedth_tensor = Parameter(
-            torch.tensor([0.01]), requires_grad=False
-        )
+        self.one_hunderedth_tensor = Parameter(torch.tensor([0.01]), requires_grad=False)
         self.min_tensor = Parameter(torch.tensor([-1e20]), requires_grad=False)
         self.max_tensor = Parameter(torch.tensor([1e20]), requires_grad=False)
         self.epsilon_tensor = Parameter(
@@ -41,16 +48,13 @@ class Preprocessor(Module):
                 continue
             if ftype == Ftype.ENUM:
                 for j in range(begin_fheader, end_fheader):
-                    enum_norm_params = self.normalization_params[
-                        self.sorted_features[j]
-                    ]
+                    enum_norm_params = self.normalization_params[self.sorted_features[j]]
                     creator = getattr(self, "_create_params_" + ftype)
                     creator(j, enum_norm_params)
                     self.split_sections.append(1)
             else:
                 norm_params = [
-                    self.normalization_params[fid]
-                    for fid in self.sorted_features[begin_fheader:end_fheader]
+                    self.normalization_params[fid] for fid in self.sorted_features[begin_fheader:end_fheader]
                 ]
                 creator = getattr(self, "_create_params_" + ftype)
                 creator(begin_fheader, norm_params)
@@ -76,31 +80,23 @@ class Preprocessor(Module):
                 for j in range(begin_fheader, end_fheader):
                     norm_params = self.normalization_params[self.sorted_features[j]]
                     preprocessed_output = (
-                        self._preprocess_feature(
-                            j, split_input[partition], [norm_params]
-                        )
-                        * split_presence[partition]
+                        self._preprocess_feature(j, split_input[partition], [norm_params]) * split_presence[partition]
                     )
                     partition += 1
                     self._check_preprocessed_output(preprocessed_output, [norm_params])
                     outputs.append(preprocessed_output)
             else:
                 norm_params_list = [
-                    self.normalization_params[fid]
-                    for fid in self.sorted_features[begin_fheader:end_fheader]
+                    self.normalization_params[fid] for fid in self.sorted_features[begin_fheader:end_fheader]
                 ]
                 preprocessed_output = (
-                    self._preprocess_feature(
-                        begin_fheader, split_input[partition], norm_params_list
-                    )
+                    self._preprocess_feature(begin_fheader, split_input[partition], norm_params_list)
                     * split_presence[partition]
                 )
                 partition += 1
                 self._check_preprocessed_output(preprocessed_output, norm_params_list)
                 if ftype != Ftype.DO_NOT_PREPROCESS:
-                    preprocessed_output = torch.clamp(
-                        preprocessed_output, MIN_FVALUE, MAX_FVALUE
-                    )
+                    preprocessed_output = torch.clamp(preprocessed_output, MIN_FVALUE, MAX_FVALUE)
                 outputs.append(preprocessed_output)
 
         return torch.cat(outputs, dim=1)
@@ -151,34 +147,20 @@ class Preprocessor(Module):
             at_feature += 1
         return fheaders
 
-    def _create_params_do_not_preprocess(
-        self, begin_fheader: int, norm_params: list[NormalizationParams]
-    ) -> None:
+    def _create_params_do_not_preprocess(self, begin_fheader: int, norm_params: list[NormalizationParams]) -> None:
         pass
 
-    def _create_params_binary(
-        self, begin_fheader: int, norm_params: list[NormalizationParams]
-    ) -> None:
+    def _create_params_binary(self, begin_fheader: int, norm_params: list[NormalizationParams]) -> None:
         pass
 
-    def _create_params_probability(
-        self, begin_fheader: int, norm_params: list[NormalizationParams]
-    ) -> None:
+    def _create_params_probability(self, begin_fheader: int, norm_params: list[NormalizationParams]) -> None:
         pass
 
-    def _create_params_min_max(
-        self, begin_fheader: int, norm_params: list[NormalizationParams]
-    ) -> None:
-        self._create_param(
-            begin_fheader, "mins", torch.tensor([p.min_value for p in norm_params])
-        )
-        self._create_param(
-            begin_fheader, "maxs", torch.tensor([p.max_value for p in norm_params])
-        )
+    def _create_params_min_max(self, begin_fheader: int, norm_params: list[NormalizationParams]) -> None:
+        self._create_param(begin_fheader, "mins", torch.tensor([p.min_value for p in norm_params]))
+        self._create_param(begin_fheader, "maxs", torch.tensor([p.max_value for p in norm_params]))
 
-    def _create_params_continuous(
-        self, begin_fheader: int, norm_params: list[NormalizationParams]
-    ) -> None:
+    def _create_params_continuous(self, begin_fheader: int, norm_params: list[NormalizationParams]) -> None:
         self._create_param(
             begin_fheader,
             "means",
@@ -190,19 +172,14 @@ class Preprocessor(Module):
             torch.tensor([p.stdev for p in norm_params]),
         )
 
-    def _create_params_boxcox(
-        self, begin_fheader: int, norm_params: list[NormalizationParams]
-    ) -> None:
+    def _create_params_boxcox(self, begin_fheader: int, norm_params: list[NormalizationParams]) -> None:
         self._create_param(
             begin_fheader,
             "shifts",
             torch.tensor([p.boxcox_shift for p in norm_params]),
         )
         for p in norm_params:
-            if (
-                p.boxcox_lambda is not None
-                and abs(p.boxcox_lambda) <= self.epsilon_tensor.item()
-            ):
+            if p.boxcox_lambda is not None and abs(p.boxcox_lambda) <= self.epsilon_tensor.item():
                 msg = f"Invalid value for boxcox lambda: {p.boxcox_lambda}"
                 raise ValueError(msg)
         self._create_param(
@@ -212,60 +189,36 @@ class Preprocessor(Module):
         )
         self._create_params_continuous(begin_fheader, norm_params)
 
-    def _create_params_quantile(
-        self, begin_fheader: int, norm_params: list[NormalizationParams]
-    ) -> None:
+    def _create_params_quantile(self, begin_fheader: int, norm_params: list[NormalizationParams]) -> None:
         nparams = len(norm_params)
-        nquantiles = torch.tensor(
-            [
-                [
-                    float(len(p.quantiles)) - 1
-                    for p in norm_params
-                    if p.quantiles is not None
-                ]
-            ]
-        )
+        nquantiles = torch.tensor([[float(len(p.quantiles)) - 1 for p in norm_params if p.quantiles is not None]])
         self._create_param(begin_fheader, "nquantiles", nquantiles)
 
         max_num_quantile_boundaries = int(
-            torch.max(
-                torch.tensor(
-                    [len(p.quantiles) for p in norm_params if p.quantiles is not None]
-                )
-            ).item()
+            torch.max(torch.tensor([len(p.quantiles) for p in norm_params if p.quantiles is not None])).item()
         )
         max_quantiles = max_num_quantile_boundaries
 
-        quantile_boundaries = torch.zeros(
-            [1, len(norm_params), max_num_quantile_boundaries]
-        )
+        quantile_boundaries = torch.zeros([1, len(norm_params), max_num_quantile_boundaries])
         max_quantile_boundaries = torch.zeros([1, len(norm_params)])
         min_quantile_boundaries = torch.zeros([1, len(norm_params)])
         for i, p in enumerate(norm_params):
             if p.quantiles is not None:
                 quantile_boundaries[0, i, :] = p.quantiles[-1]
-                quantile_boundaries[0, i, 0 : len(p.quantiles)] = torch.tensor(
-                    p.quantiles
-                )
+                quantile_boundaries[0, i, 0 : len(p.quantiles)] = torch.tensor(p.quantiles)
                 max_quantile_boundaries[0, i] = max(p.quantiles)
                 min_quantile_boundaries[0, i] = min(p.quantiles)
 
         self._create_param(begin_fheader, "quantile_boundaries", quantile_boundaries)
-        self._create_param(
-            begin_fheader, "max_quantile_boundaries", max_quantile_boundaries
-        )
-        self._create_param(
-            begin_fheader, "min_quantile_boundaries", min_quantile_boundaries
-        )
+        self._create_param(begin_fheader, "max_quantile_boundaries", max_quantile_boundaries)
+        self._create_param(begin_fheader, "min_quantile_boundaries", min_quantile_boundaries)
         self._create_param(
             begin_fheader,
             "quantile_boundary_mask",
             torch.ones([1, nparams, max_quantiles]),
         )
 
-    def _create_params_enum(
-        self, begin_fheader: int, norm_params: NormalizationParams
-    ) -> None:
+    def _create_params_enum(self, begin_fheader: int, norm_params: NormalizationParams) -> None:
         self._create_param(
             begin_fheader,
             "enum_values",
@@ -295,10 +248,7 @@ class Preprocessor(Module):
         norm_params: list[NormalizationParams],
     ) -> torch.Tensor:
         bounded_input = torch.clamp(x, 1e-5, 1 - 1e-5)
-        return (
-            self.negative_one_tensor
-            * (self.one_tensor / bounded_input - self.one_tensor).log()
-        )
+        return self.negative_one_tensor * (self.one_tensor / bounded_input - self.one_tensor).log()
 
     def _preprocess_min_max(
         self,
@@ -308,9 +258,7 @@ class Preprocessor(Module):
     ) -> torch.Tensor:
         mins = self._fetch_param(begin_fheader, "mins")
         maxs = self._fetch_param(begin_fheader, "maxs")
-        return torch.clamp(
-            torch.where(mins == maxs, x, (x - mins) / (maxs - mins)), min=0.0, max=1.0
-        )
+        return torch.clamp(torch.where(mins == maxs, x, (x - mins) / (maxs - mins)), min=0.0, max=1.0)
 
     def _preprocess_continuous(
         self,
@@ -330,9 +278,7 @@ class Preprocessor(Module):
     ) -> torch.Tensor:
         shifts = self._fetch_param(begin_fheader, "shifts")
         lambdas = self._fetch_param(begin_fheader, "lambdas")
-        boxcox_output = (
-            torch.pow(torch.clamp(x + shifts, 1e-6), lambdas) - self.one_tensor
-        ) / lambdas
+        boxcox_output = (torch.pow(torch.clamp(x + shifts, 1e-6), lambdas) - self.one_tensor) / lambdas
         return self._preprocess_continuous(begin_fheader, boxcox_output, norm_params)
 
     def _preprocess_quantile(
@@ -343,12 +289,8 @@ class Preprocessor(Module):
     ) -> torch.Tensor:
         nquantiles = self._fetch_param(begin_fheader, "nquantiles")
         quantile_boundaries = self._fetch_param(begin_fheader, "quantile_boundaries")
-        max_quantile_boundaries = self._fetch_param(
-            begin_fheader, "max_quantile_boundaries"
-        )
-        min_quantile_boundaries = self._fetch_param(
-            begin_fheader, "min_quantile_boundaries"
-        )
+        max_quantile_boundaries = self._fetch_param(begin_fheader, "max_quantile_boundaries")
+        min_quantile_boundaries = self._fetch_param(begin_fheader, "min_quantile_boundaries")
 
         mask = self._fetch_param(begin_fheader, "quantile_boundary_mask")
         masked_inputs = x.unsqueeze(2) * mask
@@ -359,22 +301,12 @@ class Preprocessor(Module):
         min_clamp = (x <= min_quantile_boundaries).float()
         min_or_max = (min_clamp + max_clamp).float()
         interpolate = (min_or_max < self.one_hunderedth_tensor).float()
-        interpolate_left, _ = torch.max(
-            (input_geq * quantile_boundaries) + (input_less * self.min_tensor), dim=2
-        )
-        interpolate_right, _ = torch.min(
-            (input_less * quantile_boundaries) + (input_geq * self.max_tensor), dim=2
-        )
+        interpolate_left, _ = torch.max((input_geq * quantile_boundaries) + (input_less * self.min_tensor), dim=2)
+        interpolate_right, _ = torch.min((input_less * quantile_boundaries) + (input_geq * self.max_tensor), dim=2)
 
         left_start = torch.sum(input_geq, dim=2) - self.one_tensor
         interpolated_values = (
-            (
-                left_start
-                + (
-                    (x - interpolate_left)
-                    / ((interpolate_right + self.epsilon_tensor) - interpolate_left)
-                )
-            )
+            (left_start + ((x - interpolate_left) / ((interpolate_right + self.epsilon_tensor) - interpolate_left)))
             / nquantiles
         ).float()
         return max_clamp + (interpolate * interpolated_values).float()
@@ -388,9 +320,7 @@ class Preprocessor(Module):
         enum_values = self._fetch_param(begin_fheader, "enum_values")
         return (x == enum_values).float()
 
-    def _create_param(
-        self, begin_fheader: int, name: str, tensor: torch.Tensor
-    ) -> torch.Tensor:
+    def _create_param(self, begin_fheader: int, name: str, tensor: torch.Tensor) -> torch.Tensor:
         param = Parameter(tensor, requires_grad=False)
         setattr(self, f"_auto_param_{begin_fheader!s}_{name}", param)
         return param
@@ -400,16 +330,10 @@ class Preprocessor(Module):
 
     def _get_fheaders_iters(self, at: int) -> tuple[int, int]:
         begin_fheader = self.fheaders[at]
-        end_fheader = (
-            len(self.normalization_params)
-            if (at + 1) == len(Ftype)
-            else self.fheaders[at + 1]
-        )
+        end_fheader = len(self.normalization_params) if (at + 1) == len(Ftype) else self.fheaders[at + 1]
         return begin_fheader, end_fheader
 
-    def _check_preprocessed_output(
-        self, batch: torch.Tensor, norm_params: list[NormalizationParams]
-    ) -> None:
+    def _check_preprocessed_output(self, batch: torch.Tensor, norm_params: list[NormalizationParams]) -> None:
         if not self.training:
             return
         ftype = norm_params[0].ftype

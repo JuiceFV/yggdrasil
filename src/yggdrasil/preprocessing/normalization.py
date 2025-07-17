@@ -9,7 +9,7 @@ from scipy import stats
 
 from yggdrasil.core.dtypes.base import Ftype
 from yggdrasil.core.dtypes.parameters import NormalizationParams
-from yggdrasil.preprocessing import (
+from yggdrasil.preprocessing.constants import (
     BOXCOX_MARGIN,
     BOXCOX_MAX_STDEV,
     DEFAULT_MAX_QUANTILE_SIZE,
@@ -40,42 +40,30 @@ def identify_param(  # noqa: C901, PLR0912, PLR0915
     performance and convergence.
 
     Steps:
-        1. Identify the feature type (e.g., ``float``, ``int``, ``enum``).
+        1. Identify the :class:`~yggdrasil.core.dtypes.base.Ftype`
         2. Check if sampled feature values are normally distributed.
-        3. If not, apply one or more of the following transformations:
+        3. If not, apply one or more of the following transformations.
 
-            * BoxCox:
-
-              .. math::
-                  y = \mathbf{1}_{\lambda \neq 0}\left[\frac{x^{\lambda} - 1}{\lambda},
-                  \log{x}\right]
-
-            * Quantile Transformation (see `scipy.stats.mquantiles`)
-            * Gauss Normalization:
-
-              .. math::
-                  y = \frac{x - \mu{(x)}}{\sigma{(x)}}
+        - BoxCox: :math:`y = \mathbf{1}_{\lambda \neq 0}\left[\frac{x^{\lambda} - 1}{\lambda}, \log{x}\right]`
+        - Quantile Transformation (see :func:`scipy.stats.mstats.mquantiles`)
+        - Gauss Normalization: :math:`y = \frac{x - \mu{(x)}}{\sigma{(x)}}`
 
     Pre-computed statistics are applied during training and serving through the
-    :class:`athena.preprocessing.preprocessor.Preprocessor`.
+    :class:`~yggdrasil.preprocessing.preprocessor.Preprocessor`.
 
     Args:
-        fid (int): Feature name.
-        fvalues (np.ndarray): Sample of feature values.
-        max_unique_enum_values (int, optional): Maximum unique values for a
-            categorical feature. Defaults to ``DEFAULT_MAX_UNIQUE_ENUM``.
-        quantile_size (int, optional): Number of quantile splits during
-            transformation. Defaults to ``DEFAULT_MAX_QUANTILE_SIZE``.
-        quantile_k2_threshold (float, optional): Threshold for skewness
-            (:math:`s^2`) and kurtosis (:math:`k^2`) in the normality test
-            (see `scipy.stats.normaltest`). Defaults to
-            ``DEFAULT_QUANTILE_K2_THRESHOLD``.
-        skip_boxcox (bool, optional): Skip the Box-Cox transformation.
-            Defaults to ``False``.
-        skip_quantiles (bool, optional): Skip the quantile transformation.
-            Defaults to ``False``.
-        ftype (Optional[Ftype], optional): Manually specified feature type.
-            Defaults to ``None``.
+        fid (int): Feature ID.
+        fvalues (numpy.ndarray): Sample of feature values.
+        max_unique_enum_values (int, optional): Maximum unique values for a categorical feature.
+            Defaults to ``DEFAULT_MAX_UNIQUE_ENUM``.
+        quantile_size (int, optional): Number of quantile splits during transformation.
+            Defaults to ``DEFAULT_MAX_QUANTILE_SIZE``.
+        quantile_k2_threshold (float, optional): Threshold for skewness (:math:`s^2`) and
+            kurtosis (:math:`k^2`) in the normality test (see `scipy.stats.normaltest`).
+            Defaults to ``DEFAULT_QUANTILE_K2_THRESHOLD``.
+        skip_boxcox (bool, optional): Skip the Box-Cox transformation. Defaults to ``False``.
+        skip_quantiles (bool, optional): Skip the quantile transformation. Defaults to ``False``.
+        ftype (Ftype | None, optional): Manually specified feature type. Defaults to ``None``.
 
     Raises:
         TypeError: If the feature type is undefined.
@@ -124,9 +112,7 @@ def identify_param(  # noqa: C901, PLR0912, PLR0915
     if ftype == Ftype.CONTINUOUS or boxcox_required or quantile_required:
         # If fake vectors (padding for example) is given then no normalization applied
         if min_fvalue == max_fvalue and not (boxcox_required or quantile_required):
-            return NormalizationParams(
-                Ftype.CONTINUOUS, None, 0, 0, 1, None, None, None, None
-            )
+            return NormalizationParams(Ftype.CONTINUOUS, None, 0, 0, 1, None, None, None, None)
 
         # identify the difference between current feature distribution
         # and Normal distribution using normal tes. It returns k2 = s^2 + k^2
@@ -137,18 +123,12 @@ def identify_param(  # noqa: C901, PLR0912, PLR0915
         boxcox_shift = float(min_fvalue * -1)
         boxcox_result = stats.boxcox(np.maximum(fvalues + boxcox_shift, BOXCOX_MARGIN))
         transformed_fvalues, lambda_ = boxcox_result[:2]
-        if not (
-            isinstance(transformed_fvalues, np.ndarray) and isinstance(lambda_, float)
-        ):
-            msg = (
-                "BoxCox transformation failed. "
-                "(Unexpected error, this only for the pylance)"
-            )
+        if not (isinstance(transformed_fvalues, np.ndarray) and isinstance(lambda_, float)):
+            msg = "BoxCox transformation failed. (Unexpected error, this only for the pylance)"
             raise RuntimeError(msg)
         k2_boxcox, p_boxcox = stats.normaltest(transformed_fvalues)
         logger.info(
-            f"Feature stats; Original K2: {k2_original} P: {p_original} "
-            f"BoxCox K2: {k2_boxcox} P: {p_boxcox}"
+            f"Feature stats; Original K2: {k2_original} P: {p_original} BoxCox K2: {k2_boxcox} P: {p_boxcox}"
         )
 
         # ===Box Cox Normalizaton===
@@ -158,16 +138,9 @@ def identify_param(  # noqa: C901, PLR0912, PLR0915
         lambda_lower_bound = 0.9
         lambda_upper_bound = 1.1
         if (
-            (
-                lambda_ < lambda_lower_bound
-                or lambda_ > lambda_upper_bound
-                or boxcox_required
-            )
+            (lambda_ < lambda_lower_bound or lambda_ > lambda_upper_bound or boxcox_required)
             and not (continuous_required or quantile_required)
-            and (
-                (k2_original > k2_boxcox * 10 and k2_boxcox <= quantile_k2_threshold)
-                or boxcox_required
-            )
+            and ((k2_original > k2_boxcox * 10 and k2_boxcox <= quantile_k2_threshold) or boxcox_required)
         ):
             # We must be sure that box cox differs enough and it's much more closer
             # to the normal distribution than original values distribution. Besides,
@@ -177,11 +150,7 @@ def identify_param(  # noqa: C901, PLR0912, PLR0915
 
             # For the few sample the data may be too noise or oposite too dense,
             # so make sure that it's distributed smoothly.
-            if (
-                np.isfinite(stdev)
-                and stdev < BOXCOX_MAX_STDEV
-                and not np.isclose(stdev, 0)
-            ) or boxcox_required:
+            if (np.isfinite(stdev) and stdev < BOXCOX_MAX_STDEV and not np.isclose(stdev, 0)) or boxcox_required:
                 fvalues = transformed_fvalues
                 boxcox_lambda = float(lambda_)
         if boxcox_lambda is None or skip_boxcox:
@@ -209,8 +178,7 @@ def identify_param(  # noqa: C901, PLR0912, PLR0915
                 np.unique(
                     stats.mstats.mquantiles(
                         fvalues,
-                        np.arange(quantile_size + 1, dtype=np.float64)
-                        / float(quantile_size),
+                        np.arange(quantile_size + 1, dtype=np.float64) / float(quantile_size),
                         alphap=0.0,
                         betap=1.0,
                     )
@@ -249,6 +217,18 @@ def identify_param(  # noqa: C901, PLR0912, PLR0915
 def sort_features_by_normalization(
     normalization_params: dict[int, NormalizationParams],
 ) -> tuple[list[int], list[int], list[int]]:
+    r"""
+    Sort features by their normalization parameters.
+
+    Args:
+        normalization_params (dict[int, NormalizationParams]): Feature normalization parameters.
+
+    Raises:
+        TypeError: If the feature ID is not of type int.
+
+    Returns:
+        tuple[list[int], list[int], list[int]]: Sorted feature IDs, headers, and indices.
+    """
     sorted_features: list[int] = []
     fheaders: list[int] = []
     sorted_indices: list[int] = []
@@ -284,16 +264,12 @@ def get_normalization_data_dim(
     normalization_params: dict[int, NormalizationParams],
 ) -> int:
     return sum(
-        len(np.possible_values)
-        if np.ftype == Ftype.ENUM and np.possible_values is not None
-        else 1
+        len(np.possible_values) if np.ftype == Ftype.ENUM and np.possible_values is not None else 1
         for np in normalization_params.values()
     )
 
 
-def get_feature_norm_metadata(
-    fid: int, fvalue_list: list[float], norm_params: dict[str, Any]
-) -> NormalizationParams:
+def get_feature_norm_metadata(fid: int, fvalue_list: list[float], norm_params: dict[str, Any]) -> NormalizationParams:
     logger.info(f"Extracting normalization for feature: {fid}")
     nfeatures = len(fvalue_list)
     if nfeatures < MIN_SAMPLES_TO_IDENTIFY:
@@ -366,14 +342,8 @@ def infer_normalization(
             if "fid" not in row or "fvalues" not in row:
                 msg = f"Feature name or/and values are missing; {row}"
                 raise AttributeError(msg)
-            norm_metadata = get_feature_norm_metadata(
-                row["fid"], row["fvalues"], norm_params
-            )
-            if (
-                norm_metadata is not None
-                and not allowed_features
-                or row["fid"] in allowed_features
-            ):
+            norm_metadata = get_feature_norm_metadata(row["fid"], row["fvalues"], norm_params)
+            if norm_metadata is not None and not allowed_features or row["fid"] in allowed_features:
                 params[row["fid"]] = norm_metadata
 
         if assert_allowlist_feature_coverage:

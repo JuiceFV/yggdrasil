@@ -12,15 +12,15 @@ log = init_logger(__name__)
 class BinaryPreprocessedInput(TensorDataClass):
     r"""
     Dataclass for binary classification tasks.
+
+    Args:
+        target (torch.Tensor): Preprocessed target tensor.
+        features (torch.Tensor): Preprocessed features tensor.
+        extras (ExtraData | None, optional): Extra data for the model. Defaults to None
     """
 
-    #: Target tensor. It must consist of two unique values. Typically, 0 and 1.
     target: torch.Tensor
-
-    #: Features tensor. Normalized and preprocessed features.
     features: Feature
-
-    #: Extra data for the model.
     extras: ExtraData | None = None
 
     @classmethod
@@ -48,9 +48,7 @@ class BinaryPreprocessedInput(TensorDataClass):
             msg = "Target and features must have the same number of samples"
             raise ValueError(msg)
         if not (
-            torch.all(
-                torch.logical_or(target == torch.tensor(0), target == torch.tensor(1))
-            )
+            torch.all(torch.logical_or(target == torch.tensor(0), target == torch.tensor(1)))
             or torch.min(target) == torch.max(target)
         ):
             msg = "Target must be binary"
@@ -68,6 +66,18 @@ class BinaryPreprocessedInput(TensorDataClass):
         features: torch.Tensor,
         extras: ExtraData | None = None,
     ) -> "BinaryPreprocessedInput":
+        """
+        Create a BinaryPreprocessedInput instance from target and features tensors.
+
+        Args:
+            target (torch.Tensor): Preprocessed target tensor.
+            features (torch.Tensor): Preprocessed features tensor.
+            extras (ExtraData | None, optional): Extra data for the model. Defaults to None.
+
+        Returns:
+            BinaryPreprocessedInput: Returns the data in suitable format for binary classification task.
+        """
+
         def annotation_checking(inp: torch.Tensor | None) -> None:
             if inp is not None and not isinstance(inp, torch.Tensor):
                 msg = f"Expected {torch.Tensor | None}; but got {type(inp)}"
@@ -85,6 +95,16 @@ class BinaryPreprocessedInput(TensorDataClass):
 
 @dataclass
 class MulticlassPreprocessedInput(TensorDataClass):
+    """
+    Dataclass for multiclass classification tasks.
+
+    Args:
+        target (torch.Tensor): Preprocessed target tensor.
+        features (torch.Tensor): Preprocessed features tensor.
+        nclasses (int | None, optional): Number of classes in the classification task. Defaults to None.
+        extras (ExtraData | None, optional): Extra data for the model. Defaults to None.
+    """
+
     target: torch.Tensor
     features: Feature
     nclasses: int | None = None
@@ -98,6 +118,26 @@ class MulticlassPreprocessedInput(TensorDataClass):
         nclasses: int | None = None,
         extras: ExtraData | None = None,
     ) -> "MulticlassPreprocessedInput":
+        r"""
+        Create a MulticlassPreprocessedInput instance from target and features tensors.
+
+        .. note::
+            The ``nclasses`` parameter is optional. If not provided, it will be inferred from the target tensor.
+
+        Args:
+            target (torch.Tensor): Preprocessed target tensor.
+            features (torch.Tensor): Preprocessed features tensor.
+            nclasses (int | None, optional): Number of classes in the classification task. Defaults to None.
+            extras (ExtraData | None, optional): Extra data for the model. Defaults to None.
+
+        Raises:
+            ValueError: If target and features have different number of samples.
+            ValueError: If target is not a valid multiclass tensor.
+            ValueError: If nclasses is not a positive integer when specified.
+
+        Returns:
+            MulticlassPreprocessedInput: Returns the data in suitable format for multiclass classification task.
+        """
         if target.shape[0] != features.shape[0]:
             msg = "Target and features must have the same number of samples"
             raise ValueError(msg)
@@ -114,9 +154,7 @@ class MulticlassPreprocessedInput(TensorDataClass):
             raise ValueError(msg)
         if target.size(1) > 1:
             if nclasses is not None:
-                log.warning(
-                    "The number of classes will be infered from the target tensor."
-                )
+                log.warning("The number of classes will be infered from the target tensor.")
             nclasses = target.size(1)
 
         return cls.from_tensors(
@@ -166,9 +204,7 @@ class MulticlassPreprocessedInput(TensorDataClass):
             msg = "Undefined total number of classes."
             raise ValueError(msg)
         if self.target.size(1) == 1:
-            return torch.nn.functional.one_hot(
-                self.target, num_classes=self.nclasses
-            ).to(torch.float32)
+            return torch.nn.functional.one_hot(self.target, num_classes=self.nclasses).to(torch.float32)
         return self.target
 
     @property
@@ -189,21 +225,18 @@ class MulticlassPreprocessedInput(TensorDataClass):
 class ClassificationOutput(TensorDataClass):
     r"""
     Dataclass for classification outputs.
+
+    Args:
+        logits (torch.Tensor): Logits tensor.
+        dim (int, optional): Dimension which is considered as the class dimension. Defaults to -1.
     """
 
-    #: Logits tensor.
     logits: torch.Tensor
-
-    #: Dimension which is considered as the class dimension.
-    #: Defaults to -1, which means the last dimension is used.
     dim: int = -1
 
     def __post_init__(self) -> None:
         if self.logits.ndim < 2:
-            msg = (
-                "Logits tensor has less than 2 dimensions. "
-                "Adding a batch dimension to the logits tensor."
-            )
+            msg = "Logits tensor has less than 2 dimensions. Adding a batch dimension to the logits tensor."
             log.warning(msg)
             self.logits = self.logits.unsqueeze(0)
 
@@ -227,10 +260,7 @@ class ClassificationOutput(TensorDataClass):
         Raises:
             RuntimeError: If trying to set nclasses, as it is a read-only property.
         """
-        msg = (
-            "nclasses is a read-only property. "
-            "It is determined by the shape of the logits tensor."
-        )
+        msg = "nclasses is a read-only property. It is determined by the shape of the logits tensor."
         raise RuntimeError(msg)
 
     @property

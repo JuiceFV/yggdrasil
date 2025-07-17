@@ -26,6 +26,17 @@ class ExampleDataExtractor(DataExtractor):
     def query_data(
         self, table_identifier: str, sample_range: tuple[float, float]
     ) -> ParquetDataset:
+        """
+        Queries data from a specified a prepared table, subsamples it based on a
+        sample range, unfolds `features` sparse vector and returns a tmp dataset.
+
+        Args:
+            table_identifier (str): Original table identifier.
+            sample_range (tuple[float, float]): Range of samples to query.
+
+        Returns:
+            ParquetDataset: A dataset containing the queried data in Parquet format.
+        """
         session = spark.init.get_spark_session()
         df = spark.extract.query_original_table(session, table_identifier)
         df = spark.extract.hash_and_subsample(

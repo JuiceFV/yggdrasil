@@ -58,14 +58,10 @@ class BinaryClassificationModule(BaseModule[BinaryPreprocessedInput, _STEP_T]):
         metric_input = MetricInput(preds=out.probabilities, target=batch.target)
         return {"loss": loss, "metric_input": metric_input}
 
-    def train_step_gen(
-        self, training_batch: BinaryPreprocessedInput, batch_idx: int
-    ) -> Generator[_STEP_T, None, None]:
+    def train_step_gen(self, training_batch: BinaryPreprocessedInput, batch_idx: int) -> Generator[_STEP_T, None, None]:
         yield self._single_step(training_batch)
 
-    def validation_step(
-        self, valid_batch: BinaryPreprocessedInput, batch_idx: int
-    ) -> _STEP_T:
+    def validation_step(self, valid_batch: BinaryPreprocessedInput, batch_idx: int) -> _STEP_T:
         return self._single_step(valid_batch)
 
     def test_step(self, test_batch: BinaryPreprocessedInput, batch_idx: int) -> _STEP_T:

@@ -25,9 +25,7 @@ class MLFlowModelRegistryHook(L.Callback):
         super().__init__()
 
     @rank_zero_only
-    def setup(
-        self, trainer: L.Trainer, pl_module: L.LightningModule, stage: str
-    ) -> None:
+    def setup(self, trainer: L.Trainer, pl_module: L.LightningModule, stage: str) -> None:
         for logger in trainer.loggers:
             if isinstance(logger, MLFlowLoggerCheckpointer):
                 logger.trainer = trainer
@@ -58,9 +56,7 @@ class SummaryLogger(L.Callback):
 
             for logger in trainer.loggers:
                 if isinstance(logger, MLFlowLogger):
-                    logger.experiment.log_artifact(
-                        logger.run_id, local_path=summary_file
-                    )
+                    logger.experiment.log_artifact(logger.run_id, local_path=summary_file)
         finally:
             shutil.rmtree(tempdir)
 
@@ -71,9 +67,7 @@ class TimingCallback(L.Callback):
     """
 
     @rank_zero_only
-    def on_train_epoch_start(
-        self, trainer: L.Trainer, pl_module: L.LightningModule
-    ) -> None:
+    def on_train_epoch_start(self, trainer: L.Trainer, pl_module: L.LightningModule) -> None:
         self.epoch_start_time = time.time()
 
     @rank_zero_only
@@ -97,19 +91,13 @@ class TimingCallback(L.Callback):
     ) -> None:
         step_time = time.time() - self.batch_start_time
         if trainer.logger:
-            trainer.logger.log_metrics(
-                {"step_time": step_time}, step=trainer.global_step
-            )
+            trainer.logger.log_metrics({"step_time": step_time}, step=trainer.global_step)
 
     @rank_zero_only
-    def on_train_epoch_end(
-        self, trainer: L.Trainer, pl_module: L.LightningModule, *args: Any
-    ) -> None:
+    def on_train_epoch_end(self, trainer: L.Trainer, pl_module: L.LightningModule, *args: Any) -> None:
         epoch_time = time.time() - self.epoch_start_time
         if trainer.logger:
-            trainer.logger.log_metrics(
-                {"epoch_time": epoch_time}, step=trainer.global_step
-            )
+            trainer.logger.log_metrics({"epoch_time": epoch_time}, step=trainer.global_step)
 
 
 class StepLoggingCallback(L.Callback):
@@ -158,9 +146,7 @@ class StepLoggingCallback(L.Callback):
             on_epoch=True,
         )
 
-        pl_module.log(
-            "global_step", pl_module.global_step, on_step=True, on_epoch=False
-        )
+        pl_module.log("global_step", pl_module.global_step, on_step=True, on_epoch=False)
 
     def on_train_batch_end(
         self,
