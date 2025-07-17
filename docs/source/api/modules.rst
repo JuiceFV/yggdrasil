@@ -1,18 +1,18 @@
-project.modules
-===============
+yggdrasil.modules
+=================
 
-.. automodule:: project.modules
+.. automodule:: yggdrasil.modules
 
-.. contents:: project.modules
+.. contents:: yggdrasil.modules
     :depth: 2
     :local:
     :backlinks: top
 
 Base Lightning Module
 ---------------------
-.. currentmodule:: project.modules.base
+.. currentmodule:: yggdrasil.modules.base
 .. autosummary::
-    :toctree: generated
+    :toctree: ../generated
     :nosignatures:
     :template: classtemplate.rst
 

@@ -1,19 +1,10 @@
-Project documentation
-=====================
-
-.. image:: _static/diagrams/architecture/architecture.drawio.png
-   :alt: Architecture
-   :align: center
-   :width: 80%
+Yggdrasil documentation
+=======================
 
 .. toctree::
    :maxdepth: 1
    :caption: Python API
 
-   project
-   core
-   core.dtypes
-   data
-   data.datamodule
-   models
-   modules
+   Overview <overview/index>
+   API <api/index>
+

@@ -16,14 +16,13 @@ import sys
 sys.path.insert(0, os.path.abspath("./"))
 sys.path.insert(0, os.path.abspath("../../"))
 
+import yggdrasil as pkg
 
-import project as pkg
-
-RELEASE = os.environ.get("RELEASE", False)
+RELEASE = os.environ.get("RELEASE", True)
 
 # -- Project information -----------------------------------------------------
 
-project = "PyTorch Lightning & HydraZen Template"
+project = "Yggdrasil"
 author = "Aleksandr Kasian & Nazar Yakovenko"
 copyright = f"2024, {author}"
 pkg_name = pkg.__name__
@@ -59,10 +58,14 @@ extensions = [
     "sphinx.ext.todo",
     "sphinx.ext.coverage",
     "sphinx.ext.napoleon",
-    "sphinxcontrib.katex",
     "sphinx.ext.autosectionlabel",
+    # TODO: Use this extensions once baseline ready
+    # "sphinx_docsearch",
+    # "sphinx_sitemap",
+    "sphinx_design",
+    "sphinx_togglebutton",
     "sphinx_copybutton",
-    "sphinx_panels",
+    "sphinx_design",
 ]
 
 # build the templated autosummary files
@@ -126,13 +129,53 @@ autodoc_docstring_signature = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "pydata_sphinx_theme"
+
+html_theme_options = {
+    "use_edit_page_button": False,
+    "announcement": False,
+    # "navbar_start": ["navbar-ray-logo"],
+    "navbar_end": [
+        "theme-switcher",
+        # "version-switcher",
+        # "navbar-icon-links",
+        # "navbar-anyscale",
+    ],
+    # "navbar_center": ["navbar-links"],
+    "navbar_align": "left",
+    "secondary_sidebar_items": [
+        "page-toc",
+        # "edit-on-github",
+    ],
+    # "content_footer_items": [
+    #     "csat",
+    # ],
+    "navigation_depth": 4,
+    "pygment_light_style": "stata-dark",
+    "pygment_dark_style": "stata-dark",
+    "logo": {
+        "text": project,
+        "image_light": "_static/icons/logo_light.svg",
+        "image_dark": "_static/icons/logo_dark.svg",
+    },
+    # "switcher": {
+    #     "json_url": "https://docs.ray.io/en/master/_static/versions.json",
+    #     "version_match": os.getenv("READTHEDOCS_VERSION", "master"),
+    # },
+}
+
+html_sidebars: dict[str, list[str]] = {
+    "overview/index": [],
+}
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "torch": ("https://pytorch.org/docs/stable/", None),
     "lightning": ("https://lightning.ai/docs/pytorch/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "pyspark": ("https://spark.apache.org/docs/latest/api/python/", None),
+    "torchmetrics": ("https://torchmetrics.readthedocs.io/en/stable/", None),
 }
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
