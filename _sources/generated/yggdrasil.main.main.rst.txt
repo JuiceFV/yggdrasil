@@ -1,0 +1,6 @@
+﻿yggdrasil.main.main
+===================
+
+.. currentmodule:: yggdrasil.main
+
+.. autofunction:: main

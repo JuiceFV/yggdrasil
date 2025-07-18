@@ -1,0 +1,778 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Overview &#8212; Yggdrasil 0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'overview/index';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Getting started tutorials" href="intro_tutorials/index.html" />
+    <link rel="prev" title="Yggdrasil documentation" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_light.svg" class="logo__image only-light" alt=""/>
+    <img src="../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Yggdrasil</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Overview</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h1>
+<section id="what-is-this-project-for">
+<h2>What is this project for?<a class="headerlink" href="#what-is-this-project-for" title="Link to this heading">#</a></h2>
+<p>Yggdrasil is a template for building deep learning projects.
+It provides a structure for organizing code, data, and documentation,
+making developing and maintaining machine learning models easier.
+This specific repository was developed for my purposes, bringing my
+implementations of the models and architectures. The structure of the
+code makes these models reproducible and easy to use. It is designed
+to be flexible and extensible, allowing users to add new features and
+functionality easily.</p>
+</section>
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Link to this heading">#</a></h2>
+<p>The architecture of the yggdrasil is inspired by the <a class="reference external" href="https://arxiv.org/pdf/2108.09373">Meta’s architecture
+for the Recommendation System</a>. The pipeline
+is designed to be modular and extensible, allowing users to easily add new
+features and functionality.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/architecture.drawio.png"><img alt="Architecture" src="../_images/architecture.drawio.png" style="width: 100%;" /></a>
+</figure>
+<p>The architecture consists of several components, each responsible for a
+specific part of the pipeline, which are the logical parts of the entire
+ML lifecycle. The components are:</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-quote" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.75 2.5h10.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Zm4 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2.5 7.75v6a.75.75 0 0 1-1.5 0v-6a.75.75 0 0 1 1.5 0Z"></path></svg></span><span class="sd-summary-text">Distributed Data Preparation</span><span class="sd-summary-state-marker sd-summary-chevron-down"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.22 8.22a.749.749 0 0 0 0 1.06l6.25 6.25a.749.749 0 0 0 1.06 0l6.25-6.25a.749.749 0 1 0-1.06-1.06L12 13.939 6.28 8.22a.749.749 0 0 0-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">In general, this component is responsible for preparing the data for
+training. It’s usually called ETL (Extract, Transform, Load). The data
+is extracted from a source, transformed into the desired format, and
+loaded into the target filesystem.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p class="sd-card-text">This component depends only on the user. The tools, process, code
+style, and other aspects of the data preparation are up to the
+user. The only requirementnt is that the data be stored in a
+specific format.</p>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-0">
+PySpark (recommended)</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspark.sql.types</span> <span class="k">as</span> <span class="nn">T</span>
+<span class="kn">import</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="nn">F</span>
+
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_openml</span>
+
+<span class="c1"># Initialize Spark session</span>
+<span class="n">spark</span> <span class="o">=</span> <span class="n">SparkSession</span><span class="o">.</span><span class="n">builder</span>                          \
+   <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.warehouse.dir&quot;</span><span class="p">,</span> <span class="s2">&quot;wharehouse&quot;</span><span class="p">)</span>   \
+   <span class="o">.</span><span class="n">appName</span><span class="p">(</span><span class="s2">&quot;MNIST_ETL&quot;</span><span class="p">)</span>                              \
+   <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
+
+<span class="c1"># Extract raw data</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s1">&#39;mnist_784&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">frame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+
+<span class="c1"># Here ypu can apply any type of transformation you want ...</span>
+
+<span class="c1"># Mandatory transformation for the further data pre-processing</span>
+<span class="n">feature_cols</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">784</span><span class="p">)]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">monotonically_increasing_id</span><span class="p">())</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+   <span class="s2">&quot;sparse_vector&quot;</span><span class="p">,</span>
+   <span class="n">F</span><span class="o">.</span><span class="n">create_map</span><span class="p">(</span>
+      <span class="o">*</span><span class="nb">list</span><span class="p">(</span>
+            <span class="nb">sum</span><span class="p">(</span>
+               <span class="p">[</span>
+                  <span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">lit</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;int&quot;</span><span class="p">),</span> <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;`</span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">`&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;double&quot;</span><span class="p">))</span>
+                  <span class="k">for</span> <span class="n">fid</span><span class="p">,</span> <span class="n">fname</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">feature_cols</span><span class="p">)</span>
+               <span class="p">],</span>
+               <span class="p">(),</span>
+            <span class="p">)</span>
+      <span class="p">)</span>
+   <span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="o">*</span><span class="n">feature_cols</span><span class="p">)</span><span class="o">.</span><span class="n">withColumnRenamed</span><span class="p">(</span><span class="s2">&quot;sparse_vector&quot;</span><span class="p">,</span> <span class="s2">&quot;features&quot;</span><span class="p">)</span>
+
+<span class="c1"># Store the data in a dedicated warehouse</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;DROP TABLE IF EXISTS mnist_784&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+   <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">())</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
+   <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">MapType</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">IntegerType</span><span class="p">(),</span> <span class="n">T</span><span class="o">.</span><span class="n">FloatType</span><span class="p">()))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;features&quot;</span><span class="p">),</span>
+   <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">ShortType</span><span class="p">())</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">),</span>
+<span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">&quot;overwrite&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;parquet&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">saveAsTable</span><span class="p">(</span><span class="s2">&quot;mnist_784&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-1">
+Pandas</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_openml</span>
+
+<span class="c1"># Extract raw data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s2">&quot;mnist_784&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">frame</span>
+
+<span class="c1"># Here ypu can apply any type of transformation you want ...</span>
+
+<span class="c1"># Mandatory transformation for the further data pre-processing</span>
+<span class="n">feature_cols</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">784</span><span class="p">)]</span>
+<span class="n">df</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">assgin</span><span class="p">(</span>
+   <span class="nb">id</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+   <span class="n">features</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">feature_cols</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">feature_cols</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;features&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;label&quot;</span><span class="p">})</span>
+
+<span class="c1"># Store the data in a dedicated warehouse</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;wharehouse/mnist_784.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-2" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" for="sd-tab-item-2">
+Polars</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">polars</span> <span class="k">as</span> <span class="nn">pl</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">fetch_openml</span>
+
+<span class="c1"># Extract raw data</span>
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">fetch_openml</span><span class="p">(</span><span class="s2">&quot;mnist_784&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">frame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+
+<span class="c1"># Here ypu can apply any type of transformation you want ...</span>
+
+<span class="c1"># Mandatory transformation for the further data pre-processing</span>
+<span class="n">feature_cols</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">784</span><span class="p">)]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span><span class="n">pl</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">col</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">Float64</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">feature_cols</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">with_columns</span><span class="p">([</span>
+   <span class="n">features</span><span class="o">=</span><span class="n">pl</span><span class="o">.</span><span class="n">struct</span><span class="p">(</span><span class="n">feature_cols</span><span class="p">)</span><span class="o">.</span><span class="n">map_elements</span><span class="p">(</span>
+      <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_FEATURES</span><span class="p">)}</span>
+   <span class="p">)</span>
+<span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">with_row_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;features&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;label&quot;</span><span class="p">})</span>
+
+<span class="c1"># Store the data in a dedicated warehouse</span>
+<span class="n">df</span><span class="o">.</span><span class="n">write_parquet</span><span class="p">(</span><span class="s2">&quot;wharehouse/mnist_784.parquet&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="sd-card-text"><a class="sd-sphinx-override sd-badge sd-outline-primary sd-text-primary reference internal" href="intro_tutorials/ddp.html"><span class="doc">To introduction tutorial</span></a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-quote" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.75 2.5h10.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Zm4 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2.5 7.75v6a.75.75 0 0 1-1.5 0v-6a.75.75 0 0 1 1.5 0Z"></path></svg></span><span class="sd-summary-text">Distributed Pre-Processing</span><span class="sd-summary-state-marker sd-summary-chevron-down"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.22 8.22a.749.749 0 0 0 0 1.06l6.25 6.25a.749.749 0 0 0 1.06 0l6.25-6.25a.749.749 0 1 0-1.06-1.06L12 13.939 6.28 8.22a.749.749 0 0 0-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">This component is responsible for pre-processing the data. It is unified
+and can be used for any type of data. The pre-processing is done in a
+distributed manner, allowing for faster processing and better scalability.</p>
+<p class="sd-card-text">The preprocessing is done in three steps. First, the data is extracted
+from the prepared table, which is acquired in the previous step. Then,
+the data is subsampled based on the sample range. Finally, the data is
+transformed into a dense format, which is required for the further processing.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="dpp-examples" data-sync-id="pyspark" for="sd-tab-item-3">
+PySpark (recommended)</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspark.sql.functions</span> <span class="k">as</span> <span class="nn">F</span>
+<span class="kn">import</span> <span class="nn">pyspark.sql.types</span> <span class="k">as</span> <span class="nn">T</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">DataFrame</span>
+
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.dataset</span> <span class="kn">import</span> <span class="n">ParquetDataset</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.preprocessing.base</span> <span class="kn">import</span> <span class="n">InputColumn</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.data.data_extractor.base</span> <span class="kn">import</span> <span class="n">DataExtractor</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.data.etl</span> <span class="kn">import</span> <span class="n">spark</span>
+
+
+<span class="k">def</span> <span class="nf">select_relevant_columns</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataFrame</span><span class="p">:</span>
+   <span class="n">select_cols</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">SAMPLE_ID</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">LongType</span><span class="p">()),</span>
+      <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">FEATURES</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">ArrayType</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">FloatType</span><span class="p">())),</span>
+      <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">FEATURES</span><span class="si">}</span><span class="s2">_presence&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">ArrayType</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">BooleanType</span><span class="p">())),</span>
+      <span class="n">F</span><span class="o">.</span><span class="n">col</span><span class="p">(</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">TARGET</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">FloatType</span><span class="p">()),</span>
+   <span class="p">]</span>
+   <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">select_cols</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">MNISTDataExtractor</span><span class="p">(</span><span class="n">DataExtractor</span><span class="p">):</span>
+<span class="w">   </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">   MNIST supervised (default) data extractor.</span>
+<span class="sd">   &quot;&quot;&quot;</span>
+
+   <span class="k">def</span> <span class="nf">query_data</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">table_identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sample_range</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+   <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParquetDataset</span><span class="p">:</span>
+      <span class="n">session</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">get_spark_session</span><span class="p">()</span>
+      <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">extract</span><span class="o">.</span><span class="n">query_original_table</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">table_identifier</span><span class="p">)</span>
+      <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">extract</span><span class="o">.</span><span class="n">hash_and_subsample</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">,</span> <span class="n">sample_range</span><span class="o">=</span><span class="n">sample_range</span><span class="p">,</span> <span class="n">hash_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+      <span class="p">)</span>
+      <span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">make_sparse2dense</span><span class="p">(</span>
+            <span class="n">df</span><span class="p">,</span>
+            <span class="s2">&quot;features&quot;</span><span class="p">,</span>
+            <span class="n">possible_keys</span><span class="o">=</span><span class="n">spark</span><span class="o">.</span><span class="n">extract</span><span class="o">.</span><span class="n">get_distinct_keys</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;features&quot;</span><span class="p">),</span>
+      <span class="p">)</span>
+      <span class="n">df</span> <span class="o">=</span> <span class="n">select_relevant_columns</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+      <span class="n">dataset_url</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">upload_as_parquet</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">ParquetDataset</span><span class="p">(</span><span class="n">dataset_url</span><span class="o">=</span><span class="n">dataset_url</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="sd-card-text">Once the data is extracted and pre-processed, it is stored in a
+dedicated warehouse, which is a Parquet dataset. Then, this dataset
+is loaded in the batch manner to a datamodule. The same pre-processing
+steps should be applied to each batch of data. Batch preprocessor is
+responsible for this logic. It accepts a dictionary of tensors as input
+and returns a tensor data class as output. Inside the batch preprocessor,
+you can apply any transformations you want to the tensors. Also, it’s
+highly recommended to use the preprocessor to normalize the data using
+different normalization techniques.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-4" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="dpp-examples" data-sync-id="pyspark" for="sd-tab-item-4">
+PySpark (recommended)</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.base</span> <span class="kn">import</span> <span class="n">ExtraData</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.classification.base</span> <span class="kn">import</span> <span class="n">MulticlassPreprocessedInput</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.preprocessing.base</span> <span class="kn">import</span> <span class="n">InputColumn</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.preprocessing.batch_preprocessor</span> <span class="kn">import</span> <span class="n">BatchPreprocessor</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.preprocessing.normalization</span> <span class="kn">import</span> <span class="n">sort_features_by_normalization</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.preprocessing.preprocessor</span> <span class="kn">import</span> <span class="n">Preprocessor</span>
+
+
+<span class="k">class</span> <span class="nc">MNISTBatchPreprocessor</span><span class="p">(</span><span class="n">BatchPreprocessor</span><span class="p">):</span>
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features_preprocessor</span><span class="p">:</span> <span class="n">Preprocessor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">features_preprocessor</span> <span class="o">=</span> <span class="n">features_preprocessor</span>
+
+   <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">MulticlassPreprocessedInput</span><span class="p">:</span>
+      <span class="n">batch_dict</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">indcs</span> <span class="o">=</span> <span class="n">sort_features_by_normalization</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">features_preprocessor</span><span class="o">.</span><span class="n">normalization_params</span>
+      <span class="p">)</span>
+      <span class="n">batch_dict</span><span class="p">[</span><span class="s2">&quot;features&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">features_preprocessor</span><span class="p">(</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span>
+               <span class="n">batch</span><span class="p">[</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">FEATURES</span><span class="p">],</span>
+               <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">index</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">indcs</span><span class="p">),</span>
+            <span class="p">),</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">index_select</span><span class="p">(</span>
+               <span class="n">batch</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">FEATURES</span><span class="si">}</span><span class="s2">_presence&quot;</span><span class="p">],</span>
+               <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">index</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">indcs</span><span class="p">),</span>
+            <span class="p">),</span>
+      <span class="p">)</span>
+      <span class="n">batch_dict</span><span class="p">[</span><span class="s2">&quot;extras&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ExtraData</span><span class="p">(</span><span class="n">sample_id</span><span class="o">=</span><span class="n">batch</span><span class="p">[</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">SAMPLE_ID</span><span class="p">]</span><span class="o">.</span><span class="n">long</span><span class="p">())</span>
+      <span class="n">batch_dict</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">TARGET</span><span class="p">]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
+      <span class="n">batch_dict</span><span class="p">[</span><span class="s2">&quot;nclasses&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># MNIST has 10 classes (0-9)</span>
+      <span class="k">return</span> <span class="n">MulticlassPreprocessedInput</span><span class="o">.</span><span class="n">from_input</span><span class="p">(</span><span class="o">**</span><span class="n">batch_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="sd-card-text">The last component is a datamodule, which is responsible for
+orchestrating the data loading and pre-processing. It calls
+the data extractor to get the data, computes the metadata,
+loads the batches of the data applying the batch preprocessor,
+and passes the unified data (tensor data classes) to the model for training.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-5" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="dpp-examples" data-sync-id="pyspark" for="sd-tab-item-5">
+PySpark (recommended)</label><div class="sd-tab-content docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.dataset</span> <span class="kn">import</span> <span class="n">ParquetDataset</span><span class="p">,</span> <span class="n">TableSpec</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.options</span> <span class="kn">import</span> <span class="n">DatasetOptions</span><span class="p">,</span> <span class="n">PreprocessingOptions</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.parameters</span> <span class="kn">import</span> <span class="p">(</span>
+   <span class="n">NormalizationData</span><span class="p">,</span>
+   <span class="n">NormalizationKey</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.core.dtypes.preprocessing.base</span> <span class="kn">import</span> <span class="n">InputColumn</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.data.data_extractor.mnist</span> <span class="kn">import</span> <span class="n">DataExtractor</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.data.datamodules.manual</span> <span class="kn">import</span> <span class="n">ManualDataModule</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.data.etl</span> <span class="kn">import</span> <span class="n">spark</span>
+<span class="kn">from</span> <span class="nn">yggdrasil.preprocessing.preprocessor</span> <span class="kn">import</span> <span class="n">Preprocessor</span>
+
+
+<span class="k">class</span> <span class="nc">MNISTDataModule</span><span class="p">(</span><span class="n">ManualDataModule</span><span class="p">):</span>
+   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="o">*</span><span class="p">,</span>
+      <span class="n">input_table_spec</span><span class="p">:</span> <span class="n">TableSpec</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">data_extractor</span><span class="p">:</span> <span class="n">DataExtractor</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">setup_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">saved_setup_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">dataset_options</span><span class="p">:</span> <span class="n">DatasetOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+      <span class="n">features_preprocessing_options</span><span class="p">:</span> <span class="n">PreprocessingOptions</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+   <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">input_table_spec</span><span class="o">=</span><span class="n">input_table_spec</span><span class="p">,</span>
+            <span class="n">data_extractor</span><span class="o">=</span><span class="n">data_extractor</span><span class="p">,</span>
+            <span class="n">setup_data</span><span class="o">=</span><span class="n">setup_data</span><span class="p">,</span>
+            <span class="n">saved_setup_data</span><span class="o">=</span><span class="n">saved_setup_data</span><span class="p">,</span>
+            <span class="n">dataset_options</span><span class="o">=</span><span class="n">dataset_options</span><span class="p">,</span>
+      <span class="p">)</span>
+
+      <span class="bp">self</span><span class="o">.</span><span class="n">features_preprocessing_options</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">features_preprocessing_options</span> <span class="ow">or</span> <span class="n">PreprocessingOptions</span><span class="p">()</span>
+      <span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">run_feature_identification</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span> <span class="n">table_identifier</span><span class="p">:</span> <span class="nb">str</span>
+   <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">NormalizationData</span><span class="p">]:</span>
+      <span class="n">session</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">get_spark_session</span><span class="p">()</span>
+      <span class="n">features_normalization_params</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">identify_normalization_params</span><span class="p">(</span>
+            <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">table_name</span><span class="o">=</span><span class="n">table_identifier</span><span class="p">,</span>
+            <span class="n">col_name</span><span class="o">=</span><span class="n">InputColumn</span><span class="o">.</span><span class="n">FEATURES</span><span class="p">,</span>
+            <span class="n">preprocessing_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">features_preprocessing_options</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>  <span class="c1"># Fixed seed for reproducibility</span>
+      <span class="p">)</span>
+      <span class="k">return</span> <span class="p">{</span>
+            <span class="n">NormalizationKey</span><span class="o">.</span><span class="n">FEATURES</span><span class="p">:</span> <span class="n">NormalizationData</span><span class="p">(</span><span class="n">features_normalization_params</span><span class="p">)</span>
+      <span class="p">}</span>
+
+   <span class="k">def</span> <span class="nf">query_data</span><span class="p">(</span>
+      <span class="bp">self</span><span class="p">,</span>
+      <span class="n">table_identifier</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+      <span class="n">sample_range</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+      <span class="n">data_extractor</span><span class="p">:</span> <span class="n">DataExtractor</span><span class="p">,</span>
+   <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParquetDataset</span><span class="p">:</span>
+      <span class="k">return</span> <span class="n">data_extractor</span><span class="o">.</span><span class="n">query_data</span><span class="p">(</span><span class="n">table_identifier</span><span class="p">,</span> <span class="n">sample_range</span><span class="p">)</span>
+
+   <span class="k">def</span> <span class="nf">build_batch_preprocessor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MNISTBatchPreprocessor</span><span class="p">:</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Normalization dict must be defined&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+      <span class="n">features_normalization_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalization_dict</span><span class="p">[</span><span class="n">NormalizationKey</span><span class="o">.</span><span class="n">FEATURES</span><span class="p">]</span>
+      <span class="n">features_norm_params</span> <span class="o">=</span> <span class="n">features_normalization_data</span><span class="o">.</span><span class="n">dense_normalization_params</span>
+      <span class="n">features_preprocessor</span> <span class="o">=</span> <span class="n">Preprocessor</span><span class="p">(</span><span class="n">normalization_params</span><span class="o">=</span><span class="n">features_norm_params</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">MNISTBatchPreprocessor</span><span class="p">(</span><span class="n">features_preprocessor</span><span class="o">=</span><span class="n">features_preprocessor</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p class="sd-card-text"><a class="sd-sphinx-override sd-badge sd-outline-primary sd-text-primary reference internal" href="intro_tutorials/dpp.html"><span class="doc">To introduction tutorial</span></a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-icon"><svg version="1.1" width="1.0em" height="1.0em" class="sd-octicon sd-octicon-quote" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.75 2.5h10.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Zm4 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2.5 7.75v6a.75.75 0 0 1-1.5 0v-6a.75.75 0 0 1 1.5 0Z"></path></svg></span><span class="sd-summary-text">Training</span><span class="sd-summary-state-marker sd-summary-chevron-down"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.22 8.22a.749.749 0 0 0 0 1.06l6.25 6.25a.749.749 0 0 0 1.06 0l6.25-6.25a.749.749 0 1 0-1.06-1.06L12 13.939 6.28 8.22a.749.749 0 0 0-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">This component is responsible for training the model.</p>
+</div>
+</details><div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Yggdrasil documentation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="intro_tutorials/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Getting started tutorials</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-this-project-for">What is this project for?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Aleksandr Kasian &amp; Nazar Yakovenko.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

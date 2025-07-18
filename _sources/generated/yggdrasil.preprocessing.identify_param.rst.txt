@@ -1,0 +1,6 @@
+﻿yggdrasil.preprocessing.identify\_param
+=======================================
+
+.. currentmodule:: yggdrasil.preprocessing
+
+.. autofunction:: identify_param

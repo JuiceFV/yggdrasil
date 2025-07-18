@@ -1,0 +1,6 @@
+﻿yggdrasil.main.train\_func
+==========================
+
+.. currentmodule:: yggdrasil.main
+
+.. autofunction:: train_func

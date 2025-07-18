@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>MNISTDataModule &#8212; Yggdrasil 0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/yggdrasil.data.datamodules.mnist.MNISTDataModule';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="yggdrasil.data.data_extractor" href="../api/data.data_extractor.html" />
+    <link rel="prev" title="MNISTBatchPreprocessor" href="yggdrasil.data.datamodules.mnist.MNISTBatchPreprocessor.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo_light.svg" class="logo__image only-light" alt=""/>
+    <img src="../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Yggdrasil</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview/index.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../overview/index.html">
+    Overview
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/yggdrasil.html">yggdrasil</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.main.train_func.html">yggdrasil.main.train_func</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.main.main.html">yggdrasil.main.main</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/core.html">yggdrasil.core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.config.param_hash.html">yggdrasil.core.config.param_hash</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.base_dclass.BaseDataClass.html">BaseDataClass</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/core.dtypes.html">yggdrasil.core.dtypes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.base.Ftype.html">Ftype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.base.ExtraData.html">ExtraData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.base.TensorDataClass.html">TensorDataClass</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.preprocessing.InputColumn.html">InputColumn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.preprocessing.PreprocessingOptions.html">PreprocessingOptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.classification.BinaryPreprocessedInput.html">BinaryPreprocessedInput</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.classification.MulticlassPreprocessedInput.html">MulticlassPreprocessedInput</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.classification.ClassificationOutput.html">ClassificationOutput</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.dataset.TableSpec.html">TableSpec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.dataset.ParquetDataset.html">ParquetDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.parameters.NormalizationParams.html">NormalizationParams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.parameters.NormalizationData.html">NormalizationData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.parameters.NormalizationKey.html">NormalizationKey</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.metrics.MetricInput.html">MetricInput</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.core.dtypes.options.DatasetOptions.html">DatasetOptions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/data.html">yggdrasil.data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.init.get_spark_session.html">yggdrasil.data.etl.spark.init.get_spark_session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.extract.query_original_table.html">yggdrasil.data.etl.spark.extract.query_original_table</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.extract.get_distinct_keys.html">yggdrasil.data.etl.spark.extract.get_distinct_keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.extract.hash_and_subsample.html">yggdrasil.data.etl.spark.extract.hash_and_subsample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.transform.make_sparse_vector.html">yggdrasil.data.etl.spark.transform.make_sparse_vector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.transform.make_sparse2dense.html">yggdrasil.data.etl.spark.transform.make_sparse2dense</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.transform.stratified_sampling_norm_spec.html">yggdrasil.data.etl.spark.transform.stratified_sampling_norm_spec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.transform.identify_normalization_params.html">yggdrasil.data.etl.spark.transform.identify_normalization_params</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.load.get_table_url.html">yggdrasil.data.etl.spark.load.get_table_url</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.etl.spark.load.upload_as_parquet.html">yggdrasil.data.etl.spark.load.upload_as_parquet</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../api/data.datamodule.html">yggdrasil.data.datamodules</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.datamodules.base.get_sample_range.html">yggdrasil.data.datamodules.base.get_sample_range</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.datamodules.base.TrainEvalTestSampleRanges.html">TrainEvalTestSampleRanges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.datamodules.BaseDataModule.html">BaseDataModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.datamodules.ManualDataModule.html">ManualDataModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.datamodules.example.ExampleBatchPreprocessor.html">ExampleBatchPreprocessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.datamodules.example.ExampleDataModule.html">ExampleDataModule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.datamodules.mnist.MNISTBatchPreprocessor.html">MNISTBatchPreprocessor</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">MNISTDataModule</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/data.data_extractor.html">yggdrasil.data.data_extractor</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.data_extractor.DataExtractor.html">DataExtractor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.data_extractor.ExampleDataExtractor.html">ExampleDataExtractor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.data.data_extractor.MNISTDataExtractor.html">MNISTDataExtractor</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/models.html">yggdrasil.models</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.models.base.BaseModel.html">BaseModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.models.mlp.MLP.html">MLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.models.mlp.MLPNetwork.html">MLPNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.models.mlp.BinaryClassificationMLPNetwork.html">BinaryClassificationMLPNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.models.mlp.MultiClassificationMLPNetwork.html">MultiClassificationMLPNetwork</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/modules.html">yggdrasil.modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.modules.base.BaseModule.html">BaseModule</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/preprocessing.html">yggdrasil.preprocessing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.preprocessing.BatchPreprocessor.html">BatchPreprocessor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.preprocessing.identify_type.html">yggdrasil.preprocessing.identify_type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.preprocessing.identify_param.html">yggdrasil.preprocessing.identify_param</a></li>
+<li class="toctree-l2"><a class="reference internal" href="yggdrasil.preprocessing.sort_features_by_normalization.html">yggdrasil.preprocessing.sort_features_by_normalization</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api/index.html" class="nav-link">API Reference</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../api/data.datamodule.html" class="nav-link">yggdrasil.data.datamodules</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">MNISTDataModule</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mnistdatamodule">
+<h1>MNISTDataModule<a class="headerlink" href="#mnistdatamodule" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="yggdrasil.data.datamodules.mnist.MNISTDataModule">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">yggdrasil.data.datamodules.mnist.</span></span><span class="sig-name descname"><span class="pre">MNISTDataModule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_table_spec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_extractor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setup_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">saved_setup_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_preprocessing_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule" title="Link to this definition">#</a></dt>
+<dd><p>Data module for the MNIST dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_table_spec</strong> (<a class="reference internal" href="yggdrasil.core.dtypes.dataset.TableSpec.html#yggdrasil.core.dtypes.dataset.TableSpec" title="yggdrasil.core.dtypes.dataset.TableSpec"><em>TableSpec</em></a><em> | </em><em>None</em>) – Specification of the input table.</p></li>
+<li><p><strong>data_extractor</strong> (<a class="reference internal" href="yggdrasil.data.data_extractor.DataExtractor.html#yggdrasil.data.data_extractor.DataExtractor" title="yggdrasil.data.data_extractor.DataExtractor"><em>DataExtractor</em></a><em> | </em><em>None</em>) – Data extractor to use for querying data.</p></li>
+<li><p><strong>setup_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – Setup data for the data module.</p></li>
+<li><p><strong>saved_setup_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>] </em><em>| </em><em>None</em>) – Saved setup data for the data module.</p></li>
+<li><p><strong>dataset_options</strong> (<a class="reference internal" href="yggdrasil.core.dtypes.options.DatasetOptions.html#yggdrasil.core.dtypes.options.DatasetOptions" title="yggdrasil.core.dtypes.options.DatasetOptions"><em>DatasetOptions</em></a><em> | </em><em>None</em>) – Options for the dataset.</p></li>
+<li><p><strong>features_preprocessing_options</strong> (<a class="reference internal" href="yggdrasil.core.dtypes.preprocessing.PreprocessingOptions.html#yggdrasil.core.dtypes.preprocessing.PreprocessingOptions" title="yggdrasil.core.dtypes.preprocessing.PreprocessingOptions"><em>PreprocessingOptions</em></a><em> | </em><em>None</em>) – Preprocessing options for features.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="yggdrasil.data.datamodules.mnist.MNISTDataModule.build_batch_preprocessor">
+<span class="sig-name descname"><span class="pre">build_batch_preprocessor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule.build_batch_preprocessor" title="Link to this definition">#</a></dt>
+<dd><p>Build a batch preprocessor for the MNIST dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If the normalization dictionary is not defined.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of MNISTBatchPreprocessor configured with the normalization parameters.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="yggdrasil.data.datamodules.mnist.MNISTBatchPreprocessor.html#yggdrasil.data.datamodules.mnist.MNISTBatchPreprocessor" title="yggdrasil.data.datamodules.mnist.MNISTBatchPreprocessor">MNISTBatchPreprocessor</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yggdrasil.data.datamodules.mnist.MNISTDataModule.query_data">
+<span class="sig-name descname"><span class="pre">query_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_identifier</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_extractor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule.query_data" title="Link to this definition">#</a></dt>
+<dd><p>Query data from the MNIST dataset using the provided data extractor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table_identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Identifier for the table containing the MNIST dataset.</p></li>
+<li><p><strong>sample_range</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><em>tuple</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em>]</em>) – Range of samples to query from the dataset.</p></li>
+<li><p><strong>data_extractor</strong> (<a class="reference internal" href="yggdrasil.data.data_extractor.DataExtractor.html#yggdrasil.data.data_extractor.DataExtractor" title="yggdrasil.data.data_extractor.DataExtractor"><em>DataExtractor</em></a>) – Data extractor to use for querying data.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dataset containing the queried data from the MNIST dataset.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="yggdrasil.core.dtypes.dataset.ParquetDataset.html#yggdrasil.core.dtypes.dataset.ParquetDataset" title="yggdrasil.core.dtypes.dataset.ParquetDataset">ParquetDataset</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="yggdrasil.data.datamodules.mnist.MNISTDataModule.run_feature_identification">
+<span class="sig-name descname"><span class="pre">run_feature_identification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_identifier</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule.run_feature_identification" title="Link to this definition">#</a></dt>
+<dd><p>Identify normalization parameters for the features in the MNIST dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>table_identifier</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Identifier for the table containing the MNIST dataset.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dictionary containing normalization data for the features.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>, <a class="reference internal" href="yggdrasil.core.dtypes.parameters.NormalizationData.html#yggdrasil.core.dtypes.parameters.NormalizationData" title="yggdrasil.core.dtypes.parameters.NormalizationData">NormalizationData</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="yggdrasil.data.datamodules.mnist.MNISTBatchPreprocessor.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">MNISTBatchPreprocessor</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../api/data.data_extractor.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">yggdrasil.data.data_extractor</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule"><code class="docutils literal notranslate"><span class="pre">MNISTDataModule</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule.build_batch_preprocessor"><code class="docutils literal notranslate"><span class="pre">MNISTDataModule.build_batch_preprocessor()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule.query_data"><code class="docutils literal notranslate"><span class="pre">MNISTDataModule.query_data()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#yggdrasil.data.datamodules.mnist.MNISTDataModule.run_feature_identification"><code class="docutils literal notranslate"><span class="pre">MNISTDataModule.run_feature_identification()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Aleksandr Kasian &amp; Nazar Yakovenko.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

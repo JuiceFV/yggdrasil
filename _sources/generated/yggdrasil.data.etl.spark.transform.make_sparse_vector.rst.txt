@@ -1,0 +1,6 @@
+﻿yggdrasil.data.etl.spark.transform.make\_sparse\_vector
+=======================================================
+
+.. currentmodule:: yggdrasil.data.etl.spark.transform
+
+.. autofunction:: make_sparse_vector

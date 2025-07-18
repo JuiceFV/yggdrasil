@@ -1,0 +1,6 @@
+﻿yggdrasil.data.etl.spark.transform.identify\_normalization\_params
+==================================================================
+
+.. currentmodule:: yggdrasil.data.etl.spark.transform
+
+.. autofunction:: identify_normalization_params

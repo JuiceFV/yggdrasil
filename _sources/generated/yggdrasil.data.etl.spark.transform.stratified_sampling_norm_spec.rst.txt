@@ -1,0 +1,6 @@
+﻿yggdrasil.data.etl.spark.transform.stratified\_sampling\_norm\_spec
+===================================================================
+
+.. currentmodule:: yggdrasil.data.etl.spark.transform
+
+.. autofunction:: stratified_sampling_norm_spec

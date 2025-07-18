@@ -1,0 +1,6 @@
+﻿yggdrasil.preprocessing.identify\_type
+======================================
+
+.. currentmodule:: yggdrasil.preprocessing
+
+.. autofunction:: identify_type

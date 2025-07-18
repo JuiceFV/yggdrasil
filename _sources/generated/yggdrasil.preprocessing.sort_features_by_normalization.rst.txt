@@ -1,0 +1,6 @@
+﻿yggdrasil.preprocessing.sort\_features\_by\_normalization
+=========================================================
+
+.. currentmodule:: yggdrasil.preprocessing
+
+.. autofunction:: sort_features_by_normalization

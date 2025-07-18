@@ -1,0 +1,6 @@
+﻿yggdrasil.data.etl.spark.transform.make\_sparse2dense
+=====================================================
+
+.. currentmodule:: yggdrasil.data.etl.spark.transform
+
+.. autofunction:: make_sparse2dense

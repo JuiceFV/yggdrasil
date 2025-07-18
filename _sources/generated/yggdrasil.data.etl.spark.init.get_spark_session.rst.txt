@@ -1,0 +1,6 @@
+﻿yggdrasil.data.etl.spark.init.get\_spark\_session
+=================================================
+
+.. currentmodule:: yggdrasil.data.etl.spark.init
+
+.. autofunction:: get_spark_session

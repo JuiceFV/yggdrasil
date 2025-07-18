@@ -1,0 +1,6 @@
+﻿yggdrasil.data.etl.spark.load.upload\_as\_parquet
+=================================================
+
+.. currentmodule:: yggdrasil.data.etl.spark.load
+
+.. autofunction:: upload_as_parquet

@@ -1,0 +1,6 @@
+﻿yggdrasil.data.datamodules.base.get\_sample\_range
+==================================================
+
+.. currentmodule:: yggdrasil.data.datamodules.base
+
+.. autofunction:: get_sample_range
