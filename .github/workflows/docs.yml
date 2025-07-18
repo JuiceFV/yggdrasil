@@ -1,7 +1,9 @@
 name: Deploy Sphinx Docs to GitHub Pages
 
-on: [push, pull_request]
+on: [push]
 
+permissions:
+  contents: write
 jobs:
   tests:
     runs-on: ubuntu-latest
